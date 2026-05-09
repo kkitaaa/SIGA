@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './App.css';
+import '../styles/iniciodesesion.css';
 
-function App() {
+function InicioDeSesión() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -122,4 +122,4 @@ function App() {
   );
 }
 
-export default App;
+export default InicioDeSesión;
