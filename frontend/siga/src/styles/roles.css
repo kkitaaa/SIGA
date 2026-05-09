@@ -1,0 +1,14 @@
+/* estilos minimalistas, se pueden ajustar mas adelante*/
+.role-select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+  margin-right: 8px;
+  font-size: 14px;
+  background-color: #f8fafc;
+  outline: none;
+}
+
+.role-select:focus {
+  border-color: #4055c9;
+}
