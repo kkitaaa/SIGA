@@ -1,6 +1,5 @@
-import InicioDeSesión from './pages/login';
 import Login from './pages/login'; 
-import Roles from './pages/roles';
+import Roles from './pages/asignacion_roles';
 
 const routes = [
     { path: '/', component: Login },
