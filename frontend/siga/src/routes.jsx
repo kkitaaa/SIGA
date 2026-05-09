@@ -1,4 +1,4 @@
-import InicioDeSesión from './pages/iniciodesesión';
+import InicioDeSesión from './pages/login';
 
 const routes = [
     { path: '/', component: InicioDeSesión },

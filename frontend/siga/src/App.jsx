@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import InicioDeSesión from "./pages/iniciodesesión";
+import InicioDeSesión from "./pages/login";
 
 function App() {
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/iniciodesesion.css';
+import '../styles/login.css';
 
 function InicioDeSesión() {
   const [isLogin, setIsLogin] = useState(true);
