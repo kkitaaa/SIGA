@@ -18,14 +18,62 @@ function InicioDeSesión() {
     });
   };
 
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const API_URL = 'http://localhost:3000/api/auth'; 
+
     if (isLogin) {
-      console.log('Iniciando sesión con:', { email: formData.email, password: formData.password });
-      alert(`Simulación login: ${formData.email}`);
+      // --- LÓGICA DE INICIAR SESIÓN ---
+      try {
+        const response = await fetch(`${API_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          alert(data.mensaje); 
+          navigate('/dashboard'); // **Ejemplo de redirección**: 
+          // agregar lógica para redirigir al Dashboard
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        alert("Error al conectar con el servidor.");
+      }
+
     } else {
-      console.log('Registrando usuario:', formData);
-      alert(`Simulación registro: ${formData.nombre} (${formData.rol})`);
+      // --- LÓGICA DE REGISTRO ---
+      try {
+        const response = await fetch(`${API_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre: formData.nombre,
+            email: formData.email,
+            password: formData.password,
+            rol: formData.rol
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.mensaje);
+          setIsLogin(true); // Cambia automáticamente a la vista de Iniciar Sesión
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        alert("Error al conectar con el servidor.");
+      }
     }
   };
 

@@ -7,9 +7,10 @@ dotenv.config();
 
 const app = express();
 
-app.use("/api/auth", authRoutes);
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("SIGA backend corriendo correctamente");
