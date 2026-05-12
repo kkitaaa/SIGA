@@ -1,0 +1,24 @@
+.navbar-floating { /* CSS: estilos para la navbar */
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1000px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-floating:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-logo { /* Ajustes de dimensiones para el archivo favicon.svg en el Navbar */
+  height: 40px; /* cambiar tamaño del logo a gusto */
+  width: auto;
+  display: block;
+}

@@ -1,0 +1,8 @@
+.home-fade-in { /* clase para la animacion suave de aparicion del contenido (en home) */
+  animation: fadeInHome 0.8s ease-out forwards;
+}
+
+@keyframes fadeInHome {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
