@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/login";
 import AsignacionRoles from "./pages/asignacion_roles";
+import Home from "./pages/home";
+import Navbar from "./components/Navbar";
 // PONER A FUTURO
 //import Register from "./pages/Register";
 //import Dashboard from "./pages/Dashboard";
@@ -29,6 +31,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/asignacion-roles" element={<AsignacionRoles />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
