@@ -1,4 +1,4 @@
-/* estos son estilos minimalistas, se pueden ajustar mas adelante*/
+/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -84,7 +84,7 @@ body {
   display: block;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #000000;
+  color: #1e293b;
   font-size: 0.875rem;
 }
 
@@ -92,10 +92,9 @@ body {
 .input-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #3b82f6;
+  border: 1px solid #cbd5e1;
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  background-color: #f8fafc; 
   transition: border 0.2s;
   font-family: inherit;
 }

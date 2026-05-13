@@ -1,9 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/login";
-import Roles from "./pages/asignacion_roles";
-import Navbar from "./components/Navbar"; // importacion de la navbar
-import Home from "./pages/home"; // importacion pagina home
-// IMPORTACIONES FUTURAS (solo unos ejemplos)
+import AsignacionRoles from "./pages/asignacion_roles";
+// PONER A FUTURO
 //import Register from "./pages/Register";
 //import Dashboard from "./pages/Dashboard";
 //import Profile from "./pages/Profile";
@@ -28,15 +26,12 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/asignacion-roles" element={<AsignacionRoles />} />
+      </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
-
-// PONER A FUTURO DENTRO DE <Routes>:
-// <Route path="/register" element={<Register />} />
-// <Route path="/dashboard" element={<Dashboard />} />
-// <Route path="/profile" element={<Profile />} />
-// y asi...
