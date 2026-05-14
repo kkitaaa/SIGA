@@ -1,4 +1,4 @@
-/* Reset básico */
+/* Reset b?sico */
 * {
   margin: 0;
   padding: 0;
@@ -6,162 +6,124 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+  font-family: 'Segoe UI', 'Segoe UI Variable', sans-serif;
   min-height: 100vh;
+  background: #f4faf7;
 }
 
-.app-container {
+.login-page-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: stretch;
+  padding: 0 0 0 2rem;
+  gap: 0;
+  background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('/img/FondoLogin.svg') no-repeat center center;
+  background-size: cover;
+  background-blend-mode: lighten;
+}
+
+.login-page-brand {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 2rem 0 0 2rem;
+  color: #ffffff;
 }
 
-.card {
-  background: white;
-  border-radius: 1.5rem;
-  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+.login-logo {
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+}
+
+.login-tagline {
+  font-size: 1rem;
+  font-weight: 300;
+  max-width: 18rem;
+}
+
+.login-card {
   width: 100%;
-  max-width: 450px;
-  transition: all 0.2s ease;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  padding: 3rem;
+  box-shadow: none;
+  color: #e5e7eb;
+  align-self: stretch;
+  min-height: 100vh;
 }
 
-.header {
-  text-align: center;
+.login-header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
   margin-bottom: 2rem;
-}
-
-.header h1 {
-  font-size: 2rem;
-  color: #1e293b;
-  letter-spacing: -0.5px;
-}
-
-.header p {
-  color: #64748b;
-  margin-top: 0.25rem;
-}
-
-.header small {
-  color: #94a3b8;
-  font-size: 0.75rem;
+  color: #ffffff;
 }
 
 .toggle-buttons {
   display: flex;
   gap: 1rem;
+  border-bottom: 2px solid transparent;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #e2e8f0;
 }
 
 .toggle-buttons button {
   flex: 1;
   background: none;
   border: none;
-  padding: 0.75rem;
+  padding: 1rem 0;
+  color: #d1d5db;
   font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
-  color: #64748b;
-  transition: all 0.2s;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
+  transition: color 0.2s ease;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
 }
 
 .toggle-buttons button.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: #60DEB6;
+  border-bottom-color: #60DEB6;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .input-group {
-  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .input-group label {
-  display: block;
+  color: #d1d5db;
+  font-size: 0.95rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: #1e293b;
-  font-size: 0.875rem;
 }
 
 .input-group input,
 .input-group select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  transition: border 0.2s;
+  border: 1px solid rgba(226, 232, 240, 0.4);
+  border-radius: 1rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+  font-size: 0.95rem;
   font-family: inherit;
 }
 
 .input-group input:focus,
 .input-group select:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #34d399;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
 }
 
-.input-group small {
-  display: block;
-  margin-top: 0.25rem;
-  color: #64748b;
-  font-size: 0.7rem;
-}
-
-.submit-btn {
-  width: 100%;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 0.875rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 0.5rem;
-}
-
-.submit-btn:hover {
-  background: #2563eb;
-}
-
-.info-note {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-.info-note p {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.info-note ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.info-note li {
-  margin-bottom: 0.25rem;
-  padding-left: 1rem;
-  position: relative;
-}
-
-.info-note li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #3b82f6;
-}
-/* Mostrar/ocultar contraseña */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -170,22 +132,89 @@ body {
 
 .password-wrapper input {
   flex: 1;
-  padding-right: 45px;
+  padding-right: 3rem;
 }
 
 .password-toggle {
   position: absolute;
-  right: 10px;
+  right: 0.9rem;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0;
-  margin: 0;
-  color: #64748b;
-  transition: color 0.2s;
+  color: #6b7280;
 }
 
-.password-toggle:hover {
-  color: #3b82f6;
+.submit-btn {
+  margin: 1rem auto 0;
+  width: fit-content;
+  display: inline-flex;
+  justify-content: center;
+  padding: 1rem 1.75rem;
+  border-radius: 1rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #60DEB6;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #49c79a;
+  transform: translateY(-1px);
+}
+
+.register-text {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #d1d5db;
+  text-align: center;
+}
+
+.toggle-link {
+  background: none;
+  border: none;
+  color: #60DEB6;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1000px) {
+  .login-page-container {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+
+  .login-page-brand {
+    padding: 1.5rem 0;
+  }
+
+  .login-card {
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-page-container {
+    padding: 1rem;
+  }
+
+  .login-logo {
+    font-size: 2.75rem;
+  }
+
+  .login-card {
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .toggle-buttons button {
+    font-size: 0.95rem;
+  }
 }
