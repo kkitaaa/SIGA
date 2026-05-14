@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../styles/asignacion_roles.css';
+
+
 
 import {
   Box,
@@ -18,33 +21,23 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 
-function AsignacionRoles() {
-  const [users, setUsers] = useState([
-    {
-      id: 'user1',
-      name: 'Ruben Doblas',
-      email: 'ruben.doblas@example.com',
-      assignedRole: null,
-    },
-    {
-      id: 'user2',
-      name: 'Roman Rojas',
-      email: 'roman.rojas@example.com',
-      assignedRole: null,
-    },
-    {
-      id: 'user3',
-      name: 'Tulio Triviño',
-      email: 'tulio.trivino@example.com',
-      assignedRole: null,
-    },
-    {
-      id: 'user4',
-      name: 'Kike Morande',
-      email: 'kike.morande@example.com',
-      assignedRole: null,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('token'); // JWT guardado en login
+        const res = await axios.get('http://localhost:4000/usuarios-sin-rol', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUsers(res.data.usuarios);
+      } catch (err) {
+        console.error('Error al cargar usuarios sin rol:', err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
 
   const roles = [
     'Directiva',
@@ -73,25 +66,36 @@ function AsignacionRoles() {
     setIsOpen(true);
   };
 
-  const handleAssignRole = () => {
+  const handleAssignRole = async () => {
     if (selectedUser && selectedRole) {
-      console.log(
-        `Asignando rol "${selectedRole}" a ${selectedUser.name}`
-      );
+      try {
+        const token = localStorage.getItem('token');
+        await axios.post('http://localhost:4000/asignar-rol', {
+          idUsuarioDestino: selectedUser.id,
+          idRolAsignado: roles.indexOf(selectedRole) + 1 // ejemplo según tu BD
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-      setUsers((prevUsers) =>
-        prevUsers.filter(
-          (user) => user.id !== selectedUser.id
-        )
-      );
-
-      setSelectedUser(null);
-      setSelectedRole('');
-      setIsOpen(false);
+        // Actualizar lista en frontend
+        setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser.id));
+        setSelectedUser(null);
+        setSelectedRole('');
+        setIsOpen(false);
+      } catch (err) {
+        console.error('Error al asignar rol:', err);
+      }
     }
   };
 
+  const userRole = localStorage.getItem('role'); // guardado en login
+
+  if (userRole !== 'Administrativo') {
+    return <Text color="red.500">Acceso denegado</Text>;
+  }
+
   return (
+    
     <Flex
       minH="100vh"
       align="center"
@@ -236,6 +240,6 @@ function AsignacionRoles() {
       </Box>
     </Flex>
   );
-}
+
 
 export default AsignacionRoles;
