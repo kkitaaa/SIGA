@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/asignacion_roles.css';
 
-
-
 import {
   Box,
   Flex,
@@ -21,7 +19,18 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 
+function AsignacionRoles() {
   const [users, setUsers] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedRole, setSelectedRole] = useState('');
+
+  const roles = [
+    'Directiva',
+    'Coordinador administrativo',
+    'Coordinador PIE',
+    'Profesor',
+  ];
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -37,18 +46,6 @@ import {
     };
     fetchUsers();
   }, []);
-
-
-  const roles = [
-    'Directiva',
-    'Coordinador administrativo',
-    'Coordinador PIE',
-    'Profesor',
-  ];
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedRole, setSelectedRole] = useState('');
 
   const handleRoleChange = (userId, role) => {
     setUsers((prevUsers) =>
@@ -77,7 +74,6 @@ import {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        // Actualizar lista en frontend
         setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser.id));
         setSelectedUser(null);
         setSelectedRole('');
@@ -89,93 +85,42 @@ import {
   };
 
   const userRole = localStorage.getItem('role'); // guardado en login
-
   if (userRole !== 'Administrativo') {
     return <Text color="red.500">Acceso denegado</Text>;
   }
 
   return (
-    
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg="gray.50"
-      p={4}
-    >
-      <Box
-        bg="white"
-        p={8}
-        borderRadius="lg"
-        boxShadow="lg"
-        maxW="xl"
-        w="full"
-      >
-        <Heading
-          as="h2"
-          size="lg"
-          mb={6}
-          textAlign="center"
-          color="gray.700"
-        >
+    <Flex minH="100vh" align="center" justify="center" bg="gray.50" p={4}>
+      <Box bg="white" p={8} borderRadius="lg" boxShadow="lg" maxW="xl" w="full">
+        <Heading as="h2" size="lg" mb={6} textAlign="center" color="gray.700">
           Asignación de Roles
         </Heading>
 
         <VStack spacing={4} align="stretch">
           {users.length > 0 ? (
             users.map((user) => (
-              <Flex
-                key={user.id}
-                p={3}
-                borderWidth="1px"
-                borderRadius="md"
-                align="center"
-                gap={3}
-              >
+              <Flex key={user.id} p={3} borderWidth="1px" borderRadius="md" align="center" gap={3}>
                 <Box>
-                  <Text fontWeight="bold">
-                    {user.name}
-                  </Text>
-
-                  <Text
-                    fontSize="sm"
-                    color="gray.600"
-                  >
-                    {user.email}
-                  </Text>
+                  <Text fontWeight="bold">{user.name}</Text>
+                  <Text fontSize="sm" color="gray.600">{user.email}</Text>
                 </Box>
 
                 <Spacer />
 
                 <select
                   value={user.assignedRole || ''}
-                  onChange={(e) =>
-                    handleRoleChange(
-                      user.id,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
                   className="role-select"
                 >
-                  <option value="" disabled>
-                    Rol...
-                  </option>
-
+                  <option value="" disabled>Rol...</option>
                   {roles.map((role) => (
-                    <option
-                      key={role}
-                      value={role}
-                    >
-                      {role}
-                    </option>
+                    <option key={role} value={role}>{role}</option>
                   ))}
                 </select>
 
                 <Button
                   colorScheme="blue"
-                  onClick={() =>
-                    handleConfirmClick(user)
-                  }
+                  onClick={() => handleConfirmClick(user)}
                   disabled={!user.assignedRole}
                 >
                   Asignar
@@ -183,55 +128,28 @@ import {
               </Flex>
             ))
           ) : (
-            <Text
-              textAlign="center"
-              color="gray.500"
-            >
-              No hay usuarios pendientes de
-              asignación de rol.
+            <Text textAlign="center" color="gray.500">
+              No hay usuarios pendientes de asignación de rol.
             </Text>
           )}
         </VStack>
 
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          isCentered
-        >
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
           <ModalOverlay />
-
           <ModalContent>
-            <ModalHeader>
-              Confirmar Asignación de Rol
-            </ModalHeader>
-
+            <ModalHeader>Confirmar Asignación de Rol</ModalHeader>
             <ModalCloseButton />
-
             <ModalBody>
               <Text>
-                ¿Estás seguro de asignar el rol
-                de <strong>{selectedRole}</strong>{' '}
-                a{' '}
-                <strong>
-                  {selectedUser?.name}
-                </strong>
-                ?
+                ¿Estás seguro de asignar el rol de <strong>{selectedRole}</strong> a{' '}
+                <strong>{selectedUser?.name}</strong>?
               </Text>
             </ModalBody>
-
             <ModalFooter>
-              <Button
-                variant="outline"
-                mr={3}
-                onClick={() => setIsOpen(false)}
-              >
+              <Button variant="outline" mr={3} onClick={() => setIsOpen(false)}>
                 Cancelar
               </Button>
-
-              <Button
-                colorScheme="blue"
-                onClick={handleAssignRole}
-              >
+              <Button colorScheme="blue" onClick={handleAssignRole}>
                 Confirmar
               </Button>
             </ModalFooter>
@@ -240,6 +158,6 @@ import {
       </Box>
     </Flex>
   );
-
+}
 
 export default AsignacionRoles;
