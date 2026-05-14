@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const AuthService = {
   async registerUser(datosUsuario) {
-    const { nombre, email, password, rol } = datosUsuario;
+    const { rut, nombre, email, password, rol } = datosUsuario;
 
     const [primer_nombre, ...apellidos] = nombre.split(" ");
     const primer_apellido = apellidos.join(" ") || "Sin Apellido";
@@ -13,7 +13,7 @@ export const AuthService = {
 
     const nuevoUsuario = await prisma.usuario.create({
       data: {
-        rut: "00000000-0", // **Dato temporal**
+        rut: rut,
         primer_nombre,
         segundo_nombre: "",
         primer_apellido,
@@ -21,7 +21,7 @@ export const AuthService = {
         numero_telefonico: "",
         cuenta: {
           create: {
-            email,
+            email : email,
             contraseña: hashedPassword,
             estado: "Activo",
           },

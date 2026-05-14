@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 function InicioDeSesión() {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    rut: '',
     email: '',
     password: '',
     nombre: '',
@@ -30,6 +33,7 @@ const handleSubmit = async (e) => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            rut: formData.rut, 
             email: formData.email,
             password: formData.password
           })
@@ -40,10 +44,9 @@ const handleSubmit = async (e) => {
         if (response.ok) {
           localStorage.setItem('token', data.token);
           alert(data.mensaje); 
-          navigate('/dashboard'); // **Ejemplo de redirección**: 
-          // agregar lógica para redirigir al Dashboard
+          navigate('/dashboard');
         } else {
-          alert(`Error: ${data.error}`);
+          alert(`Error: ${data.error || 'Credenciales incorrectas'}`);
         }
       } catch (error) {
         alert("Error al conectar con el servidor.");
@@ -56,6 +59,7 @@ const handleSubmit = async (e) => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            rut: formData.rut,
             nombre: formData.nombre,
             email: formData.email,
             password: formData.password,
@@ -102,6 +106,17 @@ const handleSubmit = async (e) => {
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <>
+              <div className="input-group">
+                <label>RUT (Sin puntos y con guion)</label>
+                <input
+                  type="text"
+                  name="rut"
+                  value={formData.rut}
+                  onChange={handleChange}
+                  required
+                  placeholder="12345678-9"
+                />
+              </div>
               <div className="input-group">
                 <label>Nombre completo</label>
                 <input
