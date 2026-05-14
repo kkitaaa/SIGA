@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Registrar usuario
  *     tags: [Auth]
@@ -15,22 +15,34 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nombre
+ *               - email
+ *               - password
  *             properties:
- *               name:
+ *               nombre:
  *                 type: string
+ *                 example: Juan Perez
  *               email:
  *                 type: string
+ *                 example: juan@test.com
  *               password:
  *                 type: string
+ *                 example: 12345678
+ *               rol:
+ *                 type: string
+ *                 example: PROFESOR
  *     responses:
  *       201:
- *         description: Usuario creado
+ *         description: Usuario registrado correctamente
+ *       500:
+ *         description: Error del servidor
  */
 router.post("/register", register);
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Iniciar sesión
  *     tags: [Auth]
@@ -40,16 +52,21 @@ router.post("/register", register);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
+ *                 example: juan@test.com
  *               password:
  *                 type: string
+ *                 example: 12345678
  *     responses:
  *       200:
  *         description: Login exitoso
  *       401:
- *         description: Credenciales incorrectas
+ *         description: Credenciales inválidas
  */
 router.post("/login", login);
 
