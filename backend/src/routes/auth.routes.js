@@ -29,6 +29,9 @@ const router = Router();
  *               password:
  *                 type: string
  *                 example: 12345678
+ *               rut:
+ *                 type: string
+ *                 example: 12345678-9
  *               rol:
  *                 type: string
  *                 example: PROFESOR
