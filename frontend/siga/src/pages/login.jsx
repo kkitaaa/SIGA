@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 function InicioDeSesion() {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     nombre: '',
+    rut: '',
     rol: 'Profesor'
   });
 
@@ -37,9 +40,15 @@ function InicioDeSesion() {
         const data = await response.json();
 
         if (response.ok) {
-          localStorage.setItem('token', data.token);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.role);
+
           alert(data.mensaje);
-          // navigate('/dashboard');
+          if (data.role === 'Administrativo') {
+            navigate('/asignacion-roles');
+          } else {
+            navigate('/home');
+          }
         } else {
           alert(`Error: ${data.error}`);
         }
@@ -55,6 +64,7 @@ function InicioDeSesion() {
             nombre: formData.nombre,
             email: formData.email,
             password: formData.password,
+            rut: formData.rut,
             rol: formData.rol
           })
         });

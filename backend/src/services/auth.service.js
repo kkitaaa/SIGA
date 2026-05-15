@@ -1,11 +1,11 @@
+// auth.service.js
 import prisma from "../config/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const AuthService = {
-  // Registro
   async registerUser(datosUsuario) {
-    const { nombre, email, password, rol, rut } = datosUsuario;
+    const { nombre, email, password, rut } = datosUsuario;
 
     const [primer_nombre, ...apellidos] = (nombre || "").split(" ");
     const primer_apellido = apellidos.join(" ") || "Sin Apellido";
@@ -33,40 +33,33 @@ export const AuthService = {
     return nuevoUsuario;
   },
 
-  // Login
   async loginUser(credenciales) {
     const { email, password } = credenciales;
 
     const cuenta = await prisma.cuenta.findUnique({
       where: { email },
-      include: { usuario: true },
+      include: {
+        usuario: {
+          include: {
+            roles: { include: { rol: true } }
+          }
+        }
+      }
     });
 
     if (!cuenta) throw new Error("CREDENCIALES_INVALIDAS");
 
-    const passwordValida = await bcrypt.compare(
-      password,
-      cuenta.contraseña
-    );
+    const passwordValida = await bcrypt.compare(password, cuenta.contraseña);
+    if (!passwordValida) throw new Error("CREDENCIALES_INVALIDAS");
 
-    if (!passwordValida) {
-      throw new Error("CREDENCIALES_INVALIDAS");
-    }
+    const role = cuenta.usuario.roles[0]?.rol.nombre_rol || "SinRol";
 
     const token = jwt.sign(
-      {
-        id_usuario: cuenta.id_usuario,
-        email: cuenta.email,
-      },
+      { id_usuario: cuenta.id_usuario, email: cuenta.email, role },
       process.env.JWT_SECRET || "firma_secreta_siga",
-      {
-        expiresIn: "2h",
-      }
+      { expiresIn: "2h" }
     );
 
-    return {
-      token,
-      usuario: cuenta.usuario,
-    };
-  },
+    return { token, usuario: cuenta.usuario, role };
+  }
 };

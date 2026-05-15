@@ -1,11 +1,11 @@
+import prisma from '../config/prisma.js';
 import { obtenerUsuariosSinRol } from '../services/usuario.service.js';
 
 export const listarUsuariosSinRolController = async (req, res) => {
   try {
-    // Verificar que el usuario actual es Administrativo
     const esAdministrativo = await prisma.usuario_rol.findFirst({
       where: {
-        id_usuario: req.user.id,
+        id_usuario: req.user.id_usuario, 
         rol: { nombre_rol: 'Administrativo' }
       }
     });

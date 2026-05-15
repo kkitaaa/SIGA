@@ -1,6 +1,11 @@
 import prisma from '../config/prisma.js';
 
 export const asignarRol = async (idUsuarioDestino, idRolAsignado, idUsuarioActual) => {
+  const parsedRolId = typeof idRolAsignado === 'string' ? Number(idRolAsignado) : idRolAsignado;
+  if (!Number.isInteger(parsedRolId)) {
+    throw new Error('El id de rol debe ser un número entero');
+  }
+
   // Verificar si el usuario actual tiene rol Administrativo
   const esAdministrativo = await prisma.usuario_rol.findFirst({
     where: {
@@ -26,7 +31,7 @@ export const asignarRol = async (idUsuarioDestino, idRolAsignado, idUsuarioActua
   return prisma.usuario_rol.create({
     data: {
       id_usuario: idUsuarioDestino,
-      id_rol: idRolAsignado,
+      id_rol: parsedRolId,
     },
   });
 };

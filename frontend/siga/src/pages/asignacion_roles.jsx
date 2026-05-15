@@ -21,41 +21,65 @@ import {
 
 function AsignacionRoles() {
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState('');
-
-  const roles = [
-    'Directiva',
-    'Coordinador administrativo',
-    'Coordinador PIE',
-    'Profesor',
-  ];
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role');
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token'); // JWT guardado en login
-        const res = await axios.get('http://localhost:4000/usuarios-sin-rol', {
+        if (!token) {
+          setFetchError('No hay un token válido. Inicia sesión de nuevo.');
+          return;
+        }
+
+        const res = await axios.get('http://localhost:3000/usuarios-sin-rol', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setUsers(res.data.usuarios);
+
+        setUsers(res.data.usuarios || []);
       } catch (err) {
         console.error('Error al cargar usuarios sin rol:', err);
+        setFetchError(err.response?.data?.mensaje || err.response?.data?.error || err.message);
       }
     };
-    fetchUsers();
-  }, []);
 
-  const handleRoleChange = (userId, role) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId
-          ? { ...user, assignedRole: role }
+    const fetchRoles = async () => {
+      try {
+        if (!token) {
+          setFetchError('No hay un token válido. Inicia sesión de nuevo.');
+          return;
+        }
+
+        const res = await axios.get('http://localhost:3000/roles', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        setRoles(res.data.roles || []);
+      } catch (err) {
+        console.error('Error al cargar roles:', err);
+        setFetchError(err.response?.data?.mensaje || err.response?.data?.error || err.message);
+      }
+    };
+
+    fetchUsers();
+    fetchRoles();
+  }, [token]);
+
+  const handleRoleChange = (userId, roleId) => {
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
+        user.id_usuario === userId
+          ? { ...user, assignedRole: roleId }
           : user
       )
     );
   };
+
 
   const handleConfirmClick = (user) => {
     setSelectedUser(user);
@@ -67,26 +91,32 @@ function AsignacionRoles() {
     if (selectedUser && selectedRole) {
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:4000/asignar-rol', {
-          idUsuarioDestino: selectedUser.id,
-          idRolAsignado: roles.indexOf(selectedRole) + 1 // ejemplo según tu BD
+        await axios.post('http://localhost:3000/asignar-rol', {
+          idUsuarioDestino: selectedUser.id_usuario,
+          idRolAsignado: Number(selectedRole)
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser.id));
+        setUsers(prevUsers =>
+          prevUsers.filter(user => user.id_usuario !== selectedUser.id_usuario)
+        );
         setSelectedUser(null);
         setSelectedRole('');
         setIsOpen(false);
       } catch (err) {
         console.error('Error al asignar rol:', err);
+        setFetchError(err.response?.data?.mensaje || err.response?.data?.error || err.message);
       }
     }
   };
 
-  const userRole = localStorage.getItem('role'); // guardado en login
+  if (!token) {
+    return <Text color="red.500">No estás autenticado. Inicia sesión para acceder a esta página.</Text>;
+  }
+
   if (userRole !== 'Administrativo') {
-    return <Text color="red.500">Acceso denegado</Text>;
+    return <Text color="red.500">Acceso denegado. Solo usuarios administrativos pueden ver esta página.</Text>;
   }
 
   return (
@@ -96,27 +126,38 @@ function AsignacionRoles() {
           Asignación de Roles
         </Heading>
 
+        {fetchError && (
+          <Text color="red.500" mb={4} textAlign="center">
+            {fetchError}
+          </Text>
+        )}
+
         <VStack spacing={4} align="stretch">
           {users.length > 0 ? (
             users.map((user) => (
-              <Flex key={user.id} p={3} borderWidth="1px" borderRadius="md" align="center" gap={3}>
+              <Flex key={user.id_usuario} p={3} borderWidth="1px" borderRadius="md" align="center" gap={3}>
                 <Box>
-                  <Text fontWeight="bold">{user.name}</Text>
-                  <Text fontSize="sm" color="gray.600">{user.email}</Text>
+                  <Text fontWeight="bold">
+                    {user.primer_nombre} {user.primer_apellido}
+                  </Text>
+                  <Text fontSize="sm" color="gray.600">{user.cuenta?.email}</Text>
                 </Box>
 
                 <Spacer />
 
                 <select
                   value={user.assignedRole || ''}
-                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                  onChange={(e) => handleRoleChange(user.id_usuario, e.target.value)}
                   className="role-select"
                 >
                   <option value="" disabled>Rol...</option>
                   {roles.map((role) => (
-                    <option key={role} value={role}>{role}</option>
+                    <option key={role.id_rol} value={role.id_rol}>
+                      {role.nombre_rol}
+                    </option>
                   ))}
                 </select>
+
 
                 <Button
                   colorScheme="blue"
@@ -141,9 +182,12 @@ function AsignacionRoles() {
             <ModalCloseButton />
             <ModalBody>
               <Text>
-                ¿Estás seguro de asignar el rol de <strong>{selectedRole}</strong> a{' '}
-                <strong>{selectedUser?.name}</strong>?
+                ¿Estás seguro de asignar el rol de <strong>
+                  {roles.find(r => r.id_rol === Number(selectedRole))?.nombre_rol}
+                </strong> a{' '}
+                <strong>{selectedUser?.primer_nombre} {selectedUser?.primer_apellido}</strong>?
               </Text>
+
             </ModalBody>
             <ModalFooter>
               <Button variant="outline" mr={3} onClick={() => setIsOpen(false)}>

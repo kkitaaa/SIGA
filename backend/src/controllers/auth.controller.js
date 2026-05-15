@@ -15,6 +15,7 @@ export const login = async (req, res) => {
     const data = await AuthService.loginUser(req.body);
     res.status(200).json({ 
       token: data.token, 
+      role: data.role,
       mensaje: `¡Bienvenido ${data.usuario.primer_nombre}!` 
     });
   } catch (error) {
