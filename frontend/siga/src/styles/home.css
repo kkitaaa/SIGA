@@ -1,0 +1,136 @@
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: #f5f7fa url('/img/FondoSIGA.svg') no-repeat center center;
+  background-size: cover;
+  font-family: "Segoe UI", "Segoe UI Variable", sans-serif;
+  font-weight: 400;
+}
+
+
+.home-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  background: #2ec4b6;
+  color: white;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.home-brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.home-profile-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.home-main {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+.home-panel {
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  padding: 1.8rem;
+}
+
+.home-welcome-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.home-welcome-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.05;
+}
+
+.home-welcome-subtitle {
+  color: #4b5563;
+  max-width: 55ch;
+  font-size: 1rem;
+  line-height: 1.8;
+  font-weight: 200;
+}
+
+.home-placeholder-line {
+  height: 1rem;
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+  font-weight: 100;
+}
+
+.home-card {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.home-card h2 {
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.home-placeholder-line {
+  height: 1rem;
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.home-placeholder-line.short {
+  width: 60%;
+}
+
+.home-placeholder-line.long {
+  width: 90%;
+}
+
+.home-news-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.home-aside-card {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.home-aside-card h2 {
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+@media (max-width: 980px) {
+  .home-main {
+    grid-template-columns: 1fr;
+  }
+}
