@@ -117,6 +117,20 @@ function InicioDeSesion() {
             </div>
           )}
 
+        {!isLogin && (  
+          <div className="input-group">
+            <label>RUT</label>
+            <input
+              type="text"
+              name="rut"
+              value={formData.rut}
+              onChange={handleChange}
+              required
+              placeholder="Ej: 12345678-9"
+            />
+          </div>
+          )}
+
           {!isLogin && (
             <div className="input-group">
               <label>Seleccione su rol</label>
@@ -147,7 +161,7 @@ function InicioDeSesion() {
           </div>
 
           <div className="input-group">
-            <label>Contrasena</label>
+            <label>Contraseña</label>
             <div className="password-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
