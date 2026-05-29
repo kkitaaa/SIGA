@@ -4,7 +4,6 @@ import { asignarRolController } from '../controllers/asignacion.controller.js';
 import { authMiddleware } from '../middleware/auth.js';
 import prisma from '../config/prisma.js';
 
-
 /**
  * @swagger
  * components:
@@ -26,11 +25,12 @@ import prisma from '../config/prisma.js';
  *         nombre:
  *           type: string
  */
+
 const router = Router();
 
 /**
  * @swagger
- * /usuarios-sin-rol:
+ * /api/asignacion/usuarios-sin-rol:
  *   get:
  *     summary: Lista los usuarios sin rol asignado
  *     tags:
@@ -52,10 +52,15 @@ const router = Router();
  *                   items:
  *                     $ref: '#/components/schemas/Usuario'
  */
-router.get('/usuarios-sin-rol', authMiddleware, listarUsuariosSinRolController);
+router.get(
+  '/usuarios-sin-rol',
+  authMiddleware,
+  listarUsuariosSinRolController
+);
+
 /**
  * @swagger
- * /asignar-rol:
+ * /api/asignacion/asignar-rol:
  *   post:
  *     summary: Asigna un rol a un usuario
  *     tags:
@@ -86,11 +91,15 @@ router.get('/usuarios-sin-rol', authMiddleware, listarUsuariosSinRolController);
  *                 mensaje:
  *                   type: string
  */
-router.post('/asignar-rol', authMiddleware, asignarRolController);
+router.post(
+  '/asignar-rol',
+  authMiddleware,
+  asignarRolController
+);
 
 /**
  * @swagger
- * /roles:
+ * /api/asignacion/roles:
  *   get:
  *     summary: Obtiene todos los roles disponibles
  *     tags:
