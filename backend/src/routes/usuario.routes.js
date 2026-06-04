@@ -1,10 +1,10 @@
 import { Router } from "express";
+import { authMiddleware } from "../middleware/auth.js";
+import { verifyRole } from "../middleware/role.middleware.js";
 import { listarUsuariosSinRolController } from "../controllers/usuario.controller.js";
-import { verificarToken } from "../middleware/auth.js";
-
 const router = Router();
 
-/**
+/**git
  * @swagger
  * /api/usuario/usuarios-sin-rol:
  *   get:
@@ -22,7 +22,8 @@ const router = Router();
  */
 router.get(
   "/usuarios-sin-rol",
-  verificarToken,
+  authMiddleware,
+  verifyRole("Administrativo"),
   listarUsuariosSinRolController
 );
 
