@@ -41,10 +41,10 @@ export const AuthService = {
       include: {
         usuario: {
           include: {
-            roles: { include: { rol: true } }
-          }
-        }
-      }
+            roles: { include: { rol: true } },
+          },
+        },
+      },
     });
 
     if (!cuenta) throw new Error("CREDENCIALES_INVALIDAS");
@@ -57,9 +57,9 @@ export const AuthService = {
     const token = jwt.sign(
       { id_usuario: cuenta.id_usuario, email: cuenta.email, role },
       process.env.JWT_SECRET || "firma_secreta_siga",
-      { expiresIn: "2h" }
+      { expiresIn: "2h" },
     );
 
     return { token, usuario: cuenta.usuario, role };
-  }
+  },
 };

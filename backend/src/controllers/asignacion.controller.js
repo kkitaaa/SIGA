@@ -1,4 +1,4 @@
-import { asignarRol } from '../services/asignacion.service.js';
+import { asignarRol } from "../services/asignacion.service.js";
 
 export const asignarRolController = async (req, res) => {
   try {
@@ -7,7 +7,7 @@ export const asignarRolController = async (req, res) => {
     if (!idUsuarioDestino || !idRolAsignado) {
       return res.status(400).json({
         ok: false,
-        mensaje: 'idUsuarioDestino e idRolAsignado son obligatorios',
+        mensaje: "idUsuarioDestino e idRolAsignado son obligatorios",
       });
     }
 
@@ -16,7 +16,7 @@ export const asignarRolController = async (req, res) => {
     const resultado = await asignarRol(
       idUsuarioDestino,
       idRolAsignado,
-      idUsuarioActual
+      idUsuarioActual,
     );
 
     return res.status(200).json({

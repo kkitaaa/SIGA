@@ -10,7 +10,10 @@ export const authMiddleware = (req, res, next) => {
     : authHeader;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "firma_secreta_siga");
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "firma_secreta_siga",
+    );
     req.user = decoded;
     next();
   } catch {

@@ -1,17 +1,15 @@
-import prisma from '../config/prisma.js';
+import prisma from "../config/prisma.js";
 
 export const asignarRol = async (
   idUsuarioDestino,
   idRolAsignado,
-  idUsuarioActual
+  idUsuarioActual,
 ) => {
   const parsedRolId =
-    typeof idRolAsignado === 'string'
-      ? Number(idRolAsignado)
-      : idRolAsignado;
+    typeof idRolAsignado === "string" ? Number(idRolAsignado) : idRolAsignado;
 
   if (!Number.isInteger(parsedRolId)) {
-    throw new Error('El id de rol debe ser un número entero');
+    throw new Error("El id de rol debe ser un número entero");
   }
 
   // Verificar permisos
@@ -19,13 +17,13 @@ export const asignarRol = async (
     where: {
       id_usuario: idUsuarioActual,
       rol: {
-        nombre_rol: 'Administrativo',
+        nombre_rol: "Administrativo",
       },
     },
   });
 
   if (!esAdministrativo) {
-    throw new Error('No tienes permisos para asignar roles');
+    throw new Error("No tienes permisos para asignar roles");
   }
 
   // Verificar existencia del usuario
@@ -36,7 +34,7 @@ export const asignarRol = async (
   });
 
   if (!usuarioExiste) {
-    throw new Error('El usuario no existe');
+    throw new Error("El usuario no existe");
   }
 
   // Verificar existencia del rol
@@ -47,7 +45,7 @@ export const asignarRol = async (
   });
 
   if (!rolExiste) {
-    throw new Error('El rol no existe');
+    throw new Error("El rol no existe");
   }
 
   // Verificar si ya tiene rol
@@ -58,7 +56,7 @@ export const asignarRol = async (
   });
 
   if (tieneRol) {
-    throw new Error('El usuario ya tiene un rol asignado');
+    throw new Error("El usuario ya tiene un rol asignado");
   }
 
   // Asignar rol

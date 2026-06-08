@@ -20,10 +20,6 @@ const router = Router();
  *       500:
  *         description: Error del servidor
  */
-router.get(
-  "/usuarios-sin-rol",
-  verificarToken,
-  listarUsuariosSinRolController
-);
+router.get("/usuarios-sin-rol", verificarToken, listarUsuariosSinRolController);
 
 export default router;

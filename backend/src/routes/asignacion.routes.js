@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { listarUsuariosSinRolController } from '../controllers/usuario.controller.js';
-import { asignarRolController } from '../controllers/asignacion.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
-import prisma from '../config/prisma.js';
+import { Router } from "express";
+import { listarUsuariosSinRolController } from "../controllers/usuario.controller.js";
+import { asignarRolController } from "../controllers/asignacion.controller.js";
+import { authMiddleware } from "../middleware/auth.js";
+import prisma from "../config/prisma.js";
 
 /**
  * @swagger
@@ -52,11 +52,7 @@ const router = Router();
  *                   items:
  *                     $ref: '#/components/schemas/Usuario'
  */
-router.get(
-  '/usuarios-sin-rol',
-  authMiddleware,
-  listarUsuariosSinRolController
-);
+router.get("/usuarios-sin-rol", authMiddleware, listarUsuariosSinRolController);
 
 /**
  * @swagger
@@ -91,11 +87,7 @@ router.get(
  *                 mensaje:
  *                   type: string
  */
-router.post(
-  '/asignar-rol',
-  authMiddleware,
-  asignarRolController
-);
+router.post("/asignar-rol", authMiddleware, asignarRolController);
 
 /**
  * @swagger
@@ -121,7 +113,7 @@ router.post(
  *                   items:
  *                     $ref: '#/components/schemas/Rol'
  */
-router.get('/roles', authMiddleware, async (req, res) => {
+router.get("/roles", authMiddleware, async (req, res) => {
   try {
     const roles = await prisma.rol.findMany();
     res.json({ ok: true, roles });
