@@ -12,3 +12,7 @@ test-integration:
 
 test-e2e:
 	npm run test:e2e
+
+fix:
+	npm run format
+	npm run lint -- --fix
