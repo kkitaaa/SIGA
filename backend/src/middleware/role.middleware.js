@@ -25,11 +25,9 @@ export const verifyRole = (requiredRole) => {
       });
 
       if (!tieneRol) {
-        return res
-          .status(403)
-          .json({
-            error: "Acceso denegado: no tienes los permisos necesarios",
-          });
+        return res.status(403).json({
+          error: "Acceso denegado: no tienes los permisos necesarios",
+        });
       }
 
       next();

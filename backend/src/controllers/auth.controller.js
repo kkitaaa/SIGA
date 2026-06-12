@@ -7,12 +7,10 @@ export const register = async (req, res) => {
     const registerData = new RegisterDTO(req.body);
 
     const usuario = await AuthService.registerUser(registerData);
-    res
-      .status(201)
-      .json({
-        mensaje: "Usuario registrado con éxito",
-        usuario: usuario.primer_nombre,
-      });
+    res.status(201).json({
+      mensaje: "Usuario registrado con éxito",
+      usuario: usuario.primer_nombre,
+    });
   } catch (error) {
     // Capturar errores de validación del DTO
     if (error.message.startsWith("VALIDATION_ERROR:")) {
