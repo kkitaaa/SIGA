@@ -8,7 +8,9 @@ export class LoginDTO {
   }
 
   validate() {
-    if (!this.email) throw new Error("VALIDATION_ERROR: El email es obligatorio");
-    if (!this.password) throw new Error("VALIDATION_ERROR: La contraseña es obligatoria");
+    if (!this.email)
+      throw new Error("VALIDATION_ERROR: El email es obligatorio");
+    if (!this.password)
+      throw new Error("VALIDATION_ERROR: La contraseña es obligatoria");
   }
 }

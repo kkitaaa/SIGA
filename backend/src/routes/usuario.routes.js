@@ -24,7 +24,7 @@ router.get(
   "/usuarios-sin-rol",
   authMiddleware,
   verifyRole("Administrativo"),
-  listarUsuariosSinRolController
+  listarUsuariosSinRolController,
 );
 
 export default router;
