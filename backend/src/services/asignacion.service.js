@@ -2,16 +2,23 @@ import { AsignacionRepository } from "../repositories/asignacion.repository.js";
 
 const repo = new AsignacionRepository();
 
-export const asignarRol = async (idUsuarioDestino, idRolAsignado, idUsuarioActual) => {
-  const parsedRolId = typeof idRolAsignado === "string" ? Number(idRolAsignado) : idRolAsignado;
+export const asignarRol = async (
+  idUsuarioDestino,
+  idRolAsignado,
+  idUsuarioActual,
+) => {
+  const parsedRolId =
+    typeof idRolAsignado === "string" ? Number(idRolAsignado) : idRolAsignado;
 
   if (!Number.isInteger(parsedRolId)) {
     throw new Error("El id de rol debe ser un número entero");
   }
 
   // Verificar permisos
-  const esAdministrativo = await repo.verificarRolAdministrativo(idUsuarioActual);
-  if (!esAdministrativo) throw new Error("No tienes permisos para asignar roles");
+  const esAdministrativo =
+    await repo.verificarRolAdministrativo(idUsuarioActual);
+  if (!esAdministrativo)
+    throw new Error("No tienes permisos para asignar roles");
 
   // Verificar existencia del usuario
   const usuarioExiste = await repo.usuarioExiste(idUsuarioDestino);

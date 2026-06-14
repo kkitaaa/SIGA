@@ -2,7 +2,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class AuthRepository {
-  async createUsuario({ rut, primer_nombre, primer_apellido, email, contraseña }) {
+  async createUsuario({
+    rut,
+    primer_nombre,
+    primer_apellido,
+    email,
+    contraseña,
+  }) {
     return prisma.usuario.create({
       data: {
         rut,
