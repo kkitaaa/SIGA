@@ -1,17 +1,9 @@
-import prisma from "../config/prisma.js";
+import { UsuarioRepository } from "../repositories/usuario.repository.js";
 
-export const obtenerUsuariosSinRol = async () => {
-  return prisma.usuario.findMany({
-    where: {
-      roles: { none: {} },
-    },
-    select: {
-      id_usuario: true,
-      primer_nombre: true,
-      primer_apellido: true,
-      cuenta: {
-        select: { email: true },
-      },
-    },
-  });
+const repo = new UsuarioRepository();
+
+export const UsuarioService = {
+  async obtenerUsuariosSinRol() {
+    return repo.findUsuariosSinRol();
+  },
 };

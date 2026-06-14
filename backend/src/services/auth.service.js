@@ -1,7 +1,8 @@
-// auth.service.js
-import prisma from "../config/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { AuthRepository } from "../repositories/auth.repository.js";
+
+const repo = new AuthRepository();
 
 export const AuthService = {
   async registerUser(datosUsuario) {
@@ -12,41 +13,19 @@ export const AuthService = {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const nuevoUsuario = await prisma.usuario.create({
-      data: {
-        rut,
-        primer_nombre,
-        segundo_nombre: "",
-        primer_apellido,
-        segundo_apellido: "",
-        numero_telefonico: "",
-        cuenta: {
-          create: {
-            email,
-            contraseña: hashedPassword,
-            estado: "Activo",
-          },
-        },
-      },
+    return repo.createUsuario({
+      rut,
+      primer_nombre,
+      primer_apellido,
+      email,
+      contraseña: hashedPassword,
     });
-
-    return nuevoUsuario;
   },
 
   async loginUser(credenciales) {
     const { email, password } = credenciales;
 
-    const cuenta = await prisma.cuenta.findUnique({
-      where: { email },
-      include: {
-        usuario: {
-          include: {
-            roles: { include: { rol: true } },
-          },
-        },
-      },
-    });
-
+    const cuenta = await repo.findCuentaByEmail(email);
     if (!cuenta) throw new Error("CREDENCIALES_INVALIDAS");
 
     const passwordValida = await bcrypt.compare(password, cuenta.contraseña);
