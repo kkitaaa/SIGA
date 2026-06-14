@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/login.css";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    nombre: '',
-    rut: '',
-    rol: 'Profesor'
+    email: "",
+    password: "",
+    nombre: "",
+    rut: "",
+    rol: "Profesor",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_URL = 'http://localhost:3000/api/auth';
+    const API_URL = "http://localhost:3000/api/auth";
 
     if (isLogin) {
       try {
         const response = await fetch(`${API_URL}/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             email: formData.email,
-            password: formData.password
-          })
+            password: formData.password,
+          }),
         });
 
         const data = await response.json();
@@ -44,29 +44,29 @@ function InicioDeSesion() {
           localStorage.setItem("role", data.role);
 
           alert(data.mensaje);
-          if (data.role === 'Administrativo') {
-            navigate('/asignacion-roles');
+          if (data.role === "Administrativo") {
+            navigate("/asignacion-roles");
           } else {
-            navigate('/home');
+            navigate("/home");
           }
         } else {
           alert(`Error: ${data.error}`);
         }
       } catch (error) {
-        alert('Error al conectar con el servidor.');
+        alert("Error al conectar con el servidor.");
       }
     } else {
       try {
         const response = await fetch(`${API_URL}/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             nombre: formData.nombre,
             email: formData.email,
             password: formData.password,
             rut: formData.rut,
-            rol: formData.rol
-          })
+            rol: formData.rol,
+          }),
         });
 
         const data = await response.json();
@@ -78,7 +78,7 @@ function InicioDeSesion() {
           alert(`Error: ${data.error}`);
         }
       } catch (error) {
-        alert('Error al conectar con el servidor.');
+        alert("Error al conectar con el servidor.");
       }
     }
   };
@@ -92,19 +92,19 @@ function InicioDeSesion() {
 
       <div className="login-card">
         <div className="login-header">
-          <h1>{isLogin ? 'Bienvenido/a' : 'Crea tu cuenta'}</h1>
+          <h1>{isLogin ? "Bienvenido/a" : "Crea tu cuenta"}</h1>
         </div>
 
         <div className="toggle-buttons">
           <button
-            className={isLogin ? 'active' : ''}
+            className={isLogin ? "active" : ""}
             onClick={() => setIsLogin(true)}
             type="button"
           >
             Iniciar Sesion
           </button>
           <button
-            className={!isLogin ? 'active' : ''}
+            className={!isLogin ? "active" : ""}
             onClick={() => setIsLogin(false)}
             type="button"
           >
@@ -127,30 +127,28 @@ function InicioDeSesion() {
             </div>
           )}
 
-        {!isLogin && (  
-          <div className="input-group">
-            <label>RUT</label>
-            <input
-              type="text"
-              name="rut"
-              value={formData.rut}
-              onChange={handleChange}
-              required
-              placeholder="Ej: 12345678-9"
-            />
-          </div>
+          {!isLogin && (
+            <div className="input-group">
+              <label>RUT</label>
+              <input
+                type="text"
+                name="rut"
+                value={formData.rut}
+                onChange={handleChange}
+                required
+                placeholder="Ej: 12345678-9"
+              />
+            </div>
           )}
 
           {!isLogin && (
             <div className="input-group">
               <label>Seleccione su rol</label>
-              <select
-                name="rol"
-                value={formData.rol}
-                onChange={handleChange}
-              >
+              <select name="rol" value={formData.rol} onChange={handleChange}>
                 <option value="Directiva">Directiva</option>
-                <option value="Coordinador administrativo">Coordinador administrativo</option>
+                <option value="Coordinador administrativo">
+                  Coordinador administrativo
+                </option>
                 <option value="Coordinador PIE">Coordinador PIE</option>
                 <option value="Profesor">Profesor</option>
                 <option value="Equipo PIE">Equipo PIE</option>
@@ -174,7 +172,7 @@ function InicioDeSesion() {
             <label>Contraseña</label>
             <div className="password-wrapper">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -188,7 +186,9 @@ function InicioDeSesion() {
               >
                 <span
                   className="iconify"
-                  data-icon={showPassword ? 'heroicons:eye-slash' : 'heroicons:eye'}
+                  data-icon={
+                    showPassword ? "heroicons:eye-slash" : "heroicons:eye"
+                  }
                   data-width="20"
                   data-height="20"
                 ></span>
@@ -197,17 +197,17 @@ function InicioDeSesion() {
           </div>
 
           <button type="submit" className="submit-btn">
-            {isLogin ? 'Ingresar' : 'Crear cuenta'}
+            {isLogin ? "Ingresar" : "Crear cuenta"}
           </button>
 
           <p className="register-text">
-            {isLogin ? 'No tienes cuenta?' : 'Ya tienes cuenta?'}{' '}
+            {isLogin ? "No tienes cuenta?" : "Ya tienes cuenta?"}{" "}
             <button
               type="button"
               className="toggle-link"
               onClick={() => setIsLogin(!isLogin)}
             >
-              {isLogin ? 'Crea una aqui' : 'Ingresa aqui'}
+              {isLogin ? "Crea una aqui" : "Ingresa aqui"}
             </button>
           </p>
         </form>

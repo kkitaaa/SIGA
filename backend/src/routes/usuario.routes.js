@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
 import { listarUsuariosSinRolController } from "../controllers/usuario.controller.js";
-import { ROLES } from "../constants/roles.js";   // ✅ Importar constantes
+import { ROLES } from "../constants/roles.js"; // ✅ Importar constantes
 
 const router = Router();
 
@@ -25,7 +25,7 @@ const router = Router();
 router.get(
   "/usuarios-sin-rol",
   authMiddleware,
-  verifyRole(ROLES.ADMINISTRATIVO),   // ✅ Usar constante
+  verifyRole(ROLES.ADMINISTRATIVO), // ✅ Usar constante
   listarUsuariosSinRolController,
 );
 

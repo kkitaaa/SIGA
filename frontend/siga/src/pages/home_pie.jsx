@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,7 @@ import {
   Heading,
   Text,
   VStack,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 function PieHome() {
   return (
@@ -37,7 +37,7 @@ function PieHome() {
           bg="rgba(255,255,255,0.2)"
           color="white"
           _hover={{
-            bg: 'rgba(255,255,255,0.3)',
+            bg: "rgba(255,255,255,0.3)",
           }}
         >
           Ver perfil
@@ -45,11 +45,7 @@ function PieHome() {
       </Flex>
 
       {/* Contenido */}
-      <Grid
-        templateColumns={{ base: '1fr', lg: '1.5fr 0.8fr' }}
-        gap={6}
-        mt={6}
-      >
+      <Grid templateColumns={{ base: "1fr", lg: "1.5fr 0.8fr" }} gap={6} mt={6}>
         {/* Panel principal */}
         <Box
           bg="white"
@@ -57,21 +53,13 @@ function PieHome() {
           p={8}
           boxShadow="0 20px 35px rgba(0,0,0,0.08)"
         >
-          <Heading
-            size="2xl"
-            color="gray.800"
-            mb={3}
-          >
+          <Heading size="2xl" color="gray.800" mb={3}>
             Equipo PIE
           </Heading>
 
-          <Text
-            color="gray.600"
-            mb={8}
-            maxW="55ch"
-          >
-            Gestión de estudiantes NEE, funcionarios,
-            cursos y documentación institucional.
+          <Text color="gray.600" mb={8} maxW="55ch">
+            Gestión de estudiantes NEE, funcionarios, cursos y documentación
+            institucional.
           </Text>
 
           <VStack gap={5} align="stretch">
@@ -111,53 +99,23 @@ function PieHome() {
           p={6}
           boxShadow="0 20px 35px rgba(0,0,0,0.08)"
         >
-          <Heading
-            size="md"
-            mb={5}
-            color="gray.800"
-          >
+          <Heading size="md" mb={5} color="gray.800">
             Documentos
           </Heading>
 
           <VStack gap={4} align="stretch">
-            <Box
-              h="16px"
-              bg="gray.200"
-              borderRadius="999px"
-            />
+            <Box h="16px" bg="gray.200" borderRadius="999px" />
 
-            <Box
-              h="16px"
-              bg="gray.200"
-              borderRadius="999px"
-              w="60%"
-            />
+            <Box h="16px" bg="gray.200" borderRadius="999px" w="60%" />
 
-            <Box
-              h="16px"
-              bg="gray.200"
-              borderRadius="999px"
-            />
+            <Box h="16px" bg="gray.200" borderRadius="999px" />
 
-            <Box
-              h="16px"
-              bg="gray.200"
-              borderRadius="999px"
-              w="90%"
-            />
+            <Box h="16px" bg="gray.200" borderRadius="999px" w="90%" />
 
-            <Box
-              h="16px"
-              bg="gray.200"
-              borderRadius="999px"
-            />
+            <Box h="16px" bg="gray.200" borderRadius="999px" />
           </VStack>
 
-          <Button
-            mt={8}
-            w="100%"
-            colorScheme="teal"
-          >
+          <Button mt={8} w="100%" colorScheme="teal">
             Ver más
           </Button>
         </Box>

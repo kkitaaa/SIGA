@@ -12,7 +12,11 @@ export const asignarRolController = async (req, res) => {
     }
 
     const idUsuarioActual = req.user.id_usuario;
-    const resultado = await asignarRol(idUsuarioDestino, idRolAsignado, idUsuarioActual);
+    const resultado = await asignarRol(
+      idUsuarioDestino,
+      idRolAsignado,
+      idUsuarioActual,
+    );
 
     return res.status(200).json({ ok: true, resultado });
   } catch (err) {
