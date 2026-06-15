@@ -27,3 +27,11 @@ prisma-migrate:
 
 prisma-migrate-dev:
 	npx prisma migrate dev
+
+prisma:
+	npx prisma generate
+	npx prisma migrate dev
+	npx prisma migrate deploy
+
+run:
+	npm run dev

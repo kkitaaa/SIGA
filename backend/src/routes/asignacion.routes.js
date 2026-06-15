@@ -27,9 +27,53 @@ const router = Router();
  *         nombre:
  *           type: string
  */
-
 router.get("/usuarios-sin-rol", authMiddleware, listarUsuariosSinRolController);
-router.post("/asignar-rol", authMiddleware, asignarRolController);
+
+/**
+ * @swagger
+ * /api/asignacion:
+ *   post:
+ *     summary: Asignar rol a usuario
+ *     tags:
+ *       - Asignacion
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idUsuarioDestino:
+ *                 type: integer
+ *               idRolAsignado:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Rol asignado correctamente
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autorizado
+ */
+router.post("/asignacion", authMiddleware, asignarRolController);
+
+/**
+ * @swagger
+ * /api/asignacion/roles:
+ *   get:
+ *     summary: Listar roles disponibles
+ *     tags:
+ *       - Asignacion
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de roles
+ *       401:
+ *         description: No autorizado
+ */
 router.get("/roles", authMiddleware, listarRolesController);
 
 export default router;

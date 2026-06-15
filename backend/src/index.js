@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
+import documentoRoutes from "./routes/documento.routes.js";
 
 import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/asignacion", asignacionRoutes);
 app.use("/api/usuario", usuarioRoutes);
+app.use("/api/documento", documentoRoutes);
 
 /**
  * SWAGGER

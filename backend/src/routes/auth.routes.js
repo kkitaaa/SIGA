@@ -32,9 +32,6 @@ const router = Router();
  *               rut:
  *                 type: string
  *                 example: 12345678-9
- *               rol:
- *                 type: string
- *                 example: PROFESOR
  *     responses:
  *       201:
  *         description: Usuario registrado correctamente
