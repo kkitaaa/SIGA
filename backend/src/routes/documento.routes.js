@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/documentos:
+ * /api/documento:
  *   post:
  *     summary: Subir documento institucional
  *     tags:
@@ -38,15 +38,5 @@ router.post(
   upload.single('archivo'),
   subirDocumentoController,
 );
-
-router.get('/storage-test', async (req, res) => {
-  const { data, error } = await supabase.storage.listBuckets();
-
-  if (error) {
-    return res.status(500).json(error);
-  }
-
-  res.json(data);
-});
 
 export default router;

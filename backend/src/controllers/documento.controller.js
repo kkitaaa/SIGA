@@ -9,7 +9,7 @@ export const subirDocumentoController = async (req, res) => {
       });
     }
 
-    const documento = await subirDocumento(req.file);
+    const documento = await subirDocumento(req.file, req.user.id_usuario);
 
     return res.status(201).json({
       ok: true,
