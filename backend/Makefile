@@ -1,4 +1,4 @@
-.PHONY: lint format test test-integration test-e2e fix prisma-generate prisma-migrate prisma-migrate-dev
+.PHONY: lint format test test-integration test-e2e
 
 lint:
 	npm run lint
