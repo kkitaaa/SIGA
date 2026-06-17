@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { upload } from '../middleware/upload.middleware.js';
-import { authMiddleware } from '../middleware/auth.js';
-import { subirDocumentoController } from '../controllers/documento.controller.js';
+import { Router } from "express";
+import { upload } from "../middleware/upload.middleware.js";
+import { authMiddleware } from "../middleware/auth.js";
+import { subirDocumentoController } from "../controllers/documento.controller.js";
 
 const router = Router();
 
@@ -33,9 +33,9 @@ const router = Router();
  *         description: No autorizado
  */
 router.post(
-  '/',
+  "/",
   authMiddleware,
-  upload.single('archivo'),
+  upload.single("archivo"),
   subirDocumentoController,
 );
 

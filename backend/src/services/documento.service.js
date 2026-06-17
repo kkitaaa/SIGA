@@ -1,5 +1,5 @@
-import { StorageContext } from '../storage/storage-context.js';
-import { crearDocumento } from '../repositories/documento.repository.js';
+import { StorageContext } from "../storage/storage-context.js";
+import { crearDocumento } from "../repositories/documento.repository.js";
 
 const storage = new StorageContext();
 

@@ -1,10 +1,10 @@
-import { LocalStorageStrategy } from './strategies/local-storage.strategy.js';
-import { SupabaseStorageStrategy } from './strategies/supabase-storage.strategy.js';
+import { LocalStorageStrategy } from "./strategies/local-storage.strategy.js";
+import { SupabaseStorageStrategy } from "./strategies/supabase-storage.strategy.js";
 
 export class StorageContext {
   constructor() {
     this.strategy =
-      process.env.STORAGE_DRIVER === 'local'
+      process.env.STORAGE_DRIVER === "local"
         ? new LocalStorageStrategy()
         : new SupabaseStorageStrategy();
   }

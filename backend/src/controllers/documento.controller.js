@@ -1,11 +1,11 @@
-import { subirDocumento } from '../services/documento.service.js';
+import { subirDocumento } from "../services/documento.service.js";
 
 export const subirDocumentoController = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
         ok: false,
-        mensaje: 'Debe adjuntar un archivo',
+        mensaje: "Debe adjuntar un archivo",
       });
     }
 

@@ -1,5 +1,5 @@
-import { StorageStrategy } from '../storage.interface.js';
-import { supabase } from '../../config/supabase.js';
+import { StorageStrategy } from "../storage.interface.js";
+import { supabase } from "../../config/supabase.js";
 
 export class SupabaseStorageStrategy extends StorageStrategy {
   async upload(file) {
@@ -12,7 +12,7 @@ export class SupabaseStorageStrategy extends StorageStrategy {
       });
 
     if (error) {
-      throw new Error('Error al subir archivo');
+      throw new Error("Error al subir archivo");
     }
 
     const { data } = supabase.storage

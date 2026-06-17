@@ -1,5 +1,5 @@
 export class StorageStrategy {
   async upload(file) {
-    throw new Error('Método upload no implementado');
+    throw new Error("Método upload no implementado");
   }
 }

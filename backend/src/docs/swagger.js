@@ -1,31 +1,31 @@
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'SIGA API',
-      version: '1.0.0',
-      description: 'Documentación API del sistema SIGA',
+      title: "SIGA API",
+      version: "1.0.0",
+      description: "Documentación API del sistema SIGA",
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: "http://localhost:3000",
       },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
   },
 
-  apis: ['./src/routes/*.js'],
+  apis: ["./src/routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
