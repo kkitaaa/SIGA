@@ -5,6 +5,7 @@ import path from "path";
 
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
+import asignacionPieRoutes from "./routes/asignacion-pie.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
 import documentoRoutes from "./routes/documento.routes.js";
 
@@ -23,6 +24,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
  */
 app.use("/api/auth", authRoutes);
 app.use("/api/asignacion", asignacionRoutes);
+app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documento", documentoRoutes);
 app.use("/api/documentos", documentoRoutes);
