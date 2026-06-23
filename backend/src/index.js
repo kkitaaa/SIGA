@@ -9,6 +9,7 @@ import usuarioRoutes from "./routes/usuario.routes.js";
 import documentoRoutes from "./routes/documento.routes.js";
 
 import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
+import estudianteRoutes from "./routes/estudiante.routes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/asignacion", asignacionRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documento", documentoRoutes);
 app.use("/api/documentos", documentoRoutes);
+app.use("/api/estudiante", estudianteRoutes);
 
 /**
  * SWAGGER
