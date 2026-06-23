@@ -1,9 +1,9 @@
-import prisma from '../config/prisma.js';
+import prisma from "../config/prisma.js";
 
 export class EstudianteRepository {
   static async findByRut(rut) {
     return await prisma.estudiante.findFirst({
-      where: { rut }
+      where: { rut },
     });
   }
 
@@ -23,8 +23,8 @@ export class EstudianteRepository {
         fecha_ingreso: data.fecha_ingreso,
         id_usuario: data.id_usuario,
         id_curso: data.id_curso,
-        id_tipo: data.id_tipo
-      }
+        id_tipo: data.id_tipo,
+      },
     });
   }
 }
