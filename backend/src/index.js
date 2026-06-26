@@ -8,6 +8,7 @@ import asignacionRoutes from "./routes/asignacion.routes.js";
 import asignacionPieRoutes from "./routes/asignacion-pie.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
 import documentoRoutes from "./routes/documento.routes.js";
+import cursoRoutes from "./routes/curso.routes.js";
 
 import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 import estudianteRoutes from "./routes/estudiante.routes.js";
@@ -30,7 +31,7 @@ app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documento", documentoRoutes);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
-
+app.use("/api/cursos", cursoRoutes);
 /**
  * SWAGGER
  */
