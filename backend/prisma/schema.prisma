@@ -7,28 +7,27 @@ datasource db {
 }
 
 model Usuario {
-  id_usuario        Int               @id @default(autoincrement())
+  id_usuario        Int              @id @default(autoincrement())
   rut               String
   primer_nombre     String
   segundo_nombre    String?
   primer_apellido   String
   segundo_apellido  String?
   numero_telefonico String
+
   cuenta            Cuenta?
   documentos        Documento[]
-  estudiante        Estudiante?
   funcionario       Funcionario?
   profesor          Profesor?
-  tipos             Tipo[]
-  tipos_estudiante  Tipo_estudiante[]
   roles             Usuario_rol[]
 }
 
 model Cuenta {
   id_cuenta   Int     @id @default(autoincrement())
   email       String  @unique
-  contraseña String
+  contraseña  String
   estado      String
+
   id_usuario  Int     @unique
   usuario     Usuario @relation(fields: [id_usuario], references: [id_usuario])
 }
@@ -36,14 +35,16 @@ model Cuenta {
 model Rol {
   id_rol     Int           @id @default(autoincrement())
   nombre_rol String
+
   usuarios   Usuario_rol[]
 }
 
 model Usuario_rol {
   id_usuario Int
   id_rol     Int
-  rol        Rol     @relation(fields: [id_rol], references: [id_rol])
-  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  usuario Usuario @relation(fields: [id_usuario], references: [id_usuario])
+  rol     Rol     @relation(fields: [id_rol], references: [id_rol])
 
   @@id([id_usuario, id_rol])
 }
@@ -52,78 +53,68 @@ model Documento {
   id_documento Int      @id @default(autoincrement())
   url          String
   fecha_subida DateTime @default(now())
-  id_usuario   Int
-  usuario      Usuario  @relation(fields: [id_usuario], references: [id_usuario])
+
+  id_usuario Int
+  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
 }
 
 model Profesor {
-  id_profesor  Int     @id @default(autoincrement())
+  id_profesor  Int    @id @default(autoincrement())
   especialidad String
-  id_usuario   Int     @unique
-  cursos       Curso[]
-  usuario      Usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  id_usuario Int     @unique
+  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  cursos Curso[]
 }
 
 model Curso {
-  id_curso        Int          @id @default(autoincrement())
+  id_curso        Int    @id @default(autoincrement())
   nivel_educativo String
   nivel_curso     String
   letra           String
-  id_profesor     Int
-  profesor        Profesor     @relation(fields: [id_profesor], references: [id_profesor])
-  estudiantes     Estudiante[]
+
+  id_profesor Int
+  profesor    Profesor @relation(fields: [id_profesor], references: [id_profesor])
+
+  estudiantes Estudiante[]
 }
 
 model Estudiante {
-  id_estudiante    Int          @id @default(autoincrement())
-  rut              String
-  edad             Int
-  primer_nombre    String
-  segundo_nombre   String?
-  primer_apellido  String
-  segundo_apellido String?
-  sexo             String
-  ano_nacimiento   Int
-  mes_nacimiento   Int
-  dia_nacimiento   Int
-  fecha_ingreso    DateTime
-  id_usuario       Int          @unique
-  id_curso         Int
-  id_tipo          Int
-  asignaciones     Asignacion[]
-  curso            Curso        @relation(fields: [id_curso], references: [id_curso])
-  tipo             Tipo         @relation(fields: [id_tipo], references: [id_tipo])
-  usuario          Usuario      @relation(fields: [id_usuario], references: [id_usuario])
-}
+  id_estudiante     Int      @id @default(autoincrement())
+  rut               String
+  primer_nombre     String
+  segundo_nombre    String?
+  primer_apellido   String
+  segundo_apellido  String?
+  sexo              String
+  fecha_nacimiento  DateTime
+  fecha_ingreso     DateTime
+  es_nee            Boolean  @default(false)
 
-model Tipo_estudiante {
-  id_tipo     Int     @id @default(autoincrement())
-  nombre_tipo String
-  id_usuario  Int
-  usuario     Usuario @relation(fields: [id_usuario], references: [id_usuario])
+  id_curso Int
+  curso    Curso @relation(fields: [id_curso], references: [id_curso])
+
+  asignaciones Asignacion[]
 }
 
 model Funcionario {
-  id_funcionario   Int          @id @default(autoincrement())
+  id_funcionario   Int    @id @default(autoincrement())
   tipo_funcionario String
-  id_usuario       Int          @unique
-  asignaciones     Asignacion[]
-  usuario          Usuario      @relation(fields: [id_usuario], references: [id_usuario])
-}
 
-model Tipo {
-  id_tipo     Int          @id @default(autoincrement())
-  nombre_tipo String
-  id_usuario  Int
-  estudiantes Estudiante[]
-  usuario     Usuario      @relation(fields: [id_usuario], references: [id_usuario])
+  id_usuario Int     @unique
+  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  asignaciones Asignacion[]
 }
 
 model Asignacion {
-  id_asignacion    Int         @id @default(autoincrement())
-  fecha_asignacion DateTime    @default(now())
-  id_funcionario   Int
-  id_estudiante    Int
-  estudiante       Estudiante  @relation(fields: [id_estudiante], references: [id_estudiante])
-  funcionario      Funcionario @relation(fields: [id_funcionario], references: [id_funcionario])
+  id_asignacion    Int      @id @default(autoincrement())
+  fecha_asignacion DateTime @default(now())
+
+  id_funcionario Int
+  id_estudiante  Int
+
+  funcionario Funcionario @relation(fields: [id_funcionario], references: [id_funcionario])
+  estudiante  Estudiante  @relation(fields: [id_estudiante], references: [id_estudiante])
 }

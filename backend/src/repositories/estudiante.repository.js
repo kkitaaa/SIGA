@@ -15,34 +15,31 @@ export class EstudianteRepository {
         segundo_nombre: data.segundo_nombre,
         primer_apellido: data.primer_apellido,
         segundo_apellido: data.segundo_apellido,
-        edad: data.edad,
         sexo: data.sexo,
-        ano_nacimiento: data.ano_nacimiento,
-        mes_nacimiento: data.mes_nacimiento,
-        dia_nacimiento: data.dia_nacimiento,
+        fecha_nacimiento: data.fecha_nacimiento,
         fecha_ingreso: data.fecha_ingreso,
-        id_usuario: data.id_usuario,
         id_curso: data.id_curso,
-        id_tipo: data.id_tipo,
+        es_nee: data.es_nee ?? false,
       },
     });
   }
+
   async findById(idEstudiante, tx = prisma) {
     return tx.estudiante.findUnique({
-      where: { id_estudiante: Number(idEstudiante) },
-      include: {
-        usuario: {
-          include: {
-            cuenta: true,
-          },
-        },
+      where: {
+        id_estudiante: Number(idEstudiante),
       },
     });
   }
 
   async updateNeeStatus(idEstudiante, esNee, tx = prisma) {
-    return tx.estudiante.findUnique({
-      where: { id_estudiante: Number(idEstudiante) },
+    return tx.estudiante.update({
+      where: {
+        id_estudiante: Number(idEstudiante),
+      },
+      data: {
+        es_nee: esNee,
+      },
     });
   }
 }

@@ -29,7 +29,7 @@ app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documento", documentoRoutes);
 app.use("/api/documentos", documentoRoutes);
-app.use("/api/estudiante", estudianteRoutes);
+app.use("/api/estudiantes", estudianteRoutes);
 
 /**
  * SWAGGER

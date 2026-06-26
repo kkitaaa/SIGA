@@ -2,7 +2,6 @@ import { EstudianteRepository } from "../repositories/estudiante.repository.js";
 
 export class EstudianteService {
   static async registrarEstudiante(dto) {
-    // Evitar estudiantes duplicados por RUT
     const estudianteExistente = await EstudianteRepository.findByRut(dto.rut);
 
     if (estudianteExistente) {
@@ -11,7 +10,17 @@ export class EstudianteService {
       );
     }
 
-    // Si no existe, lo creamos
-    return await EstudianteRepository.create(dto);
+    return await EstudianteRepository.create({
+      rut: dto.rut,
+      primer_nombre: dto.primer_nombre,
+      segundo_nombre: dto.segundo_nombre,
+      primer_apellido: dto.primer_apellido,
+      segundo_apellido: dto.segundo_apellido,
+      sexo: dto.sexo,
+      fecha_nacimiento: dto.fecha_nacimiento,
+      fecha_ingreso: dto.fecha_ingreso,
+      id_curso: dto.id_curso,
+      es_nee: false,
+    });
   }
 }
