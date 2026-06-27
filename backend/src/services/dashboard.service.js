@@ -9,9 +9,7 @@ export class DashboardService {
         prisma.documento.count(),
         prisma.estudiante.count({
           where: {
-            tipo: {
-              nombre_tipo: "PIE",
-            },
+            es_nee: true,
           },
         }),
       ]);
