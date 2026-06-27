@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import AsignacionRoles from "./pages/asignacion_roles";
 import PieDashboard from "./pages/home_pie";
 import ProfesoresDashboard from "./pages/home_profesores";
+import AsignacionPIEPage from "./pages/asignacion_PIE";
 
 import ProtectedRoute from "./middleware/ProtectedRoute";
 

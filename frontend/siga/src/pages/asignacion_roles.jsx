@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../services/api";
 import "../styles/asignacion_roles.css";
 
 import {
@@ -26,8 +26,9 @@ function AsignacionRoles() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
-  const token = localStorage.getItem("token");
+
   const userRole = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -37,17 +38,14 @@ function AsignacionRoles() {
           return;
         }
 
-        const res = await axios.get("http://localhost:3000/usuarios-sin-rol", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/usuarios-sin-rol");
 
         setUsers(res.data.usuarios || []);
       } catch (err) {
-        console.error("Error al cargar usuarios sin rol:", err);
         setFetchError(
           err.response?.data?.mensaje ||
             err.response?.data?.error ||
-            err.message,
+            err.message
         );
       }
     };
@@ -59,17 +57,14 @@ function AsignacionRoles() {
           return;
         }
 
-        const res = await axios.get("http://localhost:3000/roles", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/roles");
 
         setRoles(res.data.roles || []);
       } catch (err) {
-        console.error("Error al cargar roles:", err);
         setFetchError(
           err.response?.data?.mensaje ||
             err.response?.data?.error ||
-            err.message,
+            err.message
         );
       }
     };
@@ -81,8 +76,10 @@ function AsignacionRoles() {
   const handleRoleChange = (userId, roleId) => {
     setUsers((prevUsers) =>
       prevUsers.map((user) =>
-        user.id_usuario === userId ? { ...user, assignedRole: roleId } : user,
-      ),
+        user.id_usuario === userId
+          ? { ...user, assignedRole: roleId }
+          : user
+      )
     );
   };
 
@@ -95,32 +92,25 @@ function AsignacionRoles() {
   const handleAssignRole = async () => {
     if (selectedUser && selectedRole) {
       try {
-        const token = localStorage.getItem("token");
-        await axios.post(
-          "http://localhost:3000/asignar-rol",
-          {
-            idUsuarioDestino: selectedUser.id_usuario,
-            idRolAsignado: Number(selectedRole),
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        await api.post("/asignar-rol", {
+          idUsuarioDestino: selectedUser.id_usuario,
+          idRolAsignado: Number(selectedRole),
+        });
 
         setUsers((prevUsers) =>
           prevUsers.filter(
-            (user) => user.id_usuario !== selectedUser.id_usuario,
-          ),
+            (user) => user.id_usuario !== selectedUser.id_usuario
+          )
         );
+
         setSelectedUser(null);
         setSelectedRole("");
         setIsOpen(false);
       } catch (err) {
-        console.error("Error al asignar rol:", err);
         setFetchError(
           err.response?.data?.mensaje ||
             err.response?.data?.error ||
-            err.message,
+            err.message
         );
       }
     }
@@ -215,6 +205,7 @@ function AsignacionRoles() {
           <ModalContent>
             <ModalHeader>Confirmar Asignación de Rol</ModalHeader>
             <ModalCloseButton />
+
             <ModalBody>
               <Text>
                 ¿Estás seguro de asignar el rol de{" "}
@@ -231,6 +222,7 @@ function AsignacionRoles() {
                 ?
               </Text>
             </ModalBody>
+
             <ModalFooter>
               <Button variant="outline" mr={3} onClick={() => setIsOpen(false)}>
                 Cancelar

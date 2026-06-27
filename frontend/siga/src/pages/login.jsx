@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import { useAuth } from "../context/AuthContext";
 
+import api from "../services/api";
+
 function InicioDeSesion() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -27,61 +29,43 @@ function InicioDeSesion() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_URL = "http://localhost:3000/api/auth";
-
     if (isLogin) {
       try {
-        const response = await fetch(`${API_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
+        const res = await api.post("/auth/login", {
+          email: formData.email,
+          password: formData.password,
         });
 
-        const data = await response.json();
+        const data = res.data;
 
-        if (response.ok) {
-          login(data.token, data.role);
+        login(data.token, data.role);
 
-          alert(data.mensaje);
+        alert(data.mensaje);
 
-          if (data.role === "Administrativo") {
-            navigate("/asignacion-roles");
-          } else {
-            navigate("/home");
-          }
+        if (data.role === "Administrativo") {
+          navigate("/asignacion-roles");
         } else {
-          alert(`Error: ${data.error}`);
+          navigate("/home");
         }
       } catch (error) {
-        alert("Error al conectar con el servidor.");
+        alert(error.response?.data?.error || "Error al conectar con el servidor.");
       }
     } else {
       try {
-        const response = await fetch(`${API_URL}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nombre: formData.nombre,
-            email: formData.email,
-            password: formData.password,
-            rut: formData.rut,
-            rol: formData.rol,
-          }),
+        const res = await api.post("/auth/register", {
+          nombre: formData.nombre,
+          email: formData.email,
+          password: formData.password,
+          rut: formData.rut,
+          rol: formData.rol,
         });
 
-        const data = await response.json();
+        const data = res.data;
 
-        if (response.ok) {
-          alert(data.mensaje);
-          setIsLogin(true);
-        } else {
-          alert(`Error: ${data.error}`);
-        }
+        alert(data.mensaje);
+        setIsLogin(true);
       } catch (error) {
-        alert("Error al conectar con el servidor.");
+        alert(error.response?.data?.error || "Error al conectar con el servidor.");
       }
     }
   };
