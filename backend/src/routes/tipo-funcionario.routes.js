@@ -6,7 +6,8 @@ import {
   actualizarTipoFuncionarioController,
   desactivarTipoFuncionarioController,
 } from "../controllers/tipo-funcionario.controller.js";
-import { authMiddleware, verifyRole } from "../middlewares/auth.js";
+import { authMiddleware } from "../middleware/auth.js";
+import { verifyRole } from "../middleware/role.middleware.js";
 
 
 const router = Router();
@@ -20,7 +21,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/funcionarios:
+ * /api/tipos-funcionarios/funcionarios:
  *   post:
  *     summary: Registrar un nuevo tipo de funcionario
  *     tags: [TipoFuncionario]
@@ -57,7 +58,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/funcionarios:
+ * /api/tipos-funcionarios/funcionarios:
  *   get:
  *     summary: Listar todos los tipos de funcionario
  *     tags: [TipoFuncionario]
@@ -89,7 +90,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/funcionarios/{id}:
+ * /api/tipos-funcionarios/funcionarios/{id}:
  *   get:
  *     summary: Obtener detalle de un tipo de funcionario
  *     tags: [TipoFuncionario]
@@ -126,7 +127,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/funcionarios/{id}:
+ * /api/tipos-funcionarios/funcionarios/{id}:
  *   put:
  *     summary: Actualizar un tipo de funcionario
  *     tags: [TipoFuncionario]
@@ -159,7 +160,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/funcionarios/{id}/desactivar:
+ * /api/tipos-funcionarios/funcionarios/{id}/desactivar:
  *   patch:
  *     summary: Desactivar un tipo de funcionario
  *     tags: [TipoFuncionario]
