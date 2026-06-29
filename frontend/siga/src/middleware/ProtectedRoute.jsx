@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function ProtectedRoute({ children, roles = [] }) {
+function ProtectedRoute({ children, rolesPermitidos = [] }) {
   const { estaAutenticado, cargando, rol } = useAuth();
 
   if (cargando) {
@@ -9,13 +9,16 @@ function ProtectedRoute({ children, roles = [] }) {
   }
 
   if (!estaAutenticado()) {
+    // Si no tiene token, se va al login
     return <Navigate to="/" replace />;
   }
 
+  // Ahora sí lee correctamente los roles permitidos
   if (
-    roles.length > 0 &&
-    !roles.includes(rol)
+    rolesPermitidos.length > 0 &&
+    !rolesPermitidos.includes(rol)
   ) {
+    // Si el usuario no tiene el rol necesario, lo mandamos al inicio
     return <Navigate to="/home" replace />;
   }
 
