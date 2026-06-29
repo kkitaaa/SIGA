@@ -23,4 +23,12 @@ export class EstudianteService {
       es_nee: false,
     });
   }
+
+  static async listarEstudiantes() {
+    return await EstudianteRepository.findAll();
+  }
+
+  static async listarEstudiantesNee() {
+    return await EstudianteRepository.findAllNee();
+  }
 }

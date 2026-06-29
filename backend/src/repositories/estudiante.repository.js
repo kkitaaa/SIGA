@@ -24,6 +24,19 @@ export class EstudianteRepository {
     });
   }
 
+  static async findAll() {
+    return await prisma.estudiante.findMany({
+      orderBy: { primer_apellido: 'asc' } // Ordena por apellido para que se vea mejor en el frontend
+    });
+  }
+
+  static async findAllNee() {
+    return await prisma.estudiante.findMany({
+      where: { es_nee: true },
+      orderBy: { primer_apellido: 'asc' }
+    });
+  }
+
   async findById(idEstudiante, tx = prisma) {
     return tx.estudiante.findUnique({
       where: {

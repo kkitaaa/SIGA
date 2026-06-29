@@ -31,3 +31,39 @@ export const registrarEstudianteController = async (req, res) => {
     });
   }
 };
+
+// listar TODOS los estudiantes
+export const listarEstudiantesController = async (req, res) => {
+  try {
+    const estudiantes = await EstudianteService.listarEstudiantes();
+    
+    return res.status(200).json({
+      ok: true,
+      estudiantes,
+    });
+  } catch (error) {
+    console.error("Error al listar estudiantes:", error);
+    return res.status(500).json({
+      ok: false,
+      error: "Error interno al obtener estudiantes",
+    });
+  }
+};
+
+// listar SOLO los estudiantes NEE
+export const listarEstudiantesNeeController = async (req, res) => {
+  try {
+    const estudiantes = await EstudianteService.listarEstudiantesNee();
+    
+    return res.status(200).json({
+      ok: true,
+      estudiantes,
+    });
+  } catch (error) {
+    console.error("Error al listar estudiantes NEE:", error);
+    return res.status(500).json({
+      ok: false,
+      error: "Error interno al obtener estudiantes NEE",
+    });
+  }
+};
