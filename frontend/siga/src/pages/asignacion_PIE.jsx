@@ -12,28 +12,32 @@ import api from "../services/api";
 
 export default function AsignacionPIEPage() {
   const [estudiantes, setEstudiantes] = useState([]);
-  const [profesionales, setProfesionales] = useState([]);
+  const [funcionarios, setFuncionarios] = useState([]);
   const [asignaciones, setAsignaciones] = useState([]);
 
   const [estudianteId, setEstudianteId] = useState("");
-  const [profesionalId, setProfesionalId] = useState("");
+  const [funcionarioId, setFuncionarioId] = useState("");
 
   const toast = useToast();
 
   const cargarDatos = async () => {
     try {
-      const [e, p, a] = await Promise.all([
-        api.get("/estudiantes"),
-        api.get("/profesionales"),
-        api.get("/pie/asignaciones"),
+      const [asignacionesRes, estudiantesRes, funcionariosRes] = await Promise.all([
+        api.get("/asignacion-pie"),
+        api.get("/estudiantes/nee"),
+        api.get("/funcionarios")
       ]);
 
-      setEstudiantes(e.data);
-      setProfesionales(p.data);
-      setAsignaciones(a.data);
-    } catch {
+      setAsignaciones(asignacionesRes.data.asignaciones || []);
+      setEstudiantes(estudiantesRes.data.estudiantes || []);
+      setFuncionarios(funcionariosRes.data || []);
+      
+    } catch (error) {
+      console.error(error);
+
       toast({
         title: "Error cargando datos",
+        description: "Hubo un problema al conectar con el servidor.",
         status: "error",
       });
     }
@@ -44,10 +48,19 @@ export default function AsignacionPIEPage() {
   }, []);
 
   const crearAsignacion = async () => {
+    if (!estudianteId || !funcionarioId) {
+      toast({
+        title: "Faltan datos",
+        description: "Por favor selecciona un estudiante y un funcionario.",
+        status: "warning",
+      });
+      return;
+    }
+
     try {
-      await api.post("/pie/asignaciones", {
-        estudianteId,
-        profesionalId,
+      await api.post("/asignacion-pie", {
+        idEstudiante: Number(estudianteId),
+        idFuncionario: Number(funcionarioId),
       });
 
       toast({
@@ -56,11 +69,15 @@ export default function AsignacionPIEPage() {
       });
 
       setEstudianteId("");
-      setProfesionalId("");
+      setFuncionarioId("");
+
       cargarDatos();
-    } catch {
+    } catch (error) {
+      console.error(error);
+
       toast({
         title: "Error al crear asignación",
+        description: error.response?.data?.mensaje || "Error interno del servidor",
         status: "error",
       });
     }
@@ -72,25 +89,31 @@ export default function AsignacionPIEPage() {
 
       <VStack spacing={4} align="stretch">
         <Select
-          placeholder="Selecciona estudiante"
+          placeholder="Selecciona estudiante (Solo NEE)"
           value={estudianteId}
           onChange={(e) => setEstudianteId(e.target.value)}
         >
           {estudiantes.map((e) => (
-            <option key={e.id} value={e.id}>
-              {e.nombre}
+            <option
+              key={e.id_estudiante}
+              value={e.id_estudiante}
+            >
+              {e.primer_nombre} {e.primer_apellido} ({e.rut})
             </option>
           ))}
         </Select>
 
         <Select
-          placeholder="Selecciona profesional"
-          value={profesionalId}
-          onChange={(e) => setProfesionalId(e.target.value)}
+          placeholder="Selecciona funcionario"
+          value={funcionarioId}
+          onChange={(e) => setFuncionarioId(e.target.value)}
         >
-          {profesionales.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.nombre}
+          {funcionarios.map((f) => (
+            <option
+              key={f.id_funcionario}
+              value={f.id_funcionario}
+            >
+              {f.nombre} - {f.tipo_profesional}
             </option>
           ))}
         </Select>
@@ -101,11 +124,18 @@ export default function AsignacionPIEPage() {
       </VStack>
 
       <Box mt={6}>
-        <Heading size="md">Asignaciones</Heading>
+        <Heading size="md" mb={4}>Asignaciones Activas</Heading>
 
         {asignaciones.map((a) => (
-          <Box key={a.id} p={2} borderWidth="1px" mt={2}>
-            {a.estudianteNombre} → {a.profesionalNombre}
+          <Box
+            key={a.id_asignacion}
+            p={3}
+            borderWidth="1px"
+            borderRadius="md"
+            mt={2}
+            shadow="sm"
+          >
+            <strong>ID Estudiante:</strong> {a.id_estudiante} | <strong>ID Funcionario:</strong> {a.id_funcionario}
           </Box>
         ))}
       </Box>
