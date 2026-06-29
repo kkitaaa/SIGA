@@ -1,0 +1,186 @@
+.usuarios-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #f5f7fa url("/img/FondoSIGA.svg") no-repeat center center;
+  background-size: cover;
+  font-family: "Segoe UI", "Segoe UI Variable", sans-serif;
+}
+
+.usuarios-topbar {
+  margin-bottom: 1.25rem;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  background: white;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  margin-bottom: 0.85rem;
+}
+
+.usuarios-eyebrow {
+  margin: 0 0 0.25rem;
+  color: #2ec4b6;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+}
+
+.usuarios-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.8rem;
+}
+
+.usuarios-subtitle {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  max-width: 56ch;
+}
+
+.usuarios-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.usuarios-back-link {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #0f766e;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.usuarios-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  color: #475569;
+  font-weight: 600;
+}
+
+.usuarios-spinner {
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid #d1fae5;
+  border-top-color: #0f766e;
+  border-radius: 50%;
+  animation: usuarios-spin 0.8s linear infinite;
+}
+
+@keyframes usuarios-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.usuarios-filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.usuarios-input,
+.usuarios-select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  min-width: 280px;
+  background: white;
+}
+
+.usuarios-input {
+  flex: 1 1 320px;
+  min-width: 320px;
+}
+
+.usuarios-card {
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  padding: 0.95rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.usuarios-table th {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.usuarios-action {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #2ec4b6;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.usuarios-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.95rem 1rem;
+  background: #f8fafc;
+}
+
+.usuarios-pagination button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #0f766e;
+  color: white;
+  cursor: pointer;
+}
+
+.usuarios-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.usuarios-detail-card {
+  margin-top: 1rem;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+}
+
+.usuarios-empty {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  color: #475569;
+}

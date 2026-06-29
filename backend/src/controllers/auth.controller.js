@@ -34,7 +34,10 @@ export const login = async (req, res) => {
     res.status(200).json({
       token: data.token,
       role: data.role,
-      mensaje: `¡Bienvenido ${data.usuario.primer_nombre}!`,
+      nombre: data.nombre,
+      email: data.email,
+      usuario: data.usuario,
+      mensaje: `¡Bienvenido ${data.nombre || data.usuario.primer_nombre}!`,
     });
   } catch (error) {
     if (error.message.startsWith("VALIDATION_ERROR:")) {

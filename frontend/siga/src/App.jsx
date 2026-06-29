@@ -6,10 +6,11 @@ import ProtectedRoute from "./middleware/ProtectedRoute";
 import Login from "./pages/login";
 
 // General
-import Home from "./pages/home";
+import DashboardRouter from "./components/dashboard/DashboardRouter";
 
 // Roles
 import AsignacionRoles from "./pages/asignacion_roles";
+import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
 // PIE
 import PieDashboard from "./pages/home_pie";
@@ -36,12 +37,21 @@ function App() {
             "Coordinador PIE",
             "Coordinador Administrativo"
           ]}>
-            <Home />
+            <DashboardRouter />
           </ProtectedRoute>
         }
       />
 
       {/* 👤 Roles */}
+      <Route
+        path="/admin/usuarios"
+        element={
+          <ProtectedRoute rolesPermitidos={["Directiva", "Administrativo", "Coordinador Administrativo"]}>
+            <UsuariosPage />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/asignacion-roles"
         element={
