@@ -29,3 +29,28 @@ export const listarUsuariosSinRolController = async (req, res) => {
     res.status(500).json({ ok: false, mensaje: error.message });
   }
 };
+
+export const listarUsuariosController = async (req, res) => {
+  try {
+    const usuarios = await UsuarioService.obtenerUsuariosConRol();
+
+    if (!usuarios || usuarios.length === 0) {
+      return res.status(200).json({
+        ok: true,
+        usuarios: [],
+        mensaje: "No hay usuarios registrados",
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      usuarios,
+    });
+  } catch (error) {
+    console.error("Error al listar usuarios:", error);
+    return res.status(500).json({
+      ok: false,
+      mensaje: "Error del servidor",
+    });
+  }
+};
