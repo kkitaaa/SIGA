@@ -7,7 +7,7 @@ datasource db {
 }
 
 model Usuario {
-  id_usuario        Int              @id @default(autoincrement())
+  id_usuario        Int     @id @default(autoincrement())
   rut               String
   primer_nombre     String
   segundo_nombre    String?
@@ -15,28 +15,28 @@ model Usuario {
   segundo_apellido  String?
   numero_telefonico String
 
-  cuenta            Cuenta?
-  documentos        Documento[]
-  funcionario       Funcionario?
-  profesor          Profesor?
-  roles             Usuario_rol[]
+  cuenta      Cuenta?
+  documentos  Documento[]
+  funcionario Funcionario?
+  profesor    Profesor?
+  roles       Usuario_rol[]
 }
 
 model Cuenta {
-  id_cuenta   Int     @id @default(autoincrement())
-  email       String  @unique
-  contraseña  String
+  id_cuenta   Int    @id @default(autoincrement())
+  email       String @unique
+  contraseña String
   estado      String
 
-  id_usuario  Int     @unique
-  usuario     Usuario @relation(fields: [id_usuario], references: [id_usuario])
+  id_usuario Int     @unique
+  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
 }
 
 model Rol {
-  id_rol     Int           @id @default(autoincrement())
+  id_rol     Int    @id @default(autoincrement())
   nombre_rol String
 
-  usuarios   Usuario_rol[]
+  usuarios Usuario_rol[]
 }
 
 model Usuario_rol {
@@ -81,16 +81,16 @@ model Curso {
 }
 
 model Estudiante {
-  id_estudiante     Int      @id @default(autoincrement())
-  rut               String
-  primer_nombre     String
-  segundo_nombre    String?
-  primer_apellido   String
-  segundo_apellido  String?
-  sexo              String
-  fecha_nacimiento  DateTime
-  fecha_ingreso     DateTime
-  es_nee            Boolean  @default(false)
+  id_estudiante    Int      @id @default(autoincrement())
+  rut              String
+  primer_nombre    String
+  segundo_nombre   String?
+  primer_apellido  String
+  segundo_apellido String?
+  sexo             String
+  fecha_nacimiento DateTime
+  fecha_ingreso    DateTime
+  es_nee           Boolean  @default(false)
 
   id_curso Int
   curso    Curso @relation(fields: [id_curso], references: [id_curso])
@@ -98,12 +98,23 @@ model Estudiante {
   asignaciones Asignacion[]
 }
 
+model TipoFuncionario {
+  id_tipo_funcionario Int     @id @default(autoincrement())
+  nombre              String  @unique
+  descripcion         String?
+  activo              Boolean @default(true)
+
+  funcionarios Funcionario[] // relación 1:N
+}
+
 model Funcionario {
-  id_funcionario   Int    @id @default(autoincrement())
-  tipo_funcionario String
+  id_funcionario Int @id @default(autoincrement())
 
   id_usuario Int     @unique
   usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  id_tipo_funcionario Int
+  tipoFuncionario     TipoFuncionario @relation(fields: [id_tipo_funcionario], references: [id_tipo_funcionario])
 
   asignaciones Asignacion[]
 }
