@@ -5,35 +5,64 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [rol, setRol] = useState(null);
+  const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
+
+  const leerUsuarioDesdeStorage = () => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    if (!usuarioGuardado) return null;
+
+    try {
+      return JSON.parse(usuarioGuardado);
+    } catch {
+      return null;
+    }
+  };
 
   // Cargar sesión almacenada
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
+    const usuarioGuardado = leerUsuarioDesdeStorage();
 
-    if (tokenGuardado && rolGuardado) {
+    if (tokenGuardado) {
       setToken(tokenGuardado);
+    }
+
+    if (rolGuardado) {
       setRol(rolGuardado);
+    }
+
+    if (usuarioGuardado) {
+      setUsuario(usuarioGuardado);
     }
 
     setCargando(false);
   }, []);
 
-  const login = (tokenJWT, rolUsuario) => {
+  const login = (tokenJWT, rolUsuario, datosUsuario = null) => {
     setToken(tokenJWT);
     setRol(rolUsuario);
+    setUsuario(datosUsuario);
 
     localStorage.setItem("token", tokenJWT);
     localStorage.setItem("role", rolUsuario);
+
+    if (datosUsuario) {
+      localStorage.setItem("usuario", JSON.stringify(datosUsuario));
+    } else {
+      localStorage.removeItem("usuario");
+    }
   };
 
   const logout = () => {
     setToken(null);
     setRol(null);
+    setUsuario(null);
 
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("usuario");
   };
 
   const estaAutenticado = () => {
@@ -62,6 +91,7 @@ export function AuthProvider({ children }) {
       value={{
         token,
         rol,
+        usuario,
         cargando,
         login,
         logout,

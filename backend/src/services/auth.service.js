@@ -32,6 +32,10 @@ export const AuthService = {
     if (!passwordValida) throw new Error("CREDENCIALES_INVALIDAS");
 
     const role = cuenta.usuario.roles[0]?.rol.nombre_rol || "SinRol";
+    const nombreCompleto = [
+      cuenta.usuario.primer_nombre,
+      cuenta.usuario.primer_apellido,
+    ].filter(Boolean).join(" ").trim();
 
     const token = jwt.sign(
       { id_usuario: cuenta.id_usuario, email: cuenta.email, role },
@@ -39,6 +43,12 @@ export const AuthService = {
       { expiresIn: "2h" },
     );
 
-    return { token, usuario: cuenta.usuario, role };
+    return {
+      token,
+      usuario: cuenta.usuario,
+      role,
+      nombre: nombreCompleto || cuenta.usuario.primer_nombre,
+      email: cuenta.email,
+    };
   },
 };

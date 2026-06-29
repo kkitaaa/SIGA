@@ -38,7 +38,10 @@ function InicioDeSesion() {
 
         const data = res.data;
 
-        login(data.token, data.role);
+        login(data.token, data.role, {
+          nombre: data.nombre || data.usuario?.primer_nombre || "",
+          email: data.email || formData.email,
+        });
 
         alert(data.mensaje);
 
