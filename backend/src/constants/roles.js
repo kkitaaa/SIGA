@@ -7,5 +7,5 @@ export const ROLES = {
   PIE: "PIE",
   FUNCIONARIO: "Funcionario",
   COORDINADOR_ADMINISTRATIVO: "Coordinador Administrativo",
-  COORDINADOR_PIE: "Coordinador PIE"
+  COORDINADOR_PIE: "Coordinador PIE",
 };

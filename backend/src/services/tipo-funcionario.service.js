@@ -12,7 +12,9 @@ export class TipoFuncionarioService {
       throw new Error("Ya existe un tipo de funcionario con ese nombre");
     }
     if (existente && !existente.activo) {
-      throw new Error("El tipo existe pero está desactivado. Reactívalo primero.");
+      throw new Error(
+        "El tipo existe pero está desactivado. Reactívalo primero.",
+      );
     }
 
     return repo.crear({ nombre, descripcion });

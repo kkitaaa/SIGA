@@ -9,7 +9,6 @@ import {
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
 
-
 const router = Router();
 
 /**
@@ -189,27 +188,30 @@ const router = Router();
  *                   example: Tipo de funcionario desactivado correctamente
  */
 
-
 router.post(
   "/funcionarios",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  registrarTipoFuncionarioController
+  registrarTipoFuncionarioController,
 );
 
 router.get("/funcionarios", authMiddleware, listarTiposFuncionarioController);
-router.get("/funcionarios/:id", authMiddleware, obtenerDetalleTipoFuncionarioController);
+router.get(
+  "/funcionarios/:id",
+  authMiddleware,
+  obtenerDetalleTipoFuncionarioController,
+);
 router.put(
   "/funcionarios/:id",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  actualizarTipoFuncionarioController
+  actualizarTipoFuncionarioController,
 );
 router.patch(
   "/funcionarios/:id/desactivar",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  desactivarTipoFuncionarioController
+  desactivarTipoFuncionarioController,
 );
 
 export default router;

@@ -10,7 +10,9 @@ export class TipoFuncionarioRepository {
   }
 
   async obtenerPorId(id) {
-    return prisma.tipoFuncionario.findUnique({ where: { id_tipo_funcionario: id } });
+    return prisma.tipoFuncionario.findUnique({
+      where: { id_tipo_funcionario: id },
+    });
   }
 
   async actualizar(id, data) {

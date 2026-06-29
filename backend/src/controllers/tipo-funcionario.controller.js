@@ -5,7 +5,10 @@ const service = new TipoFuncionarioService();
 export const registrarTipoFuncionarioController = async (req, res) => {
   try {
     await service.registrarTipo(req.body);
-    res.json({ ok: true, mensaje: "Tipo de funcionario registrado correctamente" });
+    res.json({
+      ok: true,
+      mensaje: "Tipo de funcionario registrado correctamente",
+    });
   } catch (error) {
     res.status(400).json({ ok: false, mensaje: error.message });
   }
@@ -32,5 +35,8 @@ export const actualizarTipoFuncionarioController = async (req, res) => {
 
 export const desactivarTipoFuncionarioController = async (req, res) => {
   await service.desactivarTipo(Number(req.params.id));
-  res.json({ ok: true, mensaje: "Tipo de funcionario desactivado correctamente" });
+  res.json({
+    ok: true,
+    mensaje: "Tipo de funcionario desactivado correctamente",
+  });
 };

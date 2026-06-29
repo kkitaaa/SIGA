@@ -15,7 +15,6 @@ import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 import estudianteRoutes from "./routes/estudiante.routes.js";
 import tipoFuncionarioRoutes from "./routes/tipo-funcionario.routes.js";
 
-
 dotenv.config();
 
 const app = express();

@@ -2,7 +2,10 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
-import { listarUsuariosSinRolController, listarUsuariosController } from "../controllers/usuario.controller.js";
+import {
+  listarUsuariosSinRolController,
+  listarUsuariosController,
+} from "../controllers/usuario.controller.js";
 import { ROLES } from "../constants/roles.js";
 
 const router = Router();
