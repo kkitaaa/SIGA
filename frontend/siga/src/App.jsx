@@ -14,18 +14,22 @@ import DocumentosPage from "./pages/documentos/DocumentosPage";
 // Roles
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
+
+
 // Directiva
-import DirectivaDashboard from "./pages/directiva/DirectivaDashboard";
 import AsignacionRoles from "./pages/directiva/AsignacionRoles";
+
+
+
+
 
 // PIE
 import PieDashboard from "./pages/pie/PieDashboard";
 import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
 import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
 
-
-
 function App() {
+
   return (
     <Routes>
 

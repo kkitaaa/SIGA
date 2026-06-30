@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
+import path from "node:path";
+
 
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
@@ -20,7 +21,16 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.disable("x-powered-by");
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
@@ -50,5 +60,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Servidor en puerto 3000");
+  console.log("Servidor iniciado");
 });
+

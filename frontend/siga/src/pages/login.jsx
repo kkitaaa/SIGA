@@ -95,7 +95,7 @@ function InicioDeSesion() {
           </button>
 
           <button
-            className={!isLogin ? "active" : ""}
+            className={isLogin ? "" : "active"}
             onClick={() => setIsLogin(false)}
             type="button"
           >
@@ -106,8 +106,9 @@ function InicioDeSesion() {
         <form className="login-form" onSubmit={handleSubmit}>
           {!isLogin && (
             <div className="input-group">
-              <label>Nombre completo</label>
+              <label htmlFor="nombre">Nombre completo</label>
               <input
+                id="nombre"
                 type="text"
                 name="nombre"
                 value={formData.nombre}
@@ -120,8 +121,9 @@ function InicioDeSesion() {
 
           {!isLogin && (
             <div className="input-group">
-              <label>RUT</label>
+              <label htmlFor="rut">RUT</label>
               <input
+                id="rut" 
                 type="text"
                 name="rut"
                 value={formData.rut}
@@ -133,8 +135,9 @@ function InicioDeSesion() {
           )}
 
           <div className="input-group">
-            <label>Correo electrónico</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
@@ -145,15 +148,16 @@ function InicioDeSesion() {
           </div>
 
           <div className="input-group">
-            <label>Contraseña</label>
+            <label htmlFor="password">Contraseña</label>
             <div className="password-wrapper">
               <input
+                id="password" 
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="????????"
+                placeholder="••••••••"
               />
 
               <button

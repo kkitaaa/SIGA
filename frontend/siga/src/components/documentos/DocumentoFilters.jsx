@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { HStack, Input, Select, Button } from '@chakra-ui/react';
 
 export const DocumentoFilters = ({ busqueda, onSearch, filtroFecha, onFilterChange, onClear }) => {
@@ -29,4 +30,12 @@ export const DocumentoFilters = ({ busqueda, onSearch, filtroFecha, onFilterChan
       </Button>
     </HStack>
   );
+};
+
+DocumentoFilters.propTypes = {
+  busqueda: PropTypes.string.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  filtroFecha: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  onClear: PropTypes.func.isRequired,
 };
