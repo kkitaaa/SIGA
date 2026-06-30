@@ -79,4 +79,14 @@ export class AsignacionRepository {
       },
     });
   }
+
+  async verificarRolAdministrativo(idUsuarioActual) {
+    return prisma.usuario_rol.findFirst({
+      where: {
+        id_usuario: idUsuarioActual,
+        rol: { nombre_rol: "Administrativo" },
+      },
+    });
+  }
+
 }

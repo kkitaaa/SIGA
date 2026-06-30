@@ -45,4 +45,3 @@ export const revocarRolController = async (req, res) => {
     });
   }
 }
-};
