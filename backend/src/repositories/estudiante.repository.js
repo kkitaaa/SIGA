@@ -43,13 +43,12 @@ export class EstudianteRepository {
         id_estudiante: Number(idEstudiante),
       },
       include: {
-        curso: true,              
-        asignaciones: true,       
-        asignacionPieLogs: true, 
+        curso: true,
+        asignaciones: true,
+        asignacionPieLogs: true,
       },
     });
   }
-
 
   static async updateNeeStatus(idEstudiante, esNee, tx = prisma) {
     return await tx.estudiante.update({

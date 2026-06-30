@@ -16,15 +16,15 @@ export class FuncionarioRepository {
         usuario: {
           select: {
             primer_nombre: true,
-            primer_apellido: true
-          }
+            primer_apellido: true,
+          },
         },
         tipoFuncionario: {
           select: {
-            nombre: true
-          }
-        }
-      }
+            nombre: true,
+          },
+        },
+      },
     });
   }
 }

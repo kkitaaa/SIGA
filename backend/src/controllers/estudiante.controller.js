@@ -36,7 +36,7 @@ export const registrarEstudianteController = async (req, res) => {
 export const listarEstudiantesController = async (req, res) => {
   try {
     const estudiantes = await EstudianteService.listarEstudiantes();
-    
+
     return res.status(200).json({
       ok: true,
       estudiantes,
@@ -54,7 +54,7 @@ export const listarEstudiantesController = async (req, res) => {
 export const listarEstudiantesNeeController = async (req, res) => {
   try {
     const estudiantes = await EstudianteService.listarEstudiantesNee();
-    
+
     return res.status(200).json({
       ok: true,
       estudiantes,

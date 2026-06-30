@@ -17,7 +17,7 @@ export const asignarRolController = async (req, res) => {
       idUsuarioDestino,
       idRolAsignado,
       idUsuarioActual,
-      idTipoFuncionario
+      idTipoFuncionario,
     );
 
     return res.status(200).json({ ok: true, resultado });
@@ -44,4 +44,4 @@ export const revocarRolController = async (req, res) => {
       mensaje: err.message,
     });
   }
-}
+};

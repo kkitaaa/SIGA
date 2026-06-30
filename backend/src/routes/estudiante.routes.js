@@ -124,7 +124,7 @@ router.post(
   "/",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  registrarEstudianteController
+  registrarEstudianteController,
 );
 
 /**
@@ -231,6 +231,5 @@ router.get("/nee", authMiddleware, listarEstudiantesNeeController);
  *         description: Error interno del servidor
  */
 router.get("/:id", authMiddleware, obtenerEstudiantePorIdController);
-
 
 export default router;

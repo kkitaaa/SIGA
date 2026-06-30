@@ -29,7 +29,10 @@ export class DocumentoService {
 
     const skip = (pageNumber - 1) * limitNumber;
 
-    const { documentos, total } = await this.repository.findAllPaginated(skip, limitNumber);
+    const { documentos, total } = await this.repository.findAllPaginated(
+      skip,
+      limitNumber,
+    );
 
     return {
       documentos,
@@ -37,8 +40,8 @@ export class DocumentoService {
         totalDocumentos: total,
         paginaActual: pageNumber,
         totalPaginas: Math.ceil(total / limitNumber),
-        limite: limitNumber
-      }
+        limite: limitNumber,
+      },
     };
   }
 }

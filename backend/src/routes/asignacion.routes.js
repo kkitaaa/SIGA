@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { listarUsuariosSinRolController } from "../controllers/usuario.controller.js";
-import { asignarRolController, revocarRolController } from "../controllers/asignacion.controller.js";
+import {
+  asignarRolController,
+  revocarRolController,
+} from "../controllers/asignacion.controller.js";
 import { listarRolesController } from "../controllers/rol.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 

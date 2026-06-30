@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { upload } from "../middleware/upload.middleware.js";
 import { authMiddleware } from "../middleware/auth.js";
-import { subirDocumentoController, listarDocumentosController } from "../controllers/documento.controller.js";
+import {
+  subirDocumentoController,
+  listarDocumentosController,
+} from "../controllers/documento.controller.js";
 
 const router = Router();
 
