@@ -3,7 +3,7 @@ import { revocarRol } from "../services/asignacion.service.js";
 
 export const asignarRolController = async (req, res) => {
   try {
-    const { idUsuarioDestino, idRolAsignado } = req.body;
+    const { idUsuarioDestino, idRolAsignado, idTipoFuncionario } = req.body;
 
     if (!idUsuarioDestino || !idRolAsignado) {
       return res.status(400).json({
@@ -17,11 +17,13 @@ export const asignarRolController = async (req, res) => {
       idUsuarioDestino,
       idRolAsignado,
       idUsuarioActual,
+      idTipoFuncionario
     );
 
     return res.status(200).json({ ok: true, resultado });
   } catch (err) {
-    return res.status(403).json({ ok: false, mensaje: err.message });
+    // Cambiamos el 403 a 400 ya que también pueden ser errores de validación de negocio
+    return res.status(400).json({ ok: false, mensaje: err.message });
   }
 };
 
@@ -42,4 +44,5 @@ export const revocarRolController = async (req, res) => {
       mensaje: err.message,
     });
   }
+}
 };
