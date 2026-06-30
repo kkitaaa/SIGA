@@ -8,6 +8,9 @@ import Login from "./pages/login";
 // General
 import DashboardRouter from "./components/dashboard/DashboardRouter";
 
+// Documentos
+import DocumentosPage from "./pages/documentos/DocumentosPage";
+
 // Roles
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
@@ -28,6 +31,7 @@ function App() {
 
       {/* 🔓 Públicas */}
       <Route path="/" element={<Login />} />
+      <Route path="/documentos" element={<DocumentosPage />} />
 
       {/* 🏠 Home general */}
       <Route

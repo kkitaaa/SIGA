@@ -15,7 +15,6 @@ import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 import estudianteRoutes from "./routes/estudiante.routes.js";
 import FuncionarioRoutes from "./routes/funcionario.routes.js";
 import tipoFuncionarioRoutes from "./routes/tipo-funcionario.routes.js";
-import "./events/index.js";
 
 dotenv.config();
 
@@ -34,7 +33,6 @@ app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
-app.use("/api/estudiantes/nee", estudianteRoutes); // Ruta específica para estudiantes NEE
 app.use("/api/cursos", cursoRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/funcionarios", FuncionarioRoutes);
