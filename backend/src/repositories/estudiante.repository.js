@@ -26,27 +26,33 @@ export class EstudianteRepository {
 
   static async findAll() {
     return await prisma.estudiante.findMany({
-      orderBy: { primer_apellido: 'asc' } // Ordena por apellido para que se vea mejor en el frontend
+      orderBy: { primer_apellido: "asc" },
     });
   }
 
   static async findAllNee() {
     return await prisma.estudiante.findMany({
       where: { es_nee: true },
-      orderBy: { primer_apellido: 'asc' }
+      orderBy: { primer_apellido: "asc" },
     });
   }
 
-  async findById(idEstudiante, tx = prisma) {
-    return tx.estudiante.findUnique({
+  static async findById(idEstudiante, tx = prisma) {
+    return await tx.estudiante.findUnique({
       where: {
         id_estudiante: Number(idEstudiante),
+      },
+      include: {
+        curso: true,              
+        asignaciones: true,       
+        asignacionPieLogs: true, 
       },
     });
   }
 
-  async updateNeeStatus(idEstudiante, esNee, tx = prisma) {
-    return tx.estudiante.update({
+
+  static async updateNeeStatus(idEstudiante, esNee, tx = prisma) {
+    return await tx.estudiante.update({
       where: {
         id_estudiante: Number(idEstudiante),
       },
