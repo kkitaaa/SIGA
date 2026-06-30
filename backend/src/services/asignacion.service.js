@@ -6,7 +6,7 @@ export const asignarRol = async (
   idUsuarioDestino,
   idRolAsignado,
   idUsuarioActual,
-  idTipoFuncionario
+  idTipoFuncionario,
 ) => {
   const parsedRolId =
     typeof idRolAsignado === "string" ? Number(idRolAsignado) : idRolAsignado;
@@ -17,7 +17,7 @@ export const asignarRol = async (
 
   // Verificar permisos
   const esAdministrativo =
-    await repo.verificarRolDirectiva(idUsuarioActual);
+    await repo.verificarRolAdministrativo(idUsuarioActual);
   if (!esAdministrativo)
     throw new Error("No tienes permisos para asignar roles");
 
@@ -42,4 +42,25 @@ export const asignarRol = async (
 
   // Asignar rol (y opcionalmente crear funcionario)
   return repo.asignarRol(idUsuarioDestino, parsedRolId, idTipoFuncionario);
+};
+
+export const revocarRol = async (idUsuarioDestino, idUsuarioActual) => {
+  // Verificar permisos
+  const esAdministrativo =
+    await repo.verificarRolAdministrativo(idUsuarioActual);
+  if (!esAdministrativo)
+    throw new Error("No tienes permisos para revocar roles");
+
+  // Verificar existencia del usuario
+  const usuarioExiste = await repo.usuarioExiste(idUsuarioDestino);
+  if (!usuarioExiste) throw new Error("El usuario no existe");
+
+  // Verificar si tiene rol asignado
+  const rolAsignado = await repo.usuarioTieneRol(idUsuarioDestino);
+  if (!rolAsignado) throw new Error("El usuario no tiene un rol asignado");
+
+  // Revocar rol
+  await repo.revocarRol(idUsuarioDestino);
+
+  return { mensaje: "Rol revocado correctamente" };
 };

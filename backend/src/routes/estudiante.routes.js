@@ -3,6 +3,7 @@ import {
   registrarEstudianteController,
   listarEstudiantesController,
   listarEstudiantesNeeController,
+  obtenerEstudiantePorIdController,
 } from "../controllers/estudiante.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
@@ -123,7 +124,7 @@ router.post(
   "/",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  registrarEstudianteController
+  registrarEstudianteController,
 );
 
 /**
@@ -187,5 +188,48 @@ router.get("/", authMiddleware, listarEstudiantesController);
  *         description: Error interno del servidor
  */
 router.get("/nee", authMiddleware, listarEstudiantesNeeController);
+
+/**
+ * @swagger
+ * /api/estudiantes/{id}:
+ *   get:
+ *     summary: Obtener estudiante por ID
+ *     description: Devuelve la información completa de un estudiante según su identificador.
+ *     tags:
+ *       - Estudiantes
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID único del estudiante
+ *     responses:
+ *       200:
+ *         description: Estudiante encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               ok: true
+ *               estudiante:
+ *                 id_estudiante: 1
+ *                 rut: "12345678-9"
+ *                 primer_nombre: "Juan"
+ *                 primer_apellido: "Pérez"
+ *                 sexo: "Masculino"
+ *                 fecha_nacimiento: "2015-04-12"
+ *                 fecha_ingreso: "2026-03-01"
+ *                 es_nee: false
+ *                 id_curso: 3
+ *       400:
+ *         description: ID inválido
+ *       404:
+ *         description: Estudiante no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.get("/:id", authMiddleware, obtenerEstudiantePorIdController);
 
 export default router;

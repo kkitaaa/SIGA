@@ -36,7 +36,7 @@ export const registrarEstudianteController = async (req, res) => {
 export const listarEstudiantesController = async (req, res) => {
   try {
     const estudiantes = await EstudianteService.listarEstudiantes();
-    
+
     return res.status(200).json({
       ok: true,
       estudiantes,
@@ -54,7 +54,7 @@ export const listarEstudiantesController = async (req, res) => {
 export const listarEstudiantesNeeController = async (req, res) => {
   try {
     const estudiantes = await EstudianteService.listarEstudiantesNee();
-    
+
     return res.status(200).json({
       ok: true,
       estudiantes,
@@ -64,6 +64,38 @@ export const listarEstudiantesNeeController = async (req, res) => {
     return res.status(500).json({
       ok: false,
       error: "Error interno al obtener estudiantes NEE",
+    });
+  }
+};
+
+export const obtenerEstudiantePorIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const estudiante = await EstudianteService.obtenerEstudiantePorId(id);
+
+    return res.status(200).json({
+      ok: true,
+      estudiante,
+    });
+  } catch (error) {
+    if (error.message?.startsWith("VALIDATION_ERROR:")) {
+      return res.status(400).json({
+        ok: false,
+        error: error.message.replace("VALIDATION_ERROR: ", ""),
+      });
+    }
+
+    if (error.message?.startsWith("BUSINESS_ERROR:")) {
+      return res.status(404).json({
+        ok: false,
+        error: error.message.replace("BUSINESS_ERROR: ", ""),
+      });
+    }
+
+    console.error("Error al obtener estudiante:", error);
+    return res.status(500).json({
+      ok: false,
+      error: "Error interno al obtener estudiante",
     });
   }
 };

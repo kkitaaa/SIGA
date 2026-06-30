@@ -1,4 +1,5 @@
 import { asignarRol } from "../services/asignacion.service.js";
+import { revocarRol } from "../services/asignacion.service.js";
 
 export const asignarRolController = async (req, res) => {
   try {
@@ -16,12 +17,31 @@ export const asignarRolController = async (req, res) => {
       idUsuarioDestino,
       idRolAsignado,
       idUsuarioActual,
-      idTipoFuncionario
+      idTipoFuncionario,
     );
 
     return res.status(200).json({ ok: true, resultado });
   } catch (err) {
     // Cambiamos el 403 a 400 ya que también pueden ser errores de validación de negocio
     return res.status(400).json({ ok: false, mensaje: err.message });
+  }
+};
+
+export const revocarRolController = async (req, res) => {
+  try {
+    const { idUsuario } = req.params;
+    const idUsuarioActual = req.user.id_usuario;
+
+    const resultado = await revocarRol(idUsuario, idUsuarioActual);
+
+    return res.status(200).json({
+      ok: true,
+      mensaje: resultado.mensaje,
+    });
+  } catch (err) {
+    return res.status(403).json({
+      ok: false,
+      mensaje: err.message,
+    });
   }
 };
