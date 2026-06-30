@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
 export class AsignacionRepository {
@@ -61,4 +60,33 @@ export class AsignacionRepository {
       return asignacion;
     });
   }
+
+  async revocarRol(idUsuarioDestino) {
+    const rolAsignado = await prisma.usuario_rol.findFirst({
+      where: { id_usuario: Number(idUsuarioDestino) },
+    });
+
+    if (!rolAsignado) {
+      throw new Error("El usuario no tiene un rol asignado");
+    }
+
+    return prisma.usuario_rol.delete({
+      where: {
+        id_usuario_id_rol: {
+          id_usuario: rolAsignado.id_usuario,
+          id_rol: rolAsignado.id_rol,
+        },
+      },
+    });
+  }
+
+  async verificarRolAdministrativo(idUsuarioActual) {
+    return prisma.usuario_rol.findFirst({
+      where: {
+        id_usuario: idUsuarioActual,
+        rol: { nombre_rol: "Administrativo" },
+      },
+    });
+  }
+
 }
