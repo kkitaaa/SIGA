@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import api from "../services/api";
-import "../styles/asignacion_roles.css";
+import api from "../../services/api";
+import "../../styles/asignacion_roles.css";
 
 import {
   Box,

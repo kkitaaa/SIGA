@@ -34,6 +34,7 @@ app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
+app.use("/api/estudiantes/nee", estudianteRoutes); // Ruta específica para estudiantes NEE
 app.use("/api/cursos", cursoRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/funcionarios", FuncionarioRoutes);

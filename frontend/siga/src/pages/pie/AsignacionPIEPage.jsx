@@ -6,11 +6,11 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import api from "../services/api";
+import api from "../../services/api";
 
 // Importamos el menú de perfil y los estilos que le darán el look del dashboard
-import ProfileMenu from "../components/dashboard/ProfileMenu"; // Ajusta la ruta si es necesario
-import "../styles/home.css";
+import ProfileMenu from "../../components/dashboard/ProfileMenu"; // Ajusta la ruta si es necesario
+import "../../styles/home.css";
 
 export default function AsignacionPIEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);

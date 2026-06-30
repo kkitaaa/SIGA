@@ -1,6 +1,6 @@
 import React from "react";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
-import AdminDashboard from "../../pages/admin/AdminDashboard";
+import AdminDashboard from "../../pages/directiva/DirectivaDashboard";
 import ProfesorDashboard from "../../pages/profesor/ProfesorDashboard";
 import PieDashboard from "../../pages/pie/PieDashboard";
 import PendingRoleDashboard from "../../pages/pending/PendingRoleDashboard";
