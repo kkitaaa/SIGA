@@ -31,4 +31,18 @@ export class EstudianteService {
   static async listarEstudiantesNee() {
     return await EstudianteRepository.findAllNee();
   }
+
+static async obtenerEstudiantePorId(id) {
+  if (!Number.isInteger(Number(id))) {
+    throw new Error("VALIDATION_ERROR: ID inválido");
+  }
+
+  const estudiante = await EstudianteRepository.findById(id);
+
+  if (!estudiante) {
+    throw new Error("BUSINESS_ERROR: Estudiante no encontrado");
+  }
+
+  return estudiante;
+}
 }
