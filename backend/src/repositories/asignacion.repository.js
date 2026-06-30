@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
 export class AsignacionRepository {
@@ -34,6 +33,25 @@ export class AsignacionRepository {
       data: {
         id_usuario: Number(idUsuarioDestino),
         id_rol: Number(idRolAsignado),
+      },
+    });
+  }
+
+  async revocarRol(idUsuarioDestino) {
+    const rolAsignado = await prisma.usuario_rol.findFirst({
+      where: { id_usuario: Number(idUsuarioDestino) },
+    });
+
+    if (!rolAsignado) {
+      throw new Error("El usuario no tiene un rol asignado");
+    }
+
+    return prisma.usuario_rol.delete({
+      where: {
+        id_usuario_id_rol: {
+          id_usuario: rolAsignado.id_usuario,
+          id_rol: rolAsignado.id_rol,
+        },
       },
     });
   }
