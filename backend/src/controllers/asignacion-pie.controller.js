@@ -32,9 +32,10 @@ export const crearAsignacionPieController = async (req, res) => {
   }
 
   try {
-    const resultado = await asignacionPieService.crearAsignacion(
-      validacion.data,
-    );
+    const resultado = await asignacionPieService.crearAsignacion({
+      ...validacion.data,
+      idUsuario: req.user.id_usuario,
+    });
 
     return res.status(201).json(resultado);
   } catch (error) {
@@ -74,6 +75,7 @@ export const finalizarAsignacionPieController = async (req, res) => {
   try {
     const resultado = await asignacionPieService.finalizarAsignacion(
       req.params.id,
+      req.user.id_usuario,
     );
 
     return res.status(200).json(resultado);

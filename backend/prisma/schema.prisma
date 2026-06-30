@@ -15,11 +15,12 @@ model Usuario {
   segundo_apellido  String?
   numero_telefonico String
 
-  cuenta      Cuenta?
-  documentos  Documento[]
-  funcionario Funcionario?
-  profesor    Profesor?
-  roles       Usuario_rol[]
+  cuenta            Cuenta?
+  documentos        Documento[]
+  funcionario       Funcionario?
+  profesor          Profesor?
+  roles             Usuario_rol[]
+  asignacionPieLogs AsignacionPieLog[]
 }
 
 model Cuenta {
@@ -95,7 +96,8 @@ model Estudiante {
   id_curso Int
   curso    Curso @relation(fields: [id_curso], references: [id_curso])
 
-  asignaciones Asignacion[]
+  asignaciones      Asignacion[]
+  asignacionPieLogs AsignacionPieLog[]
 }
 
 model TipoFuncionario {
@@ -116,7 +118,8 @@ model Funcionario {
   id_tipo_funcionario Int
   tipoFuncionario     TipoFuncionario @relation(fields: [id_tipo_funcionario], references: [id_tipo_funcionario])
 
-  asignaciones Asignacion[]
+  asignaciones      Asignacion[]
+  asignacionPieLogs AsignacionPieLog[]
 }
 
 model Asignacion {
@@ -128,4 +131,17 @@ model Asignacion {
 
   funcionario Funcionario @relation(fields: [id_funcionario], references: [id_funcionario])
   estudiante  Estudiante  @relation(fields: [id_estudiante], references: [id_estudiante])
+}
+
+model AsignacionPieLog {
+  id_log        Int      @id @default(autoincrement())
+  usuarioId     Int
+  estudianteId  Int
+  funcionarioId Int
+  accion        String
+  fecha         DateTime @default(now())
+
+  usuario     Usuario     @relation(fields: [usuarioId], references: [id_usuario])
+  estudiante  Estudiante  @relation(fields: [estudianteId], references: [id_estudiante])
+  funcionario Funcionario @relation(fields: [funcionarioId], references: [id_funcionario])
 }

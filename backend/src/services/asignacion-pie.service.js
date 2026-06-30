@@ -1,7 +1,8 @@
+import { eventBus } from "../events/eventBus.js";
+
 const crearError = (message, statusCode = 400) => {
   const error = new Error(message);
   error.statusCode = statusCode;
-
   return error;
 };
 
@@ -18,7 +19,7 @@ export class AsignacionPieService {
     this.prismaClient = prismaClient;
   }
 
-  async crearAsignacion({ idEstudiante, idFuncionario }) {
+  async crearAsignacion({ idEstudiante, idFuncionario, idUsuario }) {
     const asignacionActiva =
       await this.asignacionPieRepository.findActiveByStudent(idEstudiante);
 
@@ -27,24 +28,19 @@ export class AsignacionPieService {
     }
 
     const estudiante = await this.estudianteRepository.findById(idEstudiante);
-
     if (!estudiante) {
       throw crearError("El estudiante no existe", 404);
     }
 
     const funcionario =
       await this.funcionarioRepository.findPieMemberByUserId(idFuncionario);
-
     if (!funcionario) {
       throw crearError("El funcionario PIE no existe", 404);
     }
 
     const asignacion = await this.prismaClient.$transaction(async (tx) => {
       const nuevaAsignacion = await this.asignacionPieRepository.create(
-        {
-          idEstudiante,
-          idFuncionario,
-        },
+        { idEstudiante, idFuncionario },
         tx,
       );
 
@@ -53,9 +49,18 @@ export class AsignacionPieService {
       return nuevaAsignacion;
     });
 
+    // Emitir evento para el log después de que la transacción haya sido confirmada
+    eventBus.emit("asignacionPIE", {
+      usuarioId: idUsuario,
+      estudianteId: idEstudiante,
+      funcionarioId: idFuncionario,
+      accion: "CREAR",
+      fecha: new Date(),
+    });
+
     return {
       ok: true,
-      mensaje: "Asignaci\u00f3n PIE registrada correctamente",
+      mensaje: "Asignación PIE registrada correctamente",
       data: asignacion,
     };
   }
@@ -75,7 +80,7 @@ export class AsignacionPieService {
     return asignacion;
   }
 
-  async finalizarAsignacion(idAsignacion) {
+  async finalizarAsignacion(idAsignacion, idUsuario) {
     const asignacion =
       await this.asignacionPieRepository.findById(idAsignacion);
 
@@ -109,9 +114,18 @@ export class AsignacionPieService {
       },
     );
 
+    // Emitir evento para el log después de que la transacción haya sido confirmada
+    eventBus.emit("asignacionPIE", {
+      usuarioId: idUsuario,
+      estudianteId: asignacion.id_estudiante,
+      funcionarioId: asignacion.id_funcionario,
+      accion: "ELIMINAR",
+      fecha: new Date(),
+    });
+
     return {
       ok: true,
-      mensaje: "Asignaci\u00f3n PIE finalizada correctamente",
+      mensaje: "Asignación PIE finalizada correctamente",
       data: asignacionFinalizada,
     };
   }
