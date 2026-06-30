@@ -9,13 +9,18 @@ import Login from "./pages/login";
 import DashboardRouter from "./components/dashboard/DashboardRouter";
 
 // Roles
-import AsignacionRoles from "./pages/asignacion_roles";
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
+// Directiva
+import DirectivaDashboard from "./pages/directiva/DirectivaDashboard";
+import AsignacionRoles from "./pages/directiva/AsignacionRoles";
+
 // PIE
-import PieDashboard from "./pages/home_pie";
-import ProfesoresDashboard from "./pages/home_profesores";
-import AsignacionPIEPage from "./pages/asignacion_PIE";
+import PieDashboard from "./pages/pie/PieDashboard";
+import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
+import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
+
+
 
 function App() {
   return (
@@ -42,7 +47,7 @@ function App() {
         }
       />
 
-      {/* 👤 Roles */}
+      {/* 👤 Usuarios */}
       <Route
         path="/admin/usuarios"
         element={
@@ -52,6 +57,7 @@ function App() {
         }
       />
 
+      {/* 🏢 Directiva */}
       <Route
         path="/asignacion-roles"
         element={
@@ -70,6 +76,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/pie/estudiantes"
+        element={
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE", "Directiva"]}>
+            <EstudiantesPIEPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/asignacion-pie"
@@ -80,6 +94,7 @@ function App() {
         }
       />
 
+    {/*
       <Route
         path="/profesores"
         element={
@@ -88,6 +103,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      */}
 
       {/* 🚫 fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
