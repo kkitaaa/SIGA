@@ -8,34 +8,15 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  const leerUsuarioDesdeStorage = () => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    if (!usuarioGuardado) return null;
-
-    try {
-      return JSON.parse(usuarioGuardado);
-    } catch {
-      return null;
-    }
-  };
-
-  // Cargar sesión almacenada
+  // Cargar sesión al iniciar
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
-    const usuarioGuardado = leerUsuarioDesdeStorage();
+    const usuarioGuardado = localStorage.getItem("usuario");
 
-    if (tokenGuardado) {
-      setToken(tokenGuardado);
-    }
-
-    if (rolGuardado) {
-      setRol(rolGuardado);
-    }
-
-    if (usuarioGuardado) {
-      setUsuario(usuarioGuardado);
-    }
+    if (tokenGuardado) setToken(tokenGuardado);
+    if (rolGuardado) setRol(rolGuardado);
+    if (usuarioGuardado) setUsuario(JSON.parse(usuarioGuardado));
 
     setCargando(false);
   }, []);
@@ -47,59 +28,20 @@ export function AuthProvider({ children }) {
 
     localStorage.setItem("token", tokenJWT);
     localStorage.setItem("role", rolUsuario);
-
-    if (datosUsuario) {
-      localStorage.setItem("usuario", JSON.stringify(datosUsuario));
-    } else {
-      localStorage.removeItem("usuario");
-    }
+    if (datosUsuario) localStorage.setItem("usuario", JSON.stringify(datosUsuario));
   };
 
   const logout = () => {
     setToken(null);
     setRol(null);
     setUsuario(null);
-
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");
   };
 
-  const estaAutenticado = () => {
-    return !!token;
-  };
-
-  const tieneRol = (...roles) => {
-    return roles.includes(rol);
-  };
-
-  const obtenerHeaders = () => {
-    if (!token) {
-      return {
-        "Content-Type": "application/json",
-      };
-    }
-
-    return {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-  };
-
   return (
-    <AuthContext.Provider
-      value={{
-        token,
-        rol,
-        usuario,
-        cargando,
-        login,
-        logout,
-        estaAutenticado,
-        tieneRol,
-        obtenerHeaders,
-      }}
-    >
+    <AuthContext.Provider value={{ token, rol, usuario, cargando, login, logout, estaAutenticado: () => !!token, tieneRol: (...roles) => roles.includes(rol) }}>
       {children}
     </AuthContext.Provider>
   );
@@ -107,10 +49,6 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const contexto = useContext(AuthContext);
-
-  if (!contexto) {
-    throw new Error("useAuth debe usarse dentro de un AuthProvider");
-  }
-
+  if (!contexto) throw new Error("useAuth debe usarse dentro de un AuthProvider");
   return contexto;
 }
