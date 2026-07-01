@@ -4,12 +4,8 @@ import api from '../../services/api';
 import { DocumentoCard } from '../../components/documentos/DocumentoCard';
 import { useNotification } from '../../hooks/useNotification';
 import { DocumentoFilters } from '../../components/documentos/DocumentoFilters';
-import "../../styles/home.css"; // Reutilizamos tu layout
+import "../../styles/home.css";
 
-// ---------------------------------------------------------------------
-// PATRÓN COMPOSITE: Este componente actúa como el "Composite" (Agrupador)
-// Trata a todos sus hijos (los DocumentoCard u otras carpetas) de manera uniforme.
-// ---------------------------------------------------------------------
 const validateChildren = (props, propName, componentName) => {
   if (props[propName] == null) {
     return new Error(`Prop ${propName} is required in ${componentName}.`);
@@ -49,7 +45,6 @@ export default function DocumentosPage({ user }) {
   useEffect(() => {
     const fetchDocumentos = async () => {
       try {
-        // Consumimos el endpoint paginado que armamos en el backend
         const response = await api.get('/documentos?page=1&limit=50');
         setDocumentos(response.data.documentos || []);
       } catch (error) {
@@ -71,7 +66,6 @@ export default function DocumentosPage({ user }) {
     fetchDocumentos();
   }, [showError]);
 
-  // Lógica de filtrado en memoria
   const documentosFiltrados = useMemo(() => {
     return documentos
       .filter(doc => {

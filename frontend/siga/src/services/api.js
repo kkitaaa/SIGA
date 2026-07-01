@@ -16,10 +16,11 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token") || (api.defaults.headers.common.Authorization || "").replace(/^Bearer\s+/i, "");
 
   if (token) {
-    config.headers = {
-      ...(config.headers || {}),
-      Authorization: `Bearer ${token}`,
-    };
+    // CORRECCIÓN 1: Evitamos el objeto vacío y asignamos la cabecera de forma directa y limpia
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;
@@ -34,8 +35,9 @@ api.interceptors.response.use(
       localStorage.removeItem("usuario");
       setAuthToken(null);
 
-      if (window.location.pathname !== "/") {
-        window.location.href = "/";
+      // CORRECCIÓN 2: Reemplazamos 'window' por 'globalThis' (El estándar moderno de JS)
+      if (globalThis.location.pathname !== "/") {
+        globalThis.location.href = "/";
       }
     }
 

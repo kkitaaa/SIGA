@@ -34,7 +34,8 @@ export class EstudianteService {
 
   static async obtenerEstudiantePorId(id) {
     if (!Number.isInteger(Number(id))) {
-      throw new Error("VALIDATION_ERROR: ID inválido");
+      // CORRECCIÓN: Usamos TypeError porque estamos validando el tipo de dato
+      throw new TypeError("VALIDATION_ERROR: ID inválido");
     }
 
     const estudiante = await EstudianteRepository.findById(id);
@@ -48,7 +49,8 @@ export class EstudianteService {
 
   static async actualizarEstudiante(id, dto) {
     if (!Number.isInteger(Number(id))) {
-      throw new Error("VALIDATION_ERROR: ID inválido");
+      // CORRECCIÓN: Usamos TypeError porque estamos validando el tipo de dato
+      throw new TypeError("VALIDATION_ERROR: ID inválido");
     }
 
     const estudiante = await EstudianteRepository.findById(id);

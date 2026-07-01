@@ -7,6 +7,8 @@ import {
 } from "@chakra-ui/react";
 import api from "../../services/api";
 import { useNotification } from "../../hooks/useNotification";
+import ProfileMenu from "../../components/dashboard/ProfileMenu"; 
+import "../../styles/home.css";
 
 const validateUser = (props, propName, componentName) => {
   const value = props[propName];
@@ -25,10 +27,6 @@ const validateUser = (props, propName, componentName) => {
 
   return null;
 };
-
-// Importamos el menú de perfil y los estilos que le darán el look del dashboard
-import ProfileMenu from "../../components/dashboard/ProfileMenu"; // Ajusta la ruta si es necesario
-import "../../styles/home.css";
 
 export default function AsignacionPIEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -97,7 +95,6 @@ export default function AsignacionPIEPage({ user }) {
 
   return (
     <div className="home-page">
-      {/* HEADER AL ESTILO DASHBOARD */}
       <header className="home-topbar">
         <div className="home-brand">SIGA</div>
         <div className="home-topbar-actions">
@@ -106,10 +103,8 @@ export default function AsignacionPIEPage({ user }) {
         </div>
       </header>
 
-      {/* CONTENIDO PRINCIPAL */}
       <main className="home-main">
         
-        {/* SECCIÓN IZQUIERDA: Formulario */}
         <section className="home-panel home-welcome-panel">
           <div className="home-welcome-title">Asignación PIE</div>
           <p className="home-welcome-subtitle">
@@ -119,7 +114,6 @@ export default function AsignacionPIEPage({ user }) {
           <div className="home-card">
             <h2>Registrar nueva asignación</h2>
             
-            {/* Formulario usando Chakra UI pero dentro de la tarjeta del dashboard */}
             <VStack spacing={4} align="stretch" mt={4}>
               <Select
                 placeholder="Selecciona estudiante (Solo NEE)"
@@ -154,7 +148,6 @@ export default function AsignacionPIEPage({ user }) {
           </div>
         </section>
 
-        {/* SECCIÓN DERECHA: Lista de asignaciones activas */}
         <aside className="home-panel home-news-panel">
           <div className="home-aside-card">
             <h2>Asignaciones Activas</h2>
