@@ -9,14 +9,18 @@ const mockRepository = {
   update: jest.fn(),
 };
 
-jest.unstable_mockModule("../../src/repositories/estudiante.repository.js", () => ({
-  EstudianteRepository: mockRepository,
-}));
+jest.unstable_mockModule(
+  "../../src/repositories/estudiante.repository.js",
+  () => ({
+    EstudianteRepository: mockRepository,
+  }),
+);
 
 let EstudianteService;
 
 beforeAll(async () => {
-  ({ EstudianteService } = await import("../../src/services/estudiante.service.js"));
+  ({ EstudianteService } =
+    await import("../../src/services/estudiante.service.js"));
 });
 
 describe("EstudianteService", () => {
@@ -97,12 +101,12 @@ describe("EstudianteService", () => {
   });
 
   test("rechaza la búsqueda por ID cuando el identificador es inválido", async () => {
-    await expect(EstudianteService.obtenerEstudiantePorId("abc")).rejects.toThrow(
-      TypeError,
-    );
-    await expect(EstudianteService.obtenerEstudiantePorId("abc")).rejects.toThrow(
-      "VALIDATION_ERROR: ID inválido",
-    );
+    await expect(
+      EstudianteService.obtenerEstudiantePorId("abc"),
+    ).rejects.toThrow(TypeError);
+    await expect(
+      EstudianteService.obtenerEstudiantePorId("abc"),
+    ).rejects.toThrow("VALIDATION_ERROR: ID inválido");
   });
 
   test("rechaza la búsqueda por ID cuando el estudiante no existe", async () => {
@@ -130,9 +134,9 @@ describe("EstudianteService", () => {
       es_nee: true,
     };
 
-    await expect(EstudianteService.actualizarEstudiante(10, dto)).resolves.toEqual(
-      estudianteActualizado,
-    );
+    await expect(
+      EstudianteService.actualizarEstudiante(10, dto),
+    ).resolves.toEqual(estudianteActualizado);
 
     expect(mockRepository.update).toHaveBeenCalledWith(
       10,
@@ -144,16 +148,16 @@ describe("EstudianteService", () => {
   });
 
   test("rechaza la actualización si el ID es inválido", async () => {
-    await expect(EstudianteService.actualizarEstudiante("x", {})).rejects.toThrow(
-      "VALIDATION_ERROR: ID inválido",
-    );
+    await expect(
+      EstudianteService.actualizarEstudiante("x", {}),
+    ).rejects.toThrow("VALIDATION_ERROR: ID inválido");
   });
 
   test("rechaza la actualización si el estudiante no existe", async () => {
     mockRepository.findById.mockResolvedValue(null);
 
-    await expect(EstudianteService.actualizarEstudiante(20, {})).rejects.toThrow(
-      "BUSINESS_ERROR: Estudiante no encontrado",
-    );
+    await expect(
+      EstudianteService.actualizarEstudiante(20, {}),
+    ).rejects.toThrow("BUSINESS_ERROR: Estudiante no encontrado");
   });
 });

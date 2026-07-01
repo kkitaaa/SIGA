@@ -7,7 +7,7 @@ beforeAll(async () => {
   if (!process.env.JWT_SECRET) {
     process.env.JWT_SECRET = "secreto_para_entorno_de_pruebas";
   }
-  
+
   ({ authMiddleware } = await import("../../src/middleware/auth.js"));
 });
 

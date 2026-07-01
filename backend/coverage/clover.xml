@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1782935491858" clover="3.2.0">
-  <project timestamp="1782935491858" name="All files">
-    <metrics statements="95" coveredstatements="85" conditionals="52" coveredconditionals="35" methods="18" coveredmethods="16" elements="165" coveredelements="136" complexity="0" loc="95" ncloc="95" packages="4" files="6" classes="6"/>
+<coverage generated="1782937439593" clover="3.2.0">
+  <project timestamp="1782937439593" name="All files">
+    <metrics statements="95" coveredstatements="85" conditionals="52" coveredconditionals="34" methods="18" coveredmethods="16" elements="165" coveredelements="135" complexity="0" loc="95" ncloc="95" packages="4" files="6" classes="6"/>
     <package name="dto">
       <metrics statements="12" coveredstatements="10" conditionals="9" coveredconditionals="4" methods="2" coveredmethods="2"/>
       <file name="asignacion-pie.dto.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\dto\asignacion-pie.dto.js">
@@ -28,9 +28,9 @@
       </file>
     </package>
     <package name="middleware">
-      <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+      <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
       <file name="auth.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\middleware\auth.js">
-        <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="3" type="stmt"/>
         <line num="6" count="3" type="cond" truecount="2" falsecount="0"/>

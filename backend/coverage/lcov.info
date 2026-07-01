@@ -64,9 +64,9 @@ BRDA:6,0,1,2
 BRDA:8,1,0,2
 BRDA:8,1,1,0
 BRDA:15,2,0,2
-BRDA:15,2,1,2
+BRDA:15,2,1,0
 BRF:6
-BRH:5
+BRH:4
 end_of_record
 TN:
 SF:src\services\asignacion-pie.service.js
