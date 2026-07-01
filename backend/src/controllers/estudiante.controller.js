@@ -1,5 +1,6 @@
 import { EstudianteService } from "../services/estudiante.service.js";
 import { CreateEstudianteDTO } from "../dto/create-estudiante.dto.js";
+import { UpdateEstudianteDTO } from "../dto/update-estudiante.dto.js";
 
 export const registrarEstudianteController = async (req, res) => {
   try {

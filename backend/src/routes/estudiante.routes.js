@@ -4,6 +4,7 @@ import {
   listarEstudiantesController,
   listarEstudiantesNeeController,
   obtenerEstudiantePorIdController,
+  actualizarEstudianteController,
 } from "../controllers/estudiante.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
@@ -273,7 +274,7 @@ router.put(
   "/:id",
   authMiddleware,
   verifyRole("Directiva"),
-  actualizarEstudianteController,
+  actualizarEstudianteController
 );
 
 export default router;
