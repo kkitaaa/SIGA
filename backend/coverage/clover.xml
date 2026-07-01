@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1782941238048" clover="3.2.0">
-  <project timestamp="1782941238048" name="All files">
-    <metrics statements="322" coveredstatements="233" conditionals="180" coveredconditionals="101" methods="66" coveredmethods="39" elements="568" coveredelements="373" complexity="0" loc="322" ncloc="322" packages="7" files="21" classes="21"/>
+<coverage generated="1782941750941" clover="3.2.0">
+  <project timestamp="1782941750941" name="All files">
+    <metrics statements="377" coveredstatements="274" conditionals="214" coveredconditionals="116" methods="81" coveredmethods="54" elements="672" coveredelements="444" complexity="0" loc="377" ncloc="377" packages="7" files="28" classes="28"/>
     <package name="config">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="prisma.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\config\prisma.js">
@@ -12,7 +12,7 @@
       </file>
     </package>
     <package name="controllers">
-      <metrics statements="115" coveredstatements="69" conditionals="24" coveredconditionals="6" methods="18" coveredmethods="12"/>
+      <metrics statements="135" coveredstatements="81" conditionals="32" coveredconditionals="8" methods="20" coveredmethods="14"/>
       <file name="asignacion-pie.controller.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\controllers\asignacion-pie.controller.js">
         <metrics statements="27" coveredstatements="15" conditionals="4" coveredconditionals="2" methods="5" coveredmethods="2"/>
         <line num="8" count="1" type="stmt"/>
@@ -42,6 +42,29 @@
         <line num="76" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
+      </file>
+      <file name="auth.controller.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\controllers\auth.controller.js">
+        <metrics statements="20" coveredstatements="12" conditionals="8" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="43" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="49" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
       </file>
       <file name="documento.controller.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\controllers\documento.controller.js">
         <metrics statements="16" coveredstatements="13" conditionals="8" coveredconditionals="2" methods="2" coveredmethods="2"/>
@@ -145,7 +168,7 @@
       </file>
     </package>
     <package name="dto">
-      <metrics statements="59" coveredstatements="46" conditionals="67" coveredconditionals="41" methods="6" coveredmethods="6"/>
+      <metrics statements="82" coveredstatements="63" conditionals="93" coveredconditionals="54" methods="10" coveredmethods="10"/>
       <file name="asignacion-pie.dto.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\dto\asignacion-pie.dto.js">
         <metrics statements="12" coveredstatements="12" conditionals="9" coveredconditionals="7" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
@@ -186,6 +209,35 @@
         <line num="47" count="0" type="stmt"/>
         <line num="52" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="53" count="0" type="stmt"/>
+      </file>
+      <file name="login.dto.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\dto\login.dto.js">
+        <metrics statements="7" coveredstatements="5" conditionals="8" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <line num="4" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="5" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="11" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+      </file>
+      <file name="register.dto.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\dto\register.dto.js">
+        <metrics statements="16" coveredstatements="12" conditionals="18" coveredconditionals="9" methods="2" coveredmethods="2"/>
+        <line num="4" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="5" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="6" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="7" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="14" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
       </file>
       <file name="update-estudiante.dto.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\dto\update-estudiante.dto.js">
         <metrics statements="24" coveredstatements="17" conditionals="28" coveredconditionals="14" methods="2" coveredmethods="2"/>
@@ -238,7 +290,7 @@
       </file>
     </package>
     <package name="repositories">
-      <metrics statements="18" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="25" coveredstatements="7" conditionals="12" coveredconditionals="0" methods="24" coveredmethods="7"/>
       <file name="asignacion-pie.repository.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\repositories\asignacion-pie.repository.js">
         <metrics statements="6" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
@@ -247,6 +299,17 @@
         <line num="33" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
+      </file>
+      <file name="auth.repository.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\repositories\auth.repository.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+      </file>
+      <file name="curso.repository.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\repositories\curso.repository.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
       </file>
       <file name="documento.repository.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\repositories\documento.repository.js">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -269,9 +332,14 @@
         <line num="5" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
       </file>
+      <file name="rol.repository.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\repositories\rol.repository.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+      </file>
     </package>
     <package name="services">
-      <metrics statements="117" coveredstatements="105" conditionals="71" coveredconditionals="50" methods="24" coveredmethods="20"/>
+      <metrics statements="122" coveredstatements="110" conditionals="71" coveredconditionals="50" methods="26" coveredmethods="22"/>
       <file name="asignacion-pie.service.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\services\asignacion-pie.service.js">
         <metrics statements="39" coveredstatements="31" conditionals="13" coveredconditionals="6" methods="8" coveredmethods="6"/>
         <line num="3" count="2" type="cond" truecount="0" falsecount="1"/>
@@ -389,6 +457,14 @@
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="5" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="rol.service.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\services\rol.service.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
       </file>
       <file name="tipo-funcionario.service.js" path="C:\Users\kkita\Documents\GitHub\SIGA\backend\src\services\tipo-funcionario.service.js">
         <metrics statements="14" coveredstatements="12" conditionals="12" coveredconditionals="10" methods="5" coveredmethods="3"/>
