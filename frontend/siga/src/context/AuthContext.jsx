@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { setAuthToken } from "../services/api";
+import { authService } from "../services/auth.service";
 
 // Lo exportamos para que el hook pueda consumirlo
 export const AuthContext = createContext();
@@ -53,6 +54,23 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const loginWithCredentials = useCallback(async (credentials) => {
+    const data = await authService.login(credentials);
+    const usuario = data.usuario
+      ? {
+          ...data.usuario,
+          nombre: data.nombre || data.usuario?.primer_nombre || "",
+          email: data.email || credentials.email,
+        }
+      : {
+          nombre: data.nombre || "",
+          email: data.email || credentials.email,
+        };
+
+    login(data.token, data.role, usuario);
+    return data;
+  }, [login]);
+
   const logout = useCallback(() => {
     setToken(null);
     setRol(null);
@@ -91,6 +109,7 @@ export function AuthProvider({ children }) {
     usuario,
     cargando,
     login,
+    loginWithCredentials,
     logout,
     estaAutenticado,
     tieneRol,

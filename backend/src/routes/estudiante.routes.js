@@ -274,7 +274,7 @@ router.put(
   "/:id",
   authMiddleware,
   verifyRole("Directiva"),
-  actualizarEstudianteController
+  actualizarEstudianteController,
 );
 
 export default router;

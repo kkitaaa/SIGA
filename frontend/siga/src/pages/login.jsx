@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import { useAuth } from "../hooks/useAuth";
-
 import api from "../services/api";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginWithCredentials } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,16 +30,9 @@ function InicioDeSesion() {
 
     if (isLogin) {
       try {
-        const res = await api.post("/auth/login", {
+        const data = await loginWithCredentials({
           email: formData.email,
           password: formData.password,
-        });
-
-        const data = res.data;
-
-        login(data.token, data.role, {
-          nombre: data.nombre || data.usuario?.primer_nombre || "",
-          email: data.email || formData.email,
         });
 
         alert(data.mensaje);
