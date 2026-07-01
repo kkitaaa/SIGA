@@ -17,9 +17,9 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-  Select, // Importamos Select de Chakra UI
-  useToast // Añadimos toast para validaciones
+  Select
 } from "@chakra-ui/react";
+import { useNotification } from "../../hooks/useNotification";
 
 function AsignacionRoles() {
   const [users, setUsers] = useState([]);
@@ -32,7 +32,7 @@ function AsignacionRoles() {
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedTipo, setSelectedTipo] = useState(""); // Nuevo estado para el tipo
 
-  const toast = useToast();
+  const { showSuccess, showWarning } = useNotification();
   const userRole = localStorage.getItem("role");
   const token = localStorage.getItem("token");
 
@@ -91,12 +91,11 @@ function AsignacionRoles() {
 
     // Validación extra: si es funcionario, DEBE tener un tipo seleccionado
     if (isFuncionario && !selectedTipo) {
-      toast({
-        title: "Falta el tipo de funcionario",
-        description: "Debes seleccionar una especialidad para el funcionario.",
-        status: "warning",
-        duration: 3000,
-      });
+      showWarning(
+        "Falta el tipo de funcionario",
+        "Debes seleccionar una especialidad para el funcionario.",
+        { duration: 3000 }
+      );
       return;
     }
 
@@ -114,11 +113,7 @@ function AsignacionRoles() {
         )
       );
 
-      toast({
-        title: "Rol asignado",
-        status: "success",
-        duration: 2000,
-      });
+      showSuccess("Rol asignado", undefined, { duration: 2000 });
 
       setSelectedUser(null);
       setSelectedRole("");

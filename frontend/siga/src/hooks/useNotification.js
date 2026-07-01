@@ -1,37 +1,68 @@
+import { useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-export const useNotification = () => {
+export function useNotification() {
   const toast = useToast();
 
-  /**
-   * Facade para notificaciones de éxito
-   * @param {string} message - Mensaje a mostrar
-   */
-  const showSuccess = (message) => {
-    toast({
-      title: 'Operación exitosa',
-      description: message,
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-      position: 'top-right',
-    });
-  };
+  const show = useCallback(
+    (options) => {
+      toast({
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+        ...options,
+      });
+    },
+    [toast]
+  );
 
-  /**
-   * Facade para notificaciones de error
-   * @param {string} message - Mensaje a mostrar
-   */
-  const showError = (message) => {
-    toast({
-      title: 'Ha ocurrido un error',
-      description: message,
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-      position: 'top-right',
-    });
-  };
+  const showSuccess = useCallback(
+    (title, description, options = {}) => {
+      show({
+        title,
+        description,
+        status: 'success',
+        ...options,
+      });
+    },
+    [show]
+  );
 
-  return { showSuccess, showError };
-};
+  const showError = useCallback(
+    (title, description, options = {}) => {
+      show({
+        title: title || 'Error',
+        description,
+        status: 'error',
+        ...options,
+      });
+    },
+    [show]
+  );
+
+  const showWarning = useCallback(
+    (title, description, options = {}) => {
+      show({
+        title,
+        description,
+        status: 'warning',
+        ...options,
+      });
+    },
+    [show]
+  );
+
+  const showInfo = useCallback(
+    (title, description, options = {}) => {
+      show({
+        title,
+        description,
+        status: 'info',
+        ...options,
+      });
+    },
+    [show]
+  );
+
+  return { show, showSuccess, showError, showWarning, showInfo };
+}

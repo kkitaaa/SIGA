@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Box, Heading, Input, Select, VStack, HStack, useToast } from '@chakra-ui/react';
+import { Box, Heading, Input, Select, VStack, HStack } from '@chakra-ui/react';
 import api from '../../services/api';
 import { EstudiantesPIETable } from '../../components/pie/EstudiantesPIETable';
+import { useNotification } from '../../hooks/useNotification';
 import "../../styles/home.css";
-
-// TODO: PARA CUANDO TENGAS EL HOOK DE NOTIFICACIONES, DESCOMENTA ESTO:
-// import { useNotification } from '../../hooks/useNotification';
 
 export default function EstudiantesNEEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -16,10 +14,7 @@ export default function EstudiantesNEEPage({ user }) {
   const [cursoFiltro, setCursoFiltro] = useState('');
   const [profesionalFiltro, setProfesionalFiltro] = useState('');
 
-  const toast = useToast();
-  
-  // TODO: PARA CUANDO TENGAS EL HOOK, DESCOMENTA ESTO:
-  // const { showError } = useNotification();
+  const { showError } = useNotification();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,14 +58,11 @@ export default function EstudiantesNEEPage({ user }) {
 
       } catch (error) {
         console.error("Error al cargar la data:", error);
-        toast({
-          title: "Error de conexión",
-          description: "No se pudieron cargar los datos de los estudiantes.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "top-right"
-        });
+        showError(
+          "Error de conexión",
+          "No se pudieron cargar los datos de los estudiantes.",
+          { duration: 5000 }
+        );
       } finally {
         setCargando(false);
       }

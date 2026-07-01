@@ -1,6 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useMemo, useCallback } from "react";
+import PropTypes from "prop-types";
+import { setAuthToken } from "../services/api";
 
-const AuthContext = createContext();
+// Lo exportamos para que el hook pueda consumirlo
+export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
@@ -21,34 +24,73 @@ export function AuthProvider({ children }) {
     setCargando(false);
   }, []);
 
-  const login = (tokenJWT, rolUsuario, datosUsuario = null) => {
+  // Usamos useCallback para que estas funciones no se recreen en cada render
+  const login = useCallback((tokenJWT, rolUsuario, datosUsuario = null) => {
     setToken(tokenJWT);
     setRol(rolUsuario);
     setUsuario(datosUsuario);
+    setAuthToken(tokenJWT);
 
     localStorage.setItem("token", tokenJWT);
     localStorage.setItem("role", rolUsuario);
-    if (datosUsuario) localStorage.setItem("usuario", JSON.stringify(datosUsuario));
-  };
 
-  const logout = () => {
+    if (datosUsuario) {
+      localStorage.setItem("usuario", JSON.stringify(datosUsuario));
+    } else {
+      localStorage.removeItem("usuario");
+    }
+  }, []);
+
+  const logout = useCallback(() => {
     setToken(null);
     setRol(null);
     setUsuario(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");
-  };
+  }, []);
+
+  const estaAutenticado = useCallback(() => {
+    return !!token;
+  }, [token]);
+
+  const tieneRol = useCallback((...roles) => {
+    return roles.includes(rol);
+  }, [rol]);
+
+  const obtenerHeaders = useCallback(() => {
+    if (!token) {
+      return {
+        "Content-Type": "application/json",
+      };
+    }
+
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  }, [token]);
+
+  // SOLUCIÓN SONARQUBE S6481: Memorizamos el objeto 'value'
+  const contextValue = useMemo(() => ({
+    token,
+    rol,
+    usuario,
+    cargando,
+    login,
+    logout,
+    estaAutenticado,
+    tieneRol,
+    obtenerHeaders,
+  }), [token, rol, usuario, cargando, login, logout, estaAutenticado, tieneRol, obtenerHeaders]);
 
   return (
-    <AuthContext.Provider value={{ token, rol, usuario, cargando, login, logout, estaAutenticado: () => !!token, tieneRol: (...roles) => roles.includes(rol) }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
-  const contexto = useContext(AuthContext);
-  if (!contexto) throw new Error("useAuth debe usarse dentro de un AuthProvider");
-  return contexto;
-}
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

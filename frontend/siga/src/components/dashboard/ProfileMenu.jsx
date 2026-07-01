@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import PropTypes from "prop-types";
+import { useAuth } from "../../hooks/useAuth";
 
 function ProfileMenu({ user }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,7 +32,7 @@ function ProfileMenu({ user }) {
         className={`home-profile-btn ${menuOpen ? "open" : ""}`}
         onClick={() => setMenuOpen((open) => !open)}
       >
-        Ver perfil
+        Ver perfil{" "}
         <span className="home-profile-arrow" aria-hidden="true">
           ▼
         </span>
@@ -68,5 +69,13 @@ function ProfileMenu({ user }) {
     </div>
   );
 }
+
+ProfileMenu.propTypes = {
+  user: PropTypes.shape({
+    nombre: PropTypes.string,
+    rol: PropTypes.string,
+    email: PropTypes.string,
+  }),
+};
 
 export default ProfileMenu;

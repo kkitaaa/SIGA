@@ -3,10 +3,28 @@ import {
   Box,
   Select,
   Button,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import api from "../../services/api";
+import { useNotification } from "../../hooks/useNotification";
+
+const validateUser = (props, propName, componentName) => {
+  const value = props[propName];
+
+  if (value == null) {
+    return null;
+  }
+
+  if (typeof value !== "object" || Array.isArray(value)) {
+    return new Error(`Prop ${propName} should be an object in ${componentName}.`);
+  }
+
+  if (value.rol != null && typeof value.rol !== "string") {
+    return new Error(`Prop ${propName}.rol should be a string in ${componentName}.`);
+  }
+
+  return null;
+};
 
 // Importamos el menú de perfil y los estilos que le darán el look del dashboard
 import ProfileMenu from "../../components/dashboard/ProfileMenu"; // Ajusta la ruta si es necesario
@@ -20,7 +38,7 @@ export default function AsignacionPIEPage({ user }) {
   const [estudianteId, setEstudianteId] = useState("");
   const [funcionarioId, setFuncionarioId] = useState("");
 
-  const toast = useToast();
+  const { showSuccess, showWarning, showError } = useNotification();
 
   const cargarDatos = async () => {
     try {
@@ -36,11 +54,10 @@ export default function AsignacionPIEPage({ user }) {
       
     } catch (error) {
       console.error(error);
-      toast({
-        title: "Error cargando datos",
-        description: "Hubo un problema al conectar con el servidor.",
-        status: "error",
-      });
+      showError(
+        "Error cargando datos",
+        "Hubo un problema al conectar con el servidor."
+      );
     }
   };
 
@@ -50,11 +67,10 @@ export default function AsignacionPIEPage({ user }) {
 
   const crearAsignacion = async () => {
     if (!estudianteId || !funcionarioId) {
-      toast({
-        title: "Faltan datos",
-        description: "Por favor selecciona un estudiante y un funcionario.",
-        status: "warning",
-      });
+      showWarning(
+        "Faltan datos",
+        "Por favor selecciona un estudiante y un funcionario."
+      );
       return;
     }
 
@@ -64,10 +80,7 @@ export default function AsignacionPIEPage({ user }) {
         idFuncionario: Number(funcionarioId),
       });
 
-      toast({
-        title: "Asignación creada",
-        status: "success",
-      });
+      showSuccess("Asignación creada");
 
       setEstudianteId("");
       setFuncionarioId("");
@@ -75,11 +88,10 @@ export default function AsignacionPIEPage({ user }) {
       cargarDatos();
     } catch (error) {
       console.error(error);
-      toast({
-        title: "Error al crear asignación",
-        description: error.response?.data?.mensaje || "Error interno del servidor",
-        status: "error",
-      });
+      showError(
+        "Error al crear asignación",
+        error.response?.data?.mensaje || "Error interno del servidor"
+      );
     }
   };
 
@@ -176,3 +188,7 @@ export default function AsignacionPIEPage({ user }) {
     </div>
   );
 }
+
+AsignacionPIEPage.propTypes = {
+  user: validateUser,
+};
