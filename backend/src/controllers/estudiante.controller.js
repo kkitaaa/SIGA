@@ -1,5 +1,6 @@
 import { EstudianteService } from "../services/estudiante.service.js";
 import { CreateEstudianteDTO } from "../dto/create-estudiante.dto.js";
+import { UpdateEstudianteDTO } from "../dto/update-estudiante.dto.js";
 
 export const registrarEstudianteController = async (req, res) => {
   try {
@@ -96,6 +97,34 @@ export const obtenerEstudiantePorIdController = async (req, res) => {
     return res.status(500).json({
       ok: false,
       error: "Error interno al obtener estudiante",
+    });
+  }
+};
+
+export const actualizarEstudianteController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dto = new UpdateEstudianteDTO(req.body);
+    const estudiante = await EstudianteService.actualizarEstudiante(id, dto);
+
+    return res.status(200).json({
+      mensaje: "Estudiante actualizado con éxito",
+      estudiante,
+    });
+  } catch (error) {
+    if (error.message?.startsWith("VALIDATION_ERROR:")) {
+      return res.status(400).json({
+        error: error.message.replace("VALIDATION_ERROR: ", ""),
+      });
+    }
+    if (error.message?.startsWith("BUSINESS_ERROR:")) {
+      return res.status(404).json({
+        error: error.message.replace("BUSINESS_ERROR: ", ""),
+      });
+    }
+    console.error("Error al actualizar estudiante:", error);
+    return res.status(500).json({
+      error: "Error interno al actualizar el estudiante",
     });
   }
 };
