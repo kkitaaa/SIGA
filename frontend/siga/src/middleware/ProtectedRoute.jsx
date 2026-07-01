@@ -1,7 +1,8 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import PropTypes from "prop-types";
+import { useAuth } from "../hooks/useAuth";
 
-function ProtectedRoute({ children, roles = [] }) {
+function ProtectedRoute({ children, rolesPermitidos = [] }) {
   const { estaAutenticado, cargando, rol } = useAuth();
 
   if (cargando) {
@@ -13,13 +14,18 @@ function ProtectedRoute({ children, roles = [] }) {
   }
 
   if (
-    roles.length > 0 &&
-    !roles.includes(rol)
+    rolesPermitidos.length > 0 &&
+    !rolesPermitidos.includes(rol)
   ) {
     return <Navigate to="/home" replace />;
   }
 
   return children;
 }
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired, 
+  rolesPermitidos: PropTypes.arrayOf(PropTypes.string), 
+};
 
 export default ProtectedRoute;

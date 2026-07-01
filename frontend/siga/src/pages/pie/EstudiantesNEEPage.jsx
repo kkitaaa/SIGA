@@ -30,6 +30,7 @@ export default function EstudiantesNEEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);
   const [cargando, setCargando] = useState(true);
 
+  // Estados para los filtros
   const [busqueda, setBusqueda] = useState('');
   const [cursoFiltro, setCursoFiltro] = useState('');
   const [profesionalFiltro, setProfesionalFiltro] = useState('');
@@ -47,11 +48,27 @@ export default function EstudiantesNEEPage({ user }) {
 
         const estsData = estsRes.data.estudiantes || [];
         const asigsData = asigsRes.data.asignaciones || [];
-        const funcsData = funcsRes.data || [];
+        const funcsData = funcsRes.data || []; 
 
-        const dataCruzada = cruzarDatosEstudiantes(estsData, asigsData, funcsData);
+        const dataCruzada = estsData.map(est => {
+          
+          const misAsignaciones = asigsData.filter(a => a.id_estudiante === est.id_estudiante);
+          
+          const profesionales = misAsignaciones.map(a => {
+            const func = funcsData.find(f => f.id_funcionario === a.id_funcionario);
+            return func ? { nombre: func.nombre, especialidad: func.tipo_profesional } : null;
+          }).filter(Boolean); 
+
+          return {
+            ...est,
+            nombre_completo: `${est.primer_nombre} ${est.primer_apellido}`,
+            funcionarios_asignados: profesionales,
+            nombre_curso: est.id_curso ? `Curso ID: ${est.id_curso}` : 'Sin curso' 
+          };
+        });
 
         setEstudiantes(dataCruzada);
+
       } catch (error) {
         console.error("Error al cargar la data:", error);
         showError(
@@ -68,26 +85,26 @@ export default function EstudiantesNEEPage({ user }) {
   }, [showError]);
 
   const cursosDisponibles = useMemo(() => {
-    const cursos = estudiantes.map((e) => e.nombre_curso).filter(Boolean);
+    const cursos = estudiantes.map(e => e.nombre_curso).filter(Boolean);
     return [...new Set(cursos)];
   }, [estudiantes]);
 
   const profesionalesDisponibles = useMemo(() => {
-    const profes = estudiantes.flatMap((e) => (e.funcionarios_asignados || []).map((f) => f.nombre));
+    const profes = estudiantes.flatMap(e => (e.funcionarios_asignados || []).map(f => f.nombre));
     return [...new Set(profes)];
   }, [estudiantes]);
 
   const estudiantesFiltrados = useMemo(() => {
-    return estudiantes.filter((est) => {
+    return estudiantes.filter(est => {
       const nombre = est.nombre_completo?.toLowerCase() || '';
       const rut = est.rut || '';
-
+      
       const coincideBusqueda = nombre.includes(busqueda.toLowerCase()) || rut.includes(busqueda);
-
+      
       const coincideCurso = cursoFiltro ? est.nombre_curso === cursoFiltro : true;
-
-      const coincideProfesional = profesionalFiltro
-        ? (est.funcionarios_asignados || []).some((f) => f.nombre === profesionalFiltro)
+      
+      const coincideProfesional = profesionalFiltro 
+        ? (est.funcionarios_asignados || []).some(f => f.nombre === profesionalFiltro) 
         : true;
 
       return coincideBusqueda && coincideCurso && coincideProfesional;

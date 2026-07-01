@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+// src/repositories/usuario.repository.js
 import prisma from "../config/prisma.js";
 
 export class UsuarioRepository {
@@ -20,5 +20,21 @@ export class UsuarioRepository {
         cuenta: { select: { email: true } },
       },
     });
+  }
+
+  async findAllConRol() {
+    const usuarios = await prisma.usuario.findMany({
+      include: {
+        roles: { include: { rol: true } },
+        cuenta: { select: { email: true } },
+      },
+    });
+
+    return usuarios.map((u) => ({
+      id_usuario: u.id_usuario,
+      nombre: `${u.primer_nombre} ${u.primer_apellido}`,
+      correo: u.cuenta?.email || "sin correo",
+      rol: u.roles[0]?.rol.nombre_rol || "SinRol",
+    }));
   }
 }

@@ -9,4 +9,22 @@ export class FuncionarioRepository {
       },
     });
   }
+
+  static async findAllFuncionarios() {
+    return await prisma.funcionario.findMany({
+      include: {
+        usuario: {
+          select: {
+            primer_nombre: true,
+            primer_apellido: true,
+          },
+        },
+        tipoFuncionario: {
+          select: {
+            nombre: true,
+          },
+        },
+      },
+    });
+  }
 }

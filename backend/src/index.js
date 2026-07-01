@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
+import path from "node:path";
 
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
@@ -13,12 +13,27 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 
 import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 import estudianteRoutes from "./routes/estudiante.routes.js";
+import FuncionarioRoutes from "./routes/funcionario.routes.js";
+import tipoFuncionarioRoutes from "./routes/tipo-funcionario.routes.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.disable("x-powered-by");
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
@@ -29,11 +44,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/asignacion", asignacionRoutes);
 app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
-app.use("/api/documento", documentoRoutes);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
 app.use("/api/cursos", cursoRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/funcionarios", FuncionarioRoutes);
+app.use("/api/tipos-funcionarios", tipoFuncionarioRoutes);
 /**
  * SWAGGER
  */
@@ -47,5 +63,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Servidor en puerto 3000");
+  console.log("Servidor iniciado");
 });

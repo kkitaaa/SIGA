@@ -6,22 +6,36 @@ import ProtectedRoute from "./middleware/ProtectedRoute";
 import Login from "./pages/login";
 
 // General
-import Home from "./pages/home";
+import DashboardRouter from "./components/dashboard/DashboardRouter";
+
+// Documentos
+import DocumentosPage from "./pages/documentos/DocumentosPage";
 
 // Roles
-import AsignacionRoles from "./pages/asignacion_roles";
+import UsuariosPage from "./pages/usuarios/UsuariosPage";
+
+
+
+// Directiva
+import AsignacionRoles from "./pages/directiva/AsignacionRoles";
+
+
+
+
 
 // PIE
-import PieDashboard from "./pages/home_pie";
-import ProfesoresDashboard from "./pages/home_profesores";
-import AsignacionPIEPage from "./pages/asignacion_PIE";
+import PieDashboard from "./pages/pie/PieDashboard";
+import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
+import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
 
 function App() {
+
   return (
     <Routes>
 
       {/* 🔓 Públicas */}
       <Route path="/" element={<Login />} />
+      <Route path="/documentos" element={<DocumentosPage />} />
 
       {/* 🏠 Home general */}
       <Route
@@ -36,12 +50,22 @@ function App() {
             "Coordinador PIE",
             "Coordinador Administrativo"
           ]}>
-            <Home />
+            <DashboardRouter />
           </ProtectedRoute>
         }
       />
 
-      {/* 👤 Roles */}
+      {/* 👤 Usuarios */}
+      <Route
+        path="/admin/usuarios"
+        element={
+          <ProtectedRoute rolesPermitidos={["Directiva", "Administrativo", "Coordinador Administrativo"]}>
+            <UsuariosPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* 🏢 Directiva */}
       <Route
         path="/asignacion-roles"
         element={
@@ -60,6 +84,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/pie/estudiantes"
+        element={
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE", "Directiva"]}>
+            <EstudiantesPIEPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/asignacion-pie"
@@ -70,6 +102,7 @@ function App() {
         }
       />
 
+    {/*
       <Route
         path="/profesores"
         element={
@@ -78,6 +111,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      */}
 
       {/* 🚫 fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
