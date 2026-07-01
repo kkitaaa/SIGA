@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for dto/login.dto.js</title>
+    <title>Code coverage report for controllers/dashboard.controller.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">dto</a> login.dto.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">controllers</a> dashboard.controller.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/7</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/7</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -77,40 +77,34 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export class LoginDTO {
-  constructor(data) {
-    // Limpieza y normalización de datos
-    this.email = data.email?.trim().toLowerCase() || <span class="branch-1 cbranch-no" title="branch not covered" >"";</span>
-    this.password = data.password || <span class="branch-1 cbranch-no" title="branch not covered" >"";</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DashboardService } from "../services/dashboard.service.js";
 &nbsp;
-    this.validate();
-  }
+export const obtenerMetricasDashboard = async (req, res) =&gt; {
+  try {
+    const metricas = await DashboardService.obtenerMetricasGenerales();
 &nbsp;
-  validate() {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.email)
-<span class="cstat-no" title="statement not covered" >      throw new Error("VALIDATION_ERROR: El email es obligatorio");</span>
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.password)
-<span class="cstat-no" title="statement not covered" >      throw new Error("VALIDATION_ERROR: La contraseña es obligatoria");</span>
+    res.status(200).json(metricas);
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    console.error("Error al obtener métricas del dashboard:", error);</span>
+<span class="cstat-no" title="statement not covered" >    res</span>
+      .status(500)
+      .json({ error: "Error interno al cargar las métricas del dashboard" });
   }
-}
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

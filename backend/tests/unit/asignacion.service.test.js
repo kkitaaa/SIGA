@@ -53,6 +53,41 @@ describe("asignacion.service", () => {
     );
   });
 
+  test("rechaza asignación si el usuario no existe", async () => {
+    repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
+    repoMock.usuarioExiste.mockResolvedValue(false);
+
+    await expect(asignarRol(2, 3, 1, 7)).rejects.toThrow("El usuario no existe");
+  });
+
+  test("rechaza asignación si el rol no existe", async () => {
+    repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
+    repoMock.usuarioExiste.mockResolvedValue(true);
+    repoMock.rolExiste.mockResolvedValue(null);
+
+    await expect(asignarRol(2, 3, 1, 7)).rejects.toThrow("El rol no existe");
+  });
+
+  test("rechaza asignación si el usuario ya tiene un rol", async () => {
+    repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
+    repoMock.usuarioExiste.mockResolvedValue(true);
+    repoMock.rolExiste.mockResolvedValue({ nombre_rol: "Estudiante" });
+    repoMock.usuarioTieneRol.mockResolvedValue(true);
+
+    await expect(asignarRol(2, 3, 1, 7)).rejects.toThrow("El usuario ya tiene un rol asignado");
+  });
+
+  test("requiere tipo de funcionario cuando el rol es Funcionario", async () => {
+    repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
+    repoMock.usuarioExiste.mockResolvedValue(true);
+    repoMock.rolExiste.mockResolvedValue({ nombre_rol: "Funcionario" });
+    repoMock.usuarioTieneRol.mockResolvedValue(false);
+
+    await expect(asignarRol(2, 3, 1, undefined)).rejects.toThrow(
+      "Debe especificar el tipo de funcionario (especialidad)",
+    );
+  });
+
   test("revoca un rol cuando existe y el usuario tiene permisos", async () => {
     repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
     repoMock.usuarioExiste.mockResolvedValue(true);
@@ -60,5 +95,13 @@ describe("asignacion.service", () => {
     repoMock.revocarRol.mockResolvedValue({ ok: true });
 
     await expect(revocarRol(2, 1)).resolves.toEqual({ mensaje: "Rol revocado correctamente" });
+  });
+
+  test("rechaza revocación si el usuario no tiene rol asignado", async () => {
+    repoMock.verificarRolAdministrativo.mockResolvedValue({ id_usuario: 1 });
+    repoMock.usuarioExiste.mockResolvedValue(true);
+    repoMock.usuarioTieneRol.mockResolvedValue(null);
+
+    await expect(revocarRol(2, 1)).rejects.toThrow("El usuario no tiene un rol asignado");
   });
 });

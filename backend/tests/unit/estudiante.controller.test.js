@@ -96,4 +96,26 @@ describe("estudiante.controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
   });
+
+  test("devuelve 400 cuando falla la validación al registrar", async () => {
+    serviceMock.registrarEstudiante.mockRejectedValue(new Error("VALIDATION_ERROR: datos inválidos"));
+    const req = { body: {} };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await registrarEstudianteController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: "datos inválidos" });
+  });
+
+  test("devuelve 500 para errores inesperados al listar", async () => {
+    serviceMock.listarEstudiantes.mockRejectedValue(new Error("boom"));
+    const req = {};
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await listarEstudiantesController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ ok: false, error: "Error interno al obtener estudiantes" });
+  });
 });

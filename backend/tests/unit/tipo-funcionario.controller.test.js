@@ -51,4 +51,26 @@ describe("tipo-funcionario.controller", () => {
 
     expect(res.json).toHaveBeenCalledWith([{ id_tipo_funcionario: 1 }]);
   });
+
+  test("devuelve 400 cuando falla el registro", async () => {
+    serviceMock.registrarTipo.mockRejectedValue(new Error("Ya existe"));
+    const req = { body: { nombre: "Psicólogo" } };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await registrarTipoFuncionarioController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ ok: false, mensaje: "Ya existe" });
+  });
+
+  test("devuelve 404 cuando no existe el detalle", async () => {
+    serviceMock.obtenerDetalle.mockRejectedValue(new Error("No encontrado"));
+    const req = { params: { id: "1" } };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await obtenerDetalleTipoFuncionarioController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ ok: false, mensaje: "No encontrado" });
+  });
 });
