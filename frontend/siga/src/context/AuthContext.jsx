@@ -11,15 +11,27 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  // Cargar sesión al iniciar
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
     const usuarioGuardado = localStorage.getItem("usuario");
 
-    if (tokenGuardado) setToken(tokenGuardado);
-    if (rolGuardado) setRol(rolGuardado);
-    if (usuarioGuardado) setUsuario(JSON.parse(usuarioGuardado));
+    if (tokenGuardado) {
+      setToken(tokenGuardado);
+      setAuthToken(tokenGuardado);
+    }
+
+    if (rolGuardado) {
+      setRol(rolGuardado);
+    }
+
+    if (usuarioGuardado) {
+      try {
+        setUsuario(JSON.parse(usuarioGuardado));
+      } catch {
+        localStorage.removeItem("usuario");
+      }
+    }
 
     setCargando(false);
   }, []);
@@ -45,6 +57,7 @@ export function AuthProvider({ children }) {
     setToken(null);
     setRol(null);
     setUsuario(null);
+    setAuthToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");

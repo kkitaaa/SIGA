@@ -19,37 +19,29 @@ export default function EstudiantesNEEPage({ user }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. LLAMAMOS A LOS 3 ENDPOINTS QUE YA EXISTEN EN TU BACKEND
         const [estsRes, asigsRes, funcsRes] = await Promise.all([
           api.get('/estudiantes/nee'),
           api.get('/asignacion-pie'),
           api.get('/funcionarios')
         ]);
 
-        // 2. EXTRAEMOS LA DATA SEGÚN LA ESTRUCTURA DE TU BACKEND
         const estsData = estsRes.data.estudiantes || [];
         const asigsData = asigsRes.data.asignaciones || [];
-        // Recordando tu otro componente, funcionarios viene directo en data
         const funcsData = funcsRes.data || []; 
 
-        // 3. CRUZAMOS LA INFORMACIÓN AQUÍ EN EL FRONTEND
         const dataCruzada = estsData.map(est => {
           
-          // Buscamos las asignaciones de este estudiante en específico
           const misAsignaciones = asigsData.filter(a => a.id_estudiante === est.id_estudiante);
           
-          // Mapeamos los ID de esas asignaciones para traer el nombre del funcionario
           const profesionales = misAsignaciones.map(a => {
             const func = funcsData.find(f => f.id_funcionario === a.id_funcionario);
             return func ? { nombre: func.nombre, especialidad: func.tipo_profesional } : null;
-          }).filter(Boolean); // filter(Boolean) elimina los nulos por si acaso
+          }).filter(Boolean); 
 
           return {
             ...est,
             nombre_completo: `${est.primer_nombre} ${est.primer_apellido}`,
-            // Guardamos la lista de profesionales armadita para la tabla
             funcionarios_asignados: profesionales,
-            // Si el backend no te trae el nombre del curso, mostramos el ID por ahora
             nombre_curso: est.id_curso ? `Curso ID: ${est.id_curso}` : 'Sin curso' 
           };
         });
@@ -69,9 +61,8 @@ export default function EstudiantesNEEPage({ user }) {
     };
 
     fetchData();
-  }, [toast]);
+  }, [showError]);
 
-  // Extraer listas únicas para los selectores de filtros protegiendo contra nulos (?)
   const cursosDisponibles = useMemo(() => {
     const cursos = estudiantes.map(e => e.nombre_curso).filter(Boolean);
     return [...new Set(cursos)];
@@ -82,7 +73,6 @@ export default function EstudiantesNEEPage({ user }) {
     return [...new Set(profes)];
   }, [estudiantes]);
 
-  // Lógica de filtrado cruzado protegiendo contra nulos
   const estudiantesFiltrados = useMemo(() => {
     return estudiantes.filter(est => {
       const nombre = est.nombre_completo?.toLowerCase() || '';
