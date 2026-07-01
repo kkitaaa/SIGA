@@ -34,7 +34,6 @@ export class EstudianteService {
 
   static async obtenerEstudiantePorId(id) {
     if (!Number.isInteger(Number(id))) {
-      // CORRECCIÓN: Usamos TypeError porque estamos validando el tipo de dato
       throw new TypeError("VALIDATION_ERROR: ID inválido");
     }
 
@@ -49,7 +48,6 @@ export class EstudianteService {
 
   static async actualizarEstudiante(id, dto) {
     if (!Number.isInteger(Number(id))) {
-      // CORRECCIÓN: Usamos TypeError porque estamos validando el tipo de dato
       throw new TypeError("VALIDATION_ERROR: ID inválido");
     }
 
