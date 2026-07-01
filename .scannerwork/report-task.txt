@@ -1,0 +1,6 @@
+projectKey=SIGA
+serverUrl=https://sonarqube.inf.uct.cl
+serverVersion=26.6.0.123539
+dashboardUrl=https://sonarqube.inf.uct.cl/dashboard?id=SIGA
+ceTaskId=38f9edbf-3415-4d68-b5f6-5c4c227f3acb
+ceTaskUrl=https://sonarqube.inf.uct.cl/api/ce/task?id=38f9edbf-3415-4d68-b5f6-5c4c227f3acb
