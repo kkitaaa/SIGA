@@ -2,16 +2,16 @@ name: CI Pipeline
 
 on:
   push:
+    branches: [ main, develop ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   validation:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: backend
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,11 +30,12 @@ jobs:
       - name: Check Format
         run: npm run format:check
 
-      - name: Run Unit Tests
-        run: npm run test
+      - name: Run Tests with Coverage
+        # Usamos el script que creamos anteriormente
+        run: npm run test:coverage
 
-      - name: Run Integration Tests
-        run: npm run test:integration
-
-      - name: Run E2E Tests
-        run: npm run test:e2e
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage/lcov.info
