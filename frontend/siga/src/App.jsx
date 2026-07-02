@@ -45,6 +45,7 @@ function App() {
             "Directiva",
             "Administracion",
             "Equipo PIE",
+            "PIE",
             "Profesor",
             "Funcionario",
             "Coordinador PIE",
@@ -79,7 +80,7 @@ function App() {
       <Route
         path="/pie"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE"]}>
             <PieDashboard />
           </ProtectedRoute>
         }
@@ -87,7 +88,7 @@ function App() {
       <Route
         path="/pie/estudiantes"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE", "Directiva"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE", "Directiva"]}>
             <EstudiantesPIEPage />
           </ProtectedRoute>
         }
@@ -96,7 +97,7 @@ function App() {
       <Route
         path="/asignacion-pie"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE"]}>
             <AsignacionPIEPage />
           </ProtectedRoute>
         }

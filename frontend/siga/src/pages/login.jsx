@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
+import LogoSIGA from "../assets/Logo SIGA.svg";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
@@ -75,7 +76,9 @@ function InicioDeSesion() {
   return (
     <div className="login-page-container">
       <div className="login-page-brand">
-        <div className="login-logo">SIGA</div>
+        <div className="login-logo">
+          <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+        </div>
         <div className="login-tagline">Sistema de gestión académica</div>
       </div>
 

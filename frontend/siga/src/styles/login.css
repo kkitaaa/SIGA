@@ -35,15 +35,24 @@ body {
 }
 
 .login-logo {
-  font-size: 3.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1rem;
+  display: block;
+  line-height: 1;
+}
+
+.site-logo {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
 .login-tagline {
   font-size: 1rem;
   font-weight: 300;
   max-width: 18rem;
+}
+
+.login-tagline {
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 .login-card {

@@ -8,6 +8,7 @@ import {
 import api from "../../services/api";
 import { useNotification } from "../../hooks/useNotification";
 import ProfileMenu from "../../components/dashboard/ProfileMenu"; 
+import LogoSIGA from "../../assets/Logo SIGA.svg";
 import "../../styles/home.css";
 
 const validateUser = (props, propName, componentName) => {
@@ -96,7 +97,9 @@ export default function AsignacionPIEPage({ user }) {
   return (
     <div className="home-page">
       <header className="home-topbar">
-        <div className="home-brand">SIGA</div>
+        <div className="home-brand">
+          <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+        </div>
         <div className="home-topbar-actions">
           <span className="home-role-badge">{user?.rol || "Administrativo"}</span>
           <ProfileMenu user={user} />

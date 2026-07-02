@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import ProfileMenu from "../../components/dashboard/ProfileMenu";
+import LogoSIGA from "../../assets/Logo SIGA.svg";
 import { dashboardService } from "../../services/dashboardService";
 import "../../styles/home.css";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +45,24 @@ function AdminDashboard({ user }) {
   return (
     <div className="home-page">
       <header className="home-topbar">
-        <div className="home-brand">SIGA</div>
+        <div className="home-topbar-left">
+          <div className="home-brand">
+            <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+          </div>
+        </div>
+
+        <div className="home-topbar-center">
+          <div className="home-topbar-nav" aria-label="Navegación principal">
+            <button type="button" className="home-nav-button" onClick={() => navigate("/home")}>Cursos</button>
+            <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate("/home")} aria-label="Ir al inicio">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
+              </svg>
+            </button>
+            <button type="button" className="home-nav-button" onClick={() => navigate("/admin/usuarios")}>Asignar roles</button>
+          </div>
+        </div>
+
         <div className="home-topbar-actions">
           <span className="home-role-badge">{user?.rol || "Administrativo"}</span>
           <ProfileMenu user={user} />
