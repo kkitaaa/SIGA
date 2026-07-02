@@ -6,7 +6,7 @@ import api from "../services/api";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
-  const { loginWithCredentials } = useAuth();
+  const { loginWithCredentials, login } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -34,8 +34,6 @@ function InicioDeSesion() {
           email: formData.email,
           password: formData.password,
         });
-
-        const data = res.data;
 
         login(data.token, data.role, {
           nombre: data.nombre || data.usuario?.primer_nombre || "",

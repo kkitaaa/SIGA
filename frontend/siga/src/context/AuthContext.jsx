@@ -12,6 +12,17 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
+  const leerUsuarioDesdeStorage = () => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    if (!usuarioGuardado) return null;
+
+    try {
+      return JSON.parse(usuarioGuardado);
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
@@ -81,7 +92,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");
     localStorage.removeItem("id_usuario");
-  };
+  }, []);
 
   const estaAutenticado = useCallback(() => {
     return !!token;
