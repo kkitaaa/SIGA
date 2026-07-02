@@ -16,7 +16,7 @@ export const asignarRol = async (
   }
 
   // Verificar permisos
-  const esAdministrativo = await repo.verificarRolAdministrativo(idUsuarioActual);
+  const esAdministrativo = await repo.verificarRolDirectiva(idUsuarioActual);
   if (!esAdministrativo) {
     throw new Error("No tienes permisos para asignar roles");
   }

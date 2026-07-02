@@ -1,10 +1,15 @@
 import { CursoService } from "../services/curso.service.js";
 import { CreateCursoDTO } from "../dto/create-curso.dto.js";
+import { CursoRepository } from "../repositories/curso.repository.js";
+
+const cursoRepository = new CursoRepository();
+const cursoService = new CursoService(cursoRepository);
 
 export const crearCursoController = async (req, res) => {
   try {
     const dto = new CreateCursoDTO(req.body);
-    const curso = await CursoService.crearCurso(dto);
+    
+    const curso = await cursoService.crearCurso(dto);
 
     res.status(201).json({
       mensaje: "Curso creado exitosamente",
@@ -29,10 +34,31 @@ export const crearCursoController = async (req, res) => {
 
 export const obtenerCursosController = async (req, res) => {
   try {
-    const cursos = await CursoService.obtenerCursos();
+    const cursos = await cursoService.obtenerCursos();
     res.status(200).json(cursos);
   } catch (error) {
     console.error("Error al obtener cursos:", error);
     res.status(500).json({ error: "Error interno al obtener los cursos" });
+  }
+};
+
+export const obtenerCursoPorIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const curso = await cursoService.obtenerCursoPorId(id);
+
+    return res.status(200).json({
+      ok: true,
+      curso
+    });
+  } catch (error) {
+    console.error("Error en obtenerCursoPorIdController:", error);
+
+    const statusCode = error.message === "Curso no encontrado" ? 404 : 500;
+    return res.status(statusCode).json({
+      ok: false,
+      mensaje: error.message
+    });
   }
 };

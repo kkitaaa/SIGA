@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Box, 
   Heading, 
@@ -49,6 +50,8 @@ DocumentGallery.propTypes = {
 };
 
 export default function DocumentosPage({ user }) {
+  const navigate = useNavigate();
+
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   
@@ -176,6 +179,18 @@ export default function DocumentosPage({ user }) {
     <div className="home-page">
       <main className="home-main" style={{ display: 'block', maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
         
+        {/* Botón de Volver */}
+        <Button 
+          onClick={() => navigate(-1)} 
+          mb={4} 
+          variant="outline" 
+          bg="white" 
+          size="sm" 
+          _hover={{ bg: 'gray.100' }}
+        >
+          &larr; Volver
+        </Button>
+
         <Box bg="white" p={6} borderRadius="lg" shadow="sm" borderWidth="1px">
           
           <HStack justifyContent="space-between" mb={6}>

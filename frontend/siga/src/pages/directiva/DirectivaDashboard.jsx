@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import ProfileMenu from "../../components/dashboard/ProfileMenu";
 import LogoSIGA from "../../assets/Logo SIGA.svg";
 import { dashboardService } from "../../services/dashboardService";
+import api from "../../services/api";
 import "../../styles/home.css";
 import { useNavigate } from "react-router-dom";
 
@@ -16,25 +17,27 @@ function AdminDashboard({ user }) {
     pie: 0,
   });
 
+  const [recentDocuments, setRecentDocuments] = useState([]);
+
   useEffect(() => {
-    const loadMetrics = async () => {
+    const loadDashboardData = async () => {
       try {
         const data = await dashboardService.getMetrics();
         setMetrics(data);
       } catch (error) {
         console.error("No se pudieron cargar las métricas del dashboard", error);
       }
+
+      try {
+        const docsRes = await api.get('/documentos?page=1&limit=5');
+        setRecentDocuments(docsRes.data.documentos || []);
+      } catch (error) {
+        console.error("No se pudieron cargar los documentos recientes", error);
+      }
     };
 
-    loadMetrics();
+    loadDashboardData();
   }, []);
-
-  const documentos = [
-    "Acta de reunión mensual",
-    "Planificación anual 2026",
-    "Informe de cumplimiento",
-    "Normativa institucional",
-  ];
 
   const tareas = [
     "Revisión de expedientes",
@@ -124,10 +127,22 @@ function AdminDashboard({ user }) {
           <div className="home-aside-card">
             <h2>Documentos recientes</h2>
             <ul className="home-list">
-              {documentos.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              {recentDocuments.length > 0 ? (
+                recentDocuments.map((doc) => (
+                  <li key={doc.id_documento}>{doc.nombre || `Documento #${doc.id_documento}`}</li>
+                ))
+              ) : (
+                <li style={{ color: "#718096" }}>No hay documentos recientes</li>
+              )}
             </ul>
+            <button
+              type="button"
+              className="usuarios-action"
+              style={{ marginTop: "1rem", width: "100%" }}
+              onClick={() => navigate("/documentos")}
+            >
+              Ver todo
+            </button>
           </div>
         </aside>
       </main>

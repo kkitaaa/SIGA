@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   crearCursoController,
   obtenerCursosController,
+  obtenerCursoPorIdController,
 } from "../controllers/curso.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
@@ -129,5 +130,7 @@ router.post(
   verifyRole("Directiva", "Coordinador Administrativo"),
   crearCursoController,
 );
+
+router.get('/:id', obtenerCursoPorIdController);
 
 export default router;

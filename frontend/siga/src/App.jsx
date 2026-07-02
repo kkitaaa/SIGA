@@ -21,9 +21,12 @@ import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
 // Directiva
 import AsignacionRoles from "./pages/directiva/AsignacionRoles";
 
+// Cursos
+import CursoDetallePage from "./pages/cursos/CursoDetallePage";
+import CursosPage from "./pages/cursos/CursosPage";
 
-
-
+//Profesores
+import ProfesoresDashboard from "./pages/profesor/ProfesorDashboard";
 
 // PIE
 import PieDashboard from "./pages/pie/PieDashboard";
@@ -39,6 +42,8 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/documentos" element={<DocumentosPage />} />
       <Route path="/estudiantes/:id" element={<EstudianteDetallePage />} />
+      <Route path="/cursos/:id" element={<CursoDetallePage />} />
+      <Route path="/cursos" element={<CursosPage />} />
 
       {/* 🏠 Home general */}
       <Route
