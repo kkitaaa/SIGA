@@ -1,5 +1,4 @@
 import { TipoFuncionarioRepository } from "../repositories/tipo-funcionario.repository.js";
-import prisma from "../config/prisma.js";
 
 const repo = new TipoFuncionarioRepository();
 
@@ -8,7 +7,7 @@ export class TipoFuncionarioService {
     if (!nombre) throw new Error("El nombre es obligatorio");
 
     const existente = await repo.buscarPorNombre(nombre);
-    if (existente && existente.activo) {
+    if (existente?.activo) {
       throw new Error("Ya existe un tipo de funcionario con ese nombre");
     }
     if (existente && !existente.activo) {

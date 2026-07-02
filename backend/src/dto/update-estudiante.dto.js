@@ -23,10 +23,10 @@ export class UpdateEstudianteDTO {
     if (this.sexo && typeof this.sexo !== "string") {
       throw new Error("VALIDATION_ERROR: sexo debe ser string");
     }
-    if (this.fecha_nacimiento && isNaN(Date.parse(this.fecha_nacimiento))) {
+    if (this.fecha_nacimiento && Number.isNaN(Date.parse(this.fecha_nacimiento))) {
       throw new Error("VALIDATION_ERROR: fecha_nacimiento inválida");
     }
-    if (this.fecha_ingreso && isNaN(Date.parse(this.fecha_ingreso))) {
+    if (this.fecha_ingreso && Number.isNaN(Date.parse(this.fecha_ingreso))) {
       throw new Error("VALIDATION_ERROR: fecha_ingreso inválida");
     }
     if (this.id_curso && !Number.isInteger(Number(this.id_curso))) {

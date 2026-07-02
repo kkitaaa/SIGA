@@ -1,5 +1,4 @@
-import { asignarRol } from "../services/asignacion.service.js";
-import { revocarRol } from "../services/asignacion.service.js";
+import { asignarRol, revocarRol } from "../services/asignacion.service.js";
 
 export const asignarRolController = async (req, res) => {
   try {

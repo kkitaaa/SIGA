@@ -20,8 +20,8 @@ export class DocumentoService {
 
   // Nuevo método de paginación
   async obtenerDocumentosPaginados(page = 1, limit = 10) {
-    const pageNumber = parseInt(page, 10);
-    const limitNumber = parseInt(limit, 10);
+    const pageNumber = Number.parseInt(page, 10);
+    const limitNumber = Number.parseInt(limit, 10);
 
     if (pageNumber < 1 || limitNumber < 1) {
       throw new Error("Los parámetros de paginación deben ser mayores a 0");
