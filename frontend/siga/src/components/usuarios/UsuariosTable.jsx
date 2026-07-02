@@ -10,6 +10,7 @@ function UsuariosTable({
   roleOptions,
   onRoleChangeRequest,
   currentUserId,
+  isCoordinatorAdmin = false,
 }) {
   return (
     <div className="usuarios-card">
@@ -39,15 +40,18 @@ function UsuariosTable({
                         : roleOptions[0]?.nombre_rol || ""
                     }
                     onChange={(event) => onRoleChangeRequest(usuario, event.target.value)}
+                    aria-label={`Cambiar rol de ${usuario.nombre || `${usuario.primer_nombre || ""} ${usuario.primer_apellido || ""}`.trim()}`}
                   >
                     {roleOptions.length === 0 ? (
                       <option value="">Sin roles disponibles</option>
                     ) : (
-                      roleOptions.map((role) => (
-                        <option key={role.id_rol} value={role.nombre_rol}>
-                          {role.nombre_rol}
-                        </option>
-                      ))
+                      roleOptions
+                        .filter((role) => !isCoordinatorAdmin || role.nombre_rol !== "Directiva")
+                        .map((role) => (
+                          <option key={role.id_rol} value={role.nombre_rol}>
+                            {role.nombre_rol}
+                          </option>
+                        ))
                     )}
                   </select>
                 )}

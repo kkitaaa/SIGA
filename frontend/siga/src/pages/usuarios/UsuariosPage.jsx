@@ -21,10 +21,12 @@ const normalizeRole = (role) => {
 function UsuariosPage() {
   const navigate = useNavigate();
   const { rol, usuario: usuarioAutenticado } = useAuth();
+  const isCoordinatorAdmin = String(rol || "").trim().toLowerCase() === "coordinador administrativo";
   const [usuarios, setUsuarios] = useState([]);
   const [roleOptions, setRoleOptions] = useState([]);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("default");
   const [page, setPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,15 +84,51 @@ function UsuariosPage() {
     return [...new Set([...backendRoles, ...existingRoles, ...(hasPendingRoles ? ["Sin rol"] : [])])].sort();
   }, [usuarios, roleOptions]);
 
+  const getUserSortValue = (usuario) => {
+    const candidateFields = [
+      usuario?.created_at,
+      usuario?.createdAt,
+      usuario?.fecha_creacion,
+      usuario?.fecha_registro,
+      usuario?.fecha_ingreso,
+      usuario?.fecha,
+    ];
+
+    for (const value of candidateFields) {
+      if (!value) continue;
+
+      const parsedValue = new Date(value);
+      if (!Number.isNaN(parsedValue.getTime())) {
+        return parsedValue.getTime();
+      }
+    }
+
+    return Number(usuario?.id_usuario ?? 0);
+  };
+
   const filteredUsuarios = useMemo(() => {
     const query = search.toLowerCase();
-    return usuarios.filter((usuario) => {
+    const users = usuarios.filter((usuario) => {
       const fullName = `${usuario.nombre || ""} ${usuario.correo || ""}`.toLowerCase();
       const matchesSearch = !query || fullName.includes(query);
       const matchesRole = !roleFilter || normalizeRole(usuario?.rol) === roleFilter;
       return matchesSearch && matchesRole;
     });
-  }, [usuarios, search, roleFilter]);
+
+    if (sortOrder === "oldest-first") {
+      return [...users].sort((leftUser, rightUser) => {
+        const leftValue = getUserSortValue(leftUser);
+        const rightValue = getUserSortValue(rightUser);
+        return leftValue - rightValue || Number(leftUser?.id_usuario ?? 0) - Number(rightUser?.id_usuario ?? 0);
+      });
+    }
+
+    return [...users].sort((leftUser, rightUser) => {
+      const leftValue = getUserSortValue(leftUser);
+      const rightValue = getUserSortValue(rightUser);
+      return rightValue - leftValue || Number(rightUser?.id_usuario ?? 0) - Number(leftUser?.id_usuario ?? 0);
+    });
+  }, [usuarios, search, roleFilter, sortOrder]);
 
   const paginatedUsuarios = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE;
@@ -99,7 +137,7 @@ function UsuariosPage() {
 
   useEffect(() => {
     setPage(1);
-  }, [search, roleFilter]);
+  }, [search, roleFilter, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filteredUsuarios.length / PAGE_SIZE));
 
@@ -112,7 +150,14 @@ function UsuariosPage() {
     const currentUserId = usuarioAutenticado?.id_usuario ?? usuarioAutenticado?.id ?? null;
     const isSelfChange = Number(targetUser.id_usuario) === Number(currentUserId);
     const isDirectivaChange = nextRoleName === "Directiva";
-    const needsDoubleConfirm = isSelfChange || isDirectivaChange;
+    const isCoordinatorAdminChange = nextRoleName === "Coordinador Administrativo";
+
+    if (isCoordinatorAdmin && (isSelfChange || isDirectivaChange)) {
+      setFeedbackType("error");
+      setFeedbackMessage("No tienes permisos para asignar Directiva ni para modificar tu propio rol.");
+      return;
+    }
+    const needsDoubleConfirm = isSelfChange || isDirectivaChange || isCoordinatorAdminChange;
 
     if (!selectedRole?.id_rol) {
       setFeedbackType("error");
@@ -127,6 +172,7 @@ function UsuariosPage() {
       needsDoubleConfirm,
       isSelfChange,
       isDirectivaChange,
+      isCoordinatorAdminChange,
       confirmStep: "initial",
     });
     setConfirmCountdown(0);
@@ -150,7 +196,9 @@ function UsuariosPage() {
       return;
     }
 
-    if (pendingRoleChange.isDirectivaChange && pendingRoleChange.confirmStep === "initial") {
+    const requiresSecondConfirm = pendingRoleChange.isDirectivaChange || pendingRoleChange.isCoordinatorAdminChange;
+
+    if (requiresSecondConfirm && pendingRoleChange.confirmStep === "initial") {
       setPendingRoleChange({ ...pendingRoleChange, confirmStep: "final" });
       return;
     }
@@ -201,6 +249,10 @@ function UsuariosPage() {
       currentUser?.id_usuario === usuario.id_usuario ? null : usuario,
     );
   };
+
+  const requiresSecondConfirm = Boolean(
+    pendingRoleChange && (pendingRoleChange.isDirectivaChange || pendingRoleChange.isCoordinatorAdminChange),
+  );
 
   return (
     <div className="usuarios-page">
@@ -258,6 +310,8 @@ function UsuariosPage() {
         roleFilter={roleFilter}
         onRoleFilterChange={setRoleFilter}
         roles={roles}
+        sortOrder={sortOrder}
+        onSortOrderChange={() => setSortOrder((current) => (current === "oldest-first" ? "default" : "oldest-first"))}
       />
 
       {loading ? (
@@ -277,6 +331,7 @@ function UsuariosPage() {
             roleOptions={roleOptions}
             onRoleChangeRequest={handleRoleChangeRequest}
             currentUserId={usuarioAutenticado?.id_usuario ?? usuarioAutenticado?.id ?? null}
+            isCoordinatorAdmin={isCoordinatorAdmin}
           />
         </>
       )}
@@ -293,14 +348,14 @@ function UsuariosPage() {
                 Este cambio afectará su propio acceso. Debe confirmar de forma adicional y el botón se habilitará tras 10 segundos.
               </p>
             )}
-            {pendingRoleChange.isDirectivaChange && !pendingRoleChange.isSelfChange && pendingRoleChange.confirmStep === "initial" && (
+            {requiresSecondConfirm && !pendingRoleChange.isSelfChange && pendingRoleChange.confirmStep === "initial" && (
               <p className="usuarios-modal-warning">
-                Este cambio otorga acceso de Directiva. Confirme esta acción antes de continuar.
+                Este cambio otorga acceso privilegiado. Confirme esta acción antes de continuar.
               </p>
             )}
-            {pendingRoleChange.isDirectivaChange && !pendingRoleChange.isSelfChange && pendingRoleChange.confirmStep === "final" && (
+            {requiresSecondConfirm && !pendingRoleChange.isSelfChange && pendingRoleChange.confirmStep === "final" && (
               <p className="usuarios-modal-warning">
-                Está a punto de otorgar acceso de Directiva. Confirme esta acción una segunda vez.
+                Está a punto de otorgar un acceso privilegiado. Confirme esta acción una segunda vez.
               </p>
             )}
             <div className="usuarios-modal-actions">
@@ -315,7 +370,7 @@ function UsuariosPage() {
               >
                 {pendingRoleChange.isSelfChange
                   ? `Confirmar (${confirmCountdown > 0 ? confirmCountdown : 10})`
-                  : pendingRoleChange.isDirectivaChange && pendingRoleChange.confirmStep === "initial"
+                  : requiresSecondConfirm && pendingRoleChange.confirmStep === "initial"
                     ? "Confirmar"
                     : "Sí, cambiar rol"}
               </button>

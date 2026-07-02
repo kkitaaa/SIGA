@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import AdminDashboard from "../../pages/directiva/DirectivaDashboard";
+import CoordinadorAdministrativoDashboard from "../../pages/directiva/CoordinadorAdministrativoDashboard";
 import ProfesorDashboard from "../../pages/profesor/ProfesorDashboard";
 import PieDashboard from "../../pages/pie/PieDashboard";
 import PendingRoleDashboard from "../../pages/pending/PendingRoleDashboard";
@@ -14,7 +15,7 @@ const dashboardStrategy = {
   "equipo pie": PieDashboard,
   "coordinador pie": PieDashboard,
   directiva: AdminDashboard,
-  "coordinador administrativo": AdminDashboard,
+  "coordinador administrativo": CoordinadorAdministrativoDashboard,
 };
 
 function DashboardRouter() {
