@@ -42,7 +42,19 @@ describe("error branch coverage", () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     serviceMock.registrarEstudiante.mockRejectedValue(new Error("boom"));
-    await registrarEstudianteController({ body: {} }, res);
+    await registrarEstudianteController(
+      {
+        body: {
+          rut: "12345678-9",
+          primer_nombre: "Juan",
+          primer_apellido: "Pérez",
+          sexo: "Masculino",
+          fecha_nacimiento: "2015-04-12",
+          id_curso: 3,
+        },
+      },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(500);
 
     serviceMock.listarEstudiantes.mockRejectedValue(new Error("boom"));
