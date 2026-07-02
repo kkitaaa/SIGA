@@ -23,6 +23,9 @@ import api from '../../services/api';
 import { DocumentoCard } from '../../components/documentos/DocumentoCard';
 import { useNotification } from '../../hooks/useNotification';
 import { DocumentoFilters } from '../../components/documentos/DocumentoFilters';
+import ProfileMenu from '../../components/dashboard/ProfileMenu';
+import LogoSIGA from '../../assets/Logo SIGA.svg';
+import { useAuth } from '../../hooks/useAuth';
 import "../../styles/home.css";
 
 const validateChildren = (props, propName, componentName) => {
@@ -51,6 +54,7 @@ DocumentGallery.propTypes = {
 
 export default function DocumentosPage({ user }) {
   const navigate = useNavigate();
+  const { rol, usuario } = useAuth();
 
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -177,16 +181,43 @@ export default function DocumentosPage({ user }) {
 
   return (
     <div className="home-page">
+      <header className="home-topbar usuarios-topbar">
+        <div className="home-topbar-left">
+          <div className="home-brand">
+            <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+          </div>
+        </div>
+
+        <div className="home-topbar-center">
+          <div className="home-topbar-nav" aria-label="Navegación principal">
+            <button type="button" className="home-nav-button" onClick={() => navigate('/home')}>Cursos</button>
+            <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate('/home')} aria-label="Ir al inicio">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
+              </svg>
+            </button>
+            <button type="button" className="home-nav-button" onClick={() => navigate('/admin/roles')}>Asignar roles</button>
+          </div>
+        </div>
+
+        <div className="home-topbar-actions">
+          <span className="home-role-badge">{rol || 'Administrativo'}</span>
+          <ProfileMenu user={{ nombre: usuario?.nombre || user?.nombre || 'Usuario', rol: rol || user?.rol || 'Administrativo', email: usuario?.correo || user?.email || 'usuario@ejemplo.com' }} />
+        </div>
+      </header>
+
       <main className="home-main" style={{ display: 'block', maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
         
         {/* Botón de Volver */}
         <Button 
           onClick={() => navigate(-1)} 
           mb={4} 
-          variant="outline" 
-          bg="white" 
-          size="sm" 
-          _hover={{ bg: 'gray.100' }}
+          variant="solid"
+          bg="#0f766e"
+          color="white"
+          size="sm"
+          borderRadius="999px"
+          _hover={{ bg: '#0b5f5a' }}
         >
           &larr; Volver
         </Button>
@@ -195,7 +226,13 @@ export default function DocumentosPage({ user }) {
           
           <HStack justifyContent="space-between" mb={6}>
             <Heading size="lg" color="gray.700">Repositorio de Documentos</Heading>
-            <Button colorScheme="blue" onClick={onOpen}>
+            <Button
+              onClick={onOpen}
+              bg="#2ec4b6"
+              color="white"
+              borderRadius="999px"
+              _hover={{ bg: '#25a89b' }}
+            >
               + Subir Documento
             </Button>
           </HStack>
@@ -240,14 +277,26 @@ export default function DocumentosPage({ user }) {
             </ModalBody>
 
             <ModalFooter>
-              <Button variant="ghost" mr={3} onClick={handleCloseModal} isDisabled={subiendo}>
+              <Button
+                variant="outline"
+                mr={3}
+                onClick={handleCloseModal}
+                isDisabled={subiendo}
+                borderColor="#cbd5e1"
+                color="#334155"
+                borderRadius="999px"
+                _hover={{ bg: '#f8fafc' }}
+              >
                 Cancelar
               </Button>
               <Button 
-                colorScheme="blue" 
-                onClick={handleUpload} 
+                onClick={handleUpload}
                 isLoading={subiendo}
                 loadingText="Subiendo..."
+                bg="#2ec4b6"
+                color="white"
+                borderRadius="999px"
+                _hover={{ bg: '#25a89b' }}
               >
                 Subir
               </Button>
