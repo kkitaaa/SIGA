@@ -161,4 +161,56 @@ describe("AsignacionPieService", () => {
       tx,
     );
   });
+
+  test("rechaza crear asignacion cuando el estudiante no existe", async () => {
+    const { service, prismaClient } = crearService({ estudiante: null });
+
+    await expect(
+      service.crearAsignacion({
+        idEstudiante: 15,
+        idFuncionario: 8,
+      }),
+    ).rejects.toMatchObject({
+      message: "El estudiante no existe",
+      statusCode: 404,
+    });
+
+    expect(prismaClient.$transaction).not.toHaveBeenCalled();
+  });
+
+  test("rechaza crear asignacion cuando el funcionario PIE no existe", async () => {
+    const { service, prismaClient } = crearService({ funcionario: null });
+
+    await expect(
+      service.crearAsignacion({
+        idEstudiante: 15,
+        idFuncionario: 8,
+      }),
+    ).rejects.toMatchObject({
+      message: "El funcionario PIE no existe",
+      statusCode: 404,
+    });
+
+    expect(prismaClient.$transaction).not.toHaveBeenCalled();
+  });
+
+  test("finaliza una asignacion sin desmarcar NEE si aún existen otras activas", async () => {
+    const { service, estudianteRepository, prismaClient } = crearService({
+      mantieneAsignaciones: { id_asignacion: 2 },
+    });
+
+    await service.finalizarAsignacion(1);
+
+    expect(prismaClient.$transaction).toHaveBeenCalledTimes(1);
+    expect(estudianteRepository.updateNeeStatus).not.toHaveBeenCalled();
+  });
+
+  test("obtiene una asignacion y rechaza si no existe", async () => {
+    const { service } = crearService({ asignacion: null });
+
+    await expect(service.obtenerAsignacion(1)).rejects.toMatchObject({
+      message: "La asignacion PIE no existe",
+      statusCode: 404,
+    });
+  });
 });

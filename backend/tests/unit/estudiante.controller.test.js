@@ -99,7 +99,16 @@ describe("estudiante.controller", () => {
 
   test("devuelve 400 cuando falla la validación al registrar", async () => {
     serviceMock.registrarEstudiante.mockRejectedValue(new Error("VALIDATION_ERROR: datos inválidos"));
-    const req = { body: {} };
+    const req = {
+      body: {
+        rut: "12345678-9",
+        primer_nombre: "Juan",
+        primer_apellido: "Pérez",
+        sexo: "Masculino",
+        fecha_nacimiento: "2015-04-12",
+        id_curso: 3,
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await registrarEstudianteController(req, res);

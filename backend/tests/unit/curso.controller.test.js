@@ -50,7 +50,14 @@ describe("curso.controller", () => {
 
   test("devuelve 400 cuando el DTO tiene error de validación", async () => {
     crearCursoMock.mockRejectedValue(new Error("VALIDATION_ERROR: dato inválido"));
-    const req = { body: { nivel_educativo: "Media" } };
+    const req = {
+      body: {
+        nivel_educativo: "Media",
+        nivel_curso: "Cuarto",
+        letra: "A",
+        id_profesor: 3,
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await crearCursoController(req, res);
@@ -61,7 +68,14 @@ describe("curso.controller", () => {
 
   test("devuelve 409 cuando hay un error de negocio", async () => {
     crearCursoMock.mockRejectedValue(new Error("BUSINESS_ERROR: curso duplicado"));
-    const req = { body: { nivel_educativo: "Media" } };
+    const req = {
+      body: {
+        nivel_educativo: "Media",
+        nivel_curso: "Cuarto",
+        letra: "A",
+        id_profesor: 3,
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await crearCursoController(req, res);
@@ -72,7 +86,14 @@ describe("curso.controller", () => {
 
   test("devuelve 500 para errores inesperados", async () => {
     crearCursoMock.mockRejectedValue(new Error("boom"));
-    const req = { body: { nivel_educativo: "Media" } };
+    const req = {
+      body: {
+        nivel_educativo: "Media",
+        nivel_curso: "Cuarto",
+        letra: "A",
+        id_profesor: 3,
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await crearCursoController(req, res);

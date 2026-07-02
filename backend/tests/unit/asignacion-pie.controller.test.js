@@ -61,4 +61,49 @@ describe("asignacion-pie.controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
   });
+
+  test("devuelve 404 cuando la creación falla por negocio", async () => {
+    serviceMock.crearAsignacion.mockRejectedValue({
+      statusCode: 404,
+      message: "No existe",
+    });
+    const req = {
+      body: { idEstudiante: 1, idFuncionario: 2 },
+      user: { id_usuario: 7 },
+    };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await crearAsignacionPieController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  test("devuelve 500 cuando la creación falla sin statusCode", async () => {
+    serviceMock.crearAsignacion.mockRejectedValue(new Error("boom"));
+    const req = {
+      body: { idEstudiante: 1, idFuncionario: 2 },
+      user: { id_usuario: 7 },
+    };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await crearAsignacionPieController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+  });
+
+  test("obtiene y finaliza asignaciones", async () => {
+    serviceMock.obtenerAsignacion.mockResolvedValue({ id: 1 });
+    serviceMock.finalizarAsignacion.mockResolvedValue({ ok: true });
+
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await obtenerAsignacionPieController({ params: { id: "1" } }, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+
+    await finalizarAsignacionPieController(
+      { params: { id: "1" }, user: { id_usuario: 7 } },
+      res,
+    );
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
 });
