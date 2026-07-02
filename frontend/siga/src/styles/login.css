@@ -28,31 +28,36 @@ body {
 .login-page-brand {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
-  padding: 2rem 0 0 2rem;
+  padding: 2rem 0;
   color: #ffffff;
+  min-height: 100vh;
 }
 
 .login-logo {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 26rem);
+  min-height: 12rem;
   line-height: 1;
 }
 
 .site-logo {
-  height: 56px;
+  height: 150px;
   width: auto;
   display: block;
 }
 
 .login-tagline {
-  font-size: 1rem;
-  font-weight: 300;
+  font-size: 1.1rem;
+  font-weight: 700;
   max-width: 18rem;
-}
-
-.login-tagline {
-  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  margin-top: 0.25rem;
+  text-shadow: 0 9px 16px rgba(0, 0, 0, 0.38);
+  line-height: 1.25;
 }
 
 .login-card {
