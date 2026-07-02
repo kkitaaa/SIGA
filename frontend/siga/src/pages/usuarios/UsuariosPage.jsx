@@ -10,6 +10,14 @@ import "../../styles/usuarios.css";
 
 const PAGE_SIZE = 8;
 
+const normalizeRole = (role) => {
+  const value = String(role ?? "").trim();
+  if (!value || ["SinRol", "Sin rol", "Sin Rol"].includes(value)) {
+    return "Sin rol";
+  }
+  return value;
+};
+
 function UsuariosPage() {
   const navigate = useNavigate();
   const { rol, usuario: usuarioAutenticado } = useAuth();
@@ -29,11 +37,24 @@ function UsuariosPage() {
     const fetchUsuarios = async () => {
       try {
         setLoading(true);
-        const [usuariosData, rolesData] = await Promise.all([
+        const [usuariosData, usuariosSinRolData, rolesData] = await Promise.all([
           usuarioService.listarUsuarios(),
+          usuarioService.listarUsuariosSinRol(),
           usuarioService.listarRoles(),
         ]);
-        setUsuarios(usuariosData);
+
+        const mergedUsuarios = [...(usuariosData || []), ...(usuariosSinRolData || [])];
+        const uniqueUsuarios = mergedUsuarios.filter(
+          (usuario, index, self) =>
+            index === self.findIndex((candidate) => Number(candidate.id_usuario) === Number(usuario.id_usuario)),
+        );
+
+        setUsuarios(
+          uniqueUsuarios.map((usuario) => ({
+            ...usuario,
+            rol: normalizeRole(usuario?.rol),
+          })),
+        );
         setRoleOptions((rolesData || []).filter((r) => String(r?.nombre_rol || "").trim() !== "Alumno"));
       } catch (error) {
         console.error("No se pudieron cargar usuarios", error);
@@ -53,12 +74,12 @@ function UsuariosPage() {
       .filter((r) => r !== "Alumno");
 
     const existingRoles = usuarios
-      .map((usuario) => usuario?.rol)
-      .filter(Boolean)
-      .map((role) => String(role).trim())
-      .filter((role) => role !== "SinRol" && role !== "Sin rol" && role !== "Sin Rol" && role !== "Alumno");
+      .map((usuario) => normalizeRole(usuario?.rol))
+      .filter((role) => role !== "Sin rol" && role !== "Alumno");
 
-    return [...new Set([...backendRoles, ...existingRoles])].sort();
+    const hasPendingRoles = usuarios.some((usuario) => normalizeRole(usuario?.rol) === "Sin rol");
+
+    return [...new Set([...backendRoles, ...existingRoles, ...(hasPendingRoles ? ["Sin rol"] : [])])].sort();
   }, [usuarios, roleOptions]);
 
   const filteredUsuarios = useMemo(() => {
@@ -66,7 +87,7 @@ function UsuariosPage() {
     return usuarios.filter((usuario) => {
       const fullName = `${usuario.nombre || ""} ${usuario.correo || ""}`.toLowerCase();
       const matchesSearch = !query || fullName.includes(query);
-      const matchesRole = !roleFilter || (usuario.rol || "SinRol") === roleFilter;
+      const matchesRole = !roleFilter || normalizeRole(usuario?.rol) === roleFilter;
       return matchesSearch && matchesRole;
     });
   }, [usuarios, search, roleFilter]);

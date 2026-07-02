@@ -22,6 +22,9 @@ function UsuarioFilters({ search, onSearchChange, roleFilter, onRoleFilterChange
             {role}
           </option>
         ))}
+        {!roles.includes("Sin rol") && (
+          <option value="Sin rol">Sin rol</option>
+        )}
       </select>
     </div>
   );
