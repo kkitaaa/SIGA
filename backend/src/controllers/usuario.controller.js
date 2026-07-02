@@ -54,3 +54,27 @@ export const listarUsuariosController = async (req, res) => {
     });
   }
 };
+
+export const actualizarUsuarioController = async (req, res) => {
+  try {
+    const idUsuario = Number(req.params.id);
+
+    if (!Number.isInteger(idUsuario)) {
+      return res.status(400).json({ ok: false, mensaje: "ID de usuario inválido." });
+    }
+
+    const usuarioActualizado = await UsuarioService.actualizarUsuario(idUsuario, req.body);
+
+    return res.status(200).json({
+      ok: true,
+      usuario: usuarioActualizado,
+      mensaje: "Información de la cuenta actualizada correctamente.",
+    });
+  } catch (error) {
+    console.error("Error al actualizar usuario:", error);
+    return res.status(400).json({
+      ok: false,
+      mensaje: error.message || "No se pudo actualizar la información del usuario.",
+    });
+  }
+};

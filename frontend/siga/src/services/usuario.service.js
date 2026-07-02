@@ -23,4 +23,9 @@ export const usuarioService = {
     });
     return data;
   },
+
+  async actualizarUsuario(idUsuario, payload) {
+    const { data } = await api.put(`/usuario/${idUsuario}`, payload);
+    return data;
+  },
 };

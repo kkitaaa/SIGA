@@ -11,6 +11,8 @@ function UsuariosTable({
   onRoleChangeRequest,
   currentUserId,
   isCoordinatorAdmin = false,
+  canEditUserInfo = false,
+  onEditUser,
 }) {
   return (
     <div className="usuarios-card">
@@ -66,6 +68,12 @@ function UsuariosTable({
                     {selectedUser?.id_usuario === usuario.id_usuario ? "Ocultar" : "Ver detalle"}
                   </button>
 
+                  {canEditUserInfo && (
+                    <button type="button" className="usuarios-action" onClick={() => onEditUser(usuario)}>
+                      Editar datos
+                    </button>
+                  )}
+
                   {selectedUser?.id_usuario === usuario.id_usuario && (
                     <div className="usuarios-detail-popover" role="dialog" aria-live="polite">
                       <h3>Detalle de usuario</h3>
@@ -77,6 +85,12 @@ function UsuariosTable({
                       </p>
                       <p>
                         <strong>Rol:</strong> {selectedUser.rol || "Sin rol"}
+                      </p>
+                      <p>
+                        <strong>RUT:</strong> {selectedUser.rut || "—"}
+                      </p>
+                      <p>
+                        <strong>Teléfono:</strong> {selectedUser.numero_telefonico || "—"}
                       </p>
                     </div>
                   )}

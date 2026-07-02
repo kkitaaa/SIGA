@@ -18,10 +18,18 @@ const normalizeRole = (role) => {
   return value;
 };
 
+const buildUserSummary = (usuario) => ({
+  ...usuario,
+  nombre: usuario?.nombre || `${usuario?.primer_nombre || ""} ${usuario?.primer_apellido || ""}`.trim(),
+  correo: usuario?.correo || usuario?.email || "sin correo",
+  rol: normalizeRole(usuario?.rol),
+});
+
 function UsuariosPage() {
   const navigate = useNavigate();
   const { rol, usuario: usuarioAutenticado } = useAuth();
   const isCoordinatorAdmin = String(rol || "").trim().toLowerCase() === "coordinador administrativo";
+  const canEditUserInfo = ["Directiva", "Coordinador Administrativo"].includes(normalizeRole(rol));
   const [usuarios, setUsuarios] = useState([]);
   const [roleOptions, setRoleOptions] = useState([]);
   const [search, setSearch] = useState("");
@@ -34,6 +42,16 @@ function UsuariosPage() {
   const [confirmCountdown, setConfirmCountdown] = useState(0);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [feedbackType, setFeedbackType] = useState("success");
+  const [editingUser, setEditingUser] = useState(null);
+  const [editForm, setEditForm] = useState({
+    primer_nombre: "",
+    segundo_nombre: "",
+    primer_apellido: "",
+    segundo_apellido: "",
+    rut: "",
+    numero_telefonico: "",
+    email: "",
+  });
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -51,12 +69,7 @@ function UsuariosPage() {
             index === self.findIndex((candidate) => Number(candidate.id_usuario) === Number(usuario.id_usuario)),
         );
 
-        setUsuarios(
-          uniqueUsuarios.map((usuario) => ({
-            ...usuario,
-            rol: normalizeRole(usuario?.rol),
-          })),
-        );
+        setUsuarios(uniqueUsuarios.map(buildUserSummary));
         setRoleOptions((rolesData || []).filter((r) => String(r?.nombre_rol || "").trim() !== "Alumno"));
       } catch (error) {
         console.error("No se pudieron cargar usuarios", error);
@@ -250,6 +263,64 @@ function UsuariosPage() {
     );
   };
 
+  const openEditModal = (usuario) => {
+    setEditingUser(usuario);
+    setEditForm({
+      primer_nombre: usuario?.primer_nombre || "",
+      segundo_nombre: usuario?.segundo_nombre || "",
+      primer_apellido: usuario?.primer_apellido || "",
+      segundo_apellido: usuario?.segundo_apellido || "",
+      rut: usuario?.rut || "",
+      numero_telefonico: usuario?.numero_telefonico || "",
+      email: usuario?.correo || usuario?.email || "",
+    });
+  };
+
+  const closeEditModal = () => {
+    setEditingUser(null);
+    setEditForm({
+      primer_nombre: "",
+      segundo_nombre: "",
+      primer_apellido: "",
+      segundo_apellido: "",
+      rut: "",
+      numero_telefonico: "",
+      email: "",
+    });
+  };
+
+  const handleEditFormChange = (event) => {
+    const { name, value } = event.target;
+    setEditForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSaveUserInfo = async (event) => {
+    event.preventDefault();
+    if (!editingUser) return;
+
+    try {
+      const response = await usuarioService.actualizarUsuario(editingUser.id_usuario, editForm);
+      const updatedUser = buildUserSummary(response?.usuario || { ...editingUser, ...editForm, correo: editForm.email });
+
+      setUsuarios((currentUsuarios) =>
+        currentUsuarios.map((usuario) =>
+          Number(usuario.id_usuario) === Number(editingUser.id_usuario) ? updatedUser : usuario,
+        ),
+      );
+      setSelectedUser((currentUser) =>
+        Number(currentUser?.id_usuario) === Number(editingUser.id_usuario) ? updatedUser : currentUser,
+      );
+      setFeedbackType("success");
+      setFeedbackMessage("Información de la cuenta actualizada correctamente.");
+      closeEditModal();
+    } catch (error) {
+      console.error("No se pudo actualizar la información del usuario", error);
+      const backendMessage = error?.response?.data?.mensaje || error?.response?.data?.error || error?.message || "No se pudo actualizar la información del usuario.";
+      setFeedbackType("error");
+      setFeedbackMessage(backendMessage);
+    }
+  };
+
   const requiresSecondConfirm = Boolean(
     pendingRoleChange && (pendingRoleChange.isDirectivaChange || pendingRoleChange.isCoordinatorAdminChange),
   );
@@ -332,8 +403,59 @@ function UsuariosPage() {
             onRoleChangeRequest={handleRoleChangeRequest}
             currentUserId={usuarioAutenticado?.id_usuario ?? usuarioAutenticado?.id ?? null}
             isCoordinatorAdmin={isCoordinatorAdmin}
+            canEditUserInfo={canEditUserInfo}
+            onEditUser={openEditModal}
           />
         </>
+      )}
+
+      {editingUser && (
+        <div className="usuarios-modal-backdrop" role="presentation">
+          <div className="usuarios-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="edit-user-title">
+            <h2 id="edit-user-title">Editar información de la cuenta</h2>
+            <p>Actualiza los datos básicos que ya existen para esta cuenta.</p>
+            <form className="usuarios-edit-form" onSubmit={handleSaveUserInfo}>
+              <div className="usuarios-edit-grid">
+                <label>
+                  Primer nombre
+                  <input name="primer_nombre" value={editForm.primer_nombre} onChange={handleEditFormChange} required />
+                </label>
+                <label>
+                  Segundo nombre
+                  <input name="segundo_nombre" value={editForm.segundo_nombre} onChange={handleEditFormChange} />
+                </label>
+                <label>
+                  Primer apellido
+                  <input name="primer_apellido" value={editForm.primer_apellido} onChange={handleEditFormChange} required />
+                </label>
+                <label>
+                  Segundo apellido
+                  <input name="segundo_apellido" value={editForm.segundo_apellido} onChange={handleEditFormChange} />
+                </label>
+                <label>
+                  RUT
+                  <input name="rut" value={editForm.rut} onChange={handleEditFormChange} required />
+                </label>
+                <label>
+                  Teléfono
+                  <input name="numero_telefonico" value={editForm.numero_telefonico} onChange={handleEditFormChange} />
+                </label>
+                <label className="usuarios-edit-full">
+                  Correo electrónico
+                  <input type="email" name="email" value={editForm.email} onChange={handleEditFormChange} required />
+                </label>
+              </div>
+              <div className="usuarios-modal-actions">
+                <button type="button" className="usuarios-modal-cancel" onClick={closeEditModal}>
+                  Cancelar
+                </button>
+                <button type="submit" className="usuarios-modal-confirm">
+                  Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {pendingRoleChange && (

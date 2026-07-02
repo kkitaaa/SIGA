@@ -11,4 +11,8 @@ export const UsuarioService = {
   async obtenerUsuariosConRol() {
     return repo.findAllConRol();
   },
+
+  async actualizarUsuario(idUsuario, data) {
+    return repo.update(idUsuario, data);
+  },
 };

@@ -5,6 +5,7 @@ import { verifyRole } from "../middleware/role.middleware.js";
 import {
   listarUsuariosSinRolController,
   listarUsuariosController,
+  actualizarUsuarioController,
 } from "../controllers/usuario.controller.js";
 
 const router = Router();
@@ -67,6 +68,13 @@ router.get(
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
   listarUsuariosController,
+);
+
+router.put(
+  "/:id",
+  authMiddleware,
+  verifyRole("Directiva", "Coordinador Administrativo"),
+  actualizarUsuarioController,
 );
 
 export default router;

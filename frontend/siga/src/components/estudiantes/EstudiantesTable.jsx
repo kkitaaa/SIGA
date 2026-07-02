@@ -25,15 +25,10 @@ function EstudiantesTable({ estudiantes, onVerDetalle, onEditar, onDesactivar })
                   <button type="button" className="usuarios-action" onClick={() => onVerDetalle(estudiante)}>
                     Ver detalle
                   </button>
-                  <button type="button" className="usuarios-action is-active" onClick={() => onEditar(estudiante)} style={{ marginLeft: "0.5rem" }}>
+                  <button type="button" className="usuarios-action is-active" onClick={() => onEditar(estudiante)}>
                     Editar
                   </button>
-                  <button
-                    type="button"
-                    className="usuarios-action"
-                    onClick={() => onDesactivar(estudiante)}
-                    style={{ marginLeft: "0.5rem", background: "#b91c1c" }}
-                  >
+                  <button type="button" className="usuarios-action is-danger" onClick={() => onDesactivar(estudiante)}>
                     Desactivar
                   </button>
                 </div>
