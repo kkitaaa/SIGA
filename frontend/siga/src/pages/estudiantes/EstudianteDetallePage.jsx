@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../services/api'; // Ajusta la ruta según tu proyecto
-import '../../styles/home.css'; // O el archivo de estilos que uses
+import api from '../../services/api'; 
+import '../../styles/home.css'; 
 
 export default function EstudianteDetallePage() {
-  const { id } = useParams(); // Captura el ID de la URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [estudiante, setEstudiante] = useState(null);
@@ -12,17 +12,25 @@ export default function EstudianteDetallePage() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-useEffect(() => {
+  // --- NUEVOS ESTADOS PARA EDICIÓN ---
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [guardando, setGuardando] = useState(false);
+
+  useEffect(() => {
     const fetchDetalle = async () => {
       try {
         setCargando(true);
         const estRes = await api.get(`/estudiantes/${id}`);
-        
-        console.log("Respuesta del Backend:", estRes.data);
-
         const datosEstudiante = estRes.data.estudiante || estRes.data.data || estRes.data;
         
         setEstudiante(datosEstudiante);
+        
+        setFormData({
+          ...datosEstudiante,
+          fecha_nacimiento: datosEstudiante.fecha_nacimiento ? datosEstudiante.fecha_nacimiento.split('T')[0] : '',
+          fecha_ingreso: datosEstudiante.fecha_ingreso ? datosEstudiante.fecha_ingreso.split('T')[0] : ''
+        });
 
         if (datosEstudiante.es_nee) {
           try {
@@ -43,6 +51,55 @@ useEffect(() => {
     fetchDetalle();
   }, [id]);
 
+  // --- FUNCIONES DE EDICIÓN ---
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      setGuardando(true);
+      
+      const datosParaEnviar = { ...formData };
+
+      if (datosParaEnviar.fecha_nacimiento && !datosParaEnviar.fecha_nacimiento.includes('T')) {
+        datosParaEnviar.fecha_nacimiento = `${datosParaEnviar.fecha_nacimiento}T00:00:00.000Z`;
+      }
+      
+      if (datosParaEnviar.fecha_ingreso && !datosParaEnviar.fecha_ingreso.includes('T')) {
+        datosParaEnviar.fecha_ingreso = `${datosParaEnviar.fecha_ingreso}T00:00:00.000Z`;
+      }
+
+      if (datosParaEnviar.id_curso) {
+        datosParaEnviar.id_curso = parseInt(datosParaEnviar.id_curso);
+      }
+
+      await api.put(`/estudiantes/${id}`, datosParaEnviar);
+      
+      setEstudiante({ ...estudiante, ...datosParaEnviar });
+      setIsEditing(false);
+      alert("¡Estudiante actualizado correctamente!");
+    } catch (err) {
+      console.error("Error al actualizar:", err);
+      alert("Hubo un error al guardar los cambios.");
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      ...estudiante,
+      fecha_nacimiento: estudiante.fecha_nacimiento ? estudiante.fecha_nacimiento.split('T')[0] : '',
+      fecha_ingreso: estudiante.fecha_ingreso ? estudiante.fecha_ingreso.split('T')[0] : ''
+    });
+    setIsEditing(false);
+  };
+
   if (cargando) return <div style={{ padding: '20px', textAlign: 'center' }}>Cargando información del estudiante...</div>;
   if (error) return <div style={{ padding: '20px', color: 'red', textAlign: 'center' }}>{error}</div>;
   if (!estudiante) return <div style={{ padding: '20px', textAlign: 'center' }}>Estudiante no encontrado.</div>;
@@ -51,41 +108,96 @@ useEffect(() => {
     <div className="home-page">
       <main className="home-main" style={{ display: 'block', maxWidth: '800px', margin: '0 auto', paddingTop: '20px' }}>
         
-        {/* Botón de retorno */}
         <button 
           onClick={() => navigate(-1)} 
-          style={{ marginBottom: '20px', padding: '8px 16px', cursor: 'pointer', borderRadius: '5px' }}
+          style={{ marginBottom: '20px', padding: '8px 16px', cursor: 'pointer', borderRadius: '5px', backgroundColor: '#e2e8f0', border: 'none' }}
         >
           &larr; Volver al listado
         </button>
 
         <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ marginBottom: '20px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
-            Perfil del Estudiante
-          </h2>
+          
+          {/* ENCABEZADO CON BOTONES DE EDICIÓN */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>
+            <h2 style={{ margin: 0 }}>Perfil del Estudiante</h2>
+            <div>
+              {isEditing ? (
+                <>
+                  <button onClick={handleCancel} disabled={guardando} style={{ marginRight: '10px', padding: '6px 12px', borderRadius: '5px', border: '1px solid #ccc', cursor: 'pointer' }}>
+                    Cancelar
+                  </button>
+                  <button onClick={handleSave} disabled={guardando} style={{ padding: '6px 12px', borderRadius: '5px', backgroundColor: '#3182ce', color: 'white', border: 'none', cursor: 'pointer' }}>
+                    {guardando ? 'Guardando...' : 'Guardar Cambios'}
+                  </button>
+                </>
+              ) : (
+                <button onClick={() => setIsEditing(true)} style={{ padding: '6px 12px', borderRadius: '5px', backgroundColor: '#edf2f7', border: '1px solid #cbd5e0', cursor: 'pointer' }}>
+                  ✏️ Editar Datos
+                </button>
+              )}
+            </div>
+          </div>
 
           {/* DATOS PERSONALES */}
           <div style={{ marginBottom: '20px' }}>
             <h3 style={{ color: '#4a5568', marginBottom: '10px' }}>Datos Personales</h3>
-            <p><strong>RUT:</strong> {estudiante.rut}</p>
-            <p><strong>Nombre Completo:</strong> {estudiante.primer_nombre} {estudiante.segundo_nombre} {estudiante.primer_apellido} {estudiante.segundo_apellido}</p>
-            <p><strong>Sexo:</strong> {estudiante.sexo}</p>
-            <p><strong>Fecha de Nacimiento:</strong> {new Date(estudiante.fecha_nacimiento).toLocaleDateString()}</p>
+            
+            <p><strong>RUT:</strong> {isEditing ? (
+              <input type="text" name="rut" value={formData.rut || ''} onChange={handleChange} disabled style={{ marginLeft: '10px', padding: '4px' }} title="El RUT no se puede editar" />
+            ) : estudiante.rut}</p>
+            
+            <p><strong>Nombres:</strong> {isEditing ? (
+              <>
+                <input type="text" name="primer_nombre" value={formData.primer_nombre || ''} onChange={handleChange} placeholder="Primer Nombre" style={{ marginLeft: '10px', padding: '4px', marginRight: '5px' }} />
+                <input type="text" name="segundo_nombre" value={formData.segundo_nombre || ''} onChange={handleChange} placeholder="Segundo Nombre" style={{ padding: '4px' }} />
+              </>
+            ) : `${estudiante.primer_nombre} ${estudiante.segundo_nombre || ''}`}</p>
+
+            <p><strong>Apellidos:</strong> {isEditing ? (
+              <>
+                <input type="text" name="primer_apellido" value={formData.primer_apellido || ''} onChange={handleChange} placeholder="Primer Apellido" style={{ marginLeft: '10px', padding: '4px', marginRight: '5px' }} />
+                <input type="text" name="segundo_apellido" value={formData.segundo_apellido || ''} onChange={handleChange} placeholder="Segundo Apellido" style={{ padding: '4px' }} />
+              </>
+            ) : `${estudiante.primer_apellido} ${estudiante.segundo_apellido || ''}`}</p>
+            
+            <p><strong>Sexo:</strong> {isEditing ? (
+              <select name="sexo" value={formData.sexo || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }}>
+                <option value="M">Masculino (M)</option>
+                <option value="F">Femenino (F)</option>
+                <option value="O">Otro (O)</option>
+              </select>
+            ) : estudiante.sexo}</p>
+
+            <p><strong>Fecha de Nacimiento:</strong> {isEditing ? (
+              <input type="date" name="fecha_nacimiento" value={formData.fecha_nacimiento || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }} />
+            ) : new Date(estudiante.fecha_nacimiento).toLocaleDateString()}</p>
           </div>
 
           {/* INFORMACIÓN ACADÉMICA */}
           <div style={{ marginBottom: '20px' }}>
             <h3 style={{ color: '#4a5568', marginBottom: '10px' }}>Información Académica</h3>
-            <p><strong>ID Curso Actual:</strong> {estudiante.id_curso || 'Sin asignar'}</p>
-            <p><strong>Fecha de Ingreso:</strong> {new Date(estudiante.fecha_ingreso).toLocaleDateString()}</p>
+            
+            <p><strong>ID Curso Actual:</strong> {isEditing ? (
+              <input type="number" name="id_curso" value={formData.id_curso || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }} />
+            ) : (estudiante.id_curso || 'Sin asignar')}</p>
+            
+            <p><strong>Fecha de Ingreso:</strong> {isEditing ? (
+              <input type="date" name="fecha_ingreso" value={formData.fecha_ingreso || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }} />
+            ) : new Date(estudiante.fecha_ingreso).toLocaleDateString()}</p>
           </div>
 
           {/* ESTADO PIE / NEE */}
-          <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: estudiante.es_nee ? '#ebf8fa' : '#f7fafc', borderRadius: '8px' }}>
+          <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: (isEditing ? formData.es_nee : estudiante.es_nee) ? '#ebf8fa' : '#f7fafc', borderRadius: '8px' }}>
             <h3 style={{ color: '#4a5568', marginBottom: '10px' }}>Programa de Integración Escolar (PIE)</h3>
-            <p><strong>Pertenece a PIE:</strong> {estudiante.es_nee ? '✅ Sí' : '❌ No'}</p>
+            
+            <p><strong>Pertenece a PIE:</strong> {isEditing ? (
+              <label style={{ marginLeft: '10px', cursor: 'pointer' }}>
+                <input type="checkbox" name="es_nee" checked={formData.es_nee || false} onChange={handleChange} style={{ marginRight: '5px' }} />
+                Sí, es estudiante NEE
+              </label>
+            ) : (estudiante.es_nee ? '✅ Sí' : '❌ No')}</p>
 
-            {estudiante.es_nee && (
+            {estudiante.es_nee && !isEditing && (
               <div style={{ marginTop: '15px' }}>
                 <h4>Profesionales Asignados:</h4>
                 {profesionales.length > 0 ? (
@@ -100,6 +212,11 @@ useEffect(() => {
                   <p style={{ color: '#718096', marginTop: '5px' }}>No hay profesionales asignados actualmente a este estudiante.</p>
                 )}
               </div>
+            )}
+            {isEditing && (
+              <p style={{ fontSize: '12px', color: '#718096', marginTop: '10px' }}>
+                *La asignación de profesionales PIE se administra desde la pestaña "Asignación PIE".
+              </p>
             )}
           </div>
 
