@@ -86,6 +86,7 @@ router.get("/usuarios-sin-rol", authMiddleware, listarUsuariosSinRolController);
  *       401:
  *         description: No autorizado
  */
+router.post("/", authMiddleware, asignarRolController);
 router.post("/asignacion", authMiddleware, asignarRolController);
 
 /**

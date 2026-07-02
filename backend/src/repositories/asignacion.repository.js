@@ -28,9 +28,23 @@ export class AsignacionRepository {
     });
   }
 
-  async asignarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario) {
+  async cambiarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario) {
     return prisma.$transaction(async (tx) => {
-      // 1. Siempre asignamos el rol
+      const rolActual = await tx.usuario_rol.findFirst({
+        where: { id_usuario: Number(idUsuarioDestino) },
+      });
+
+      if (rolActual) {
+        await tx.usuario_rol.delete({
+          where: {
+            id_usuario_id_rol: {
+              id_usuario: rolActual.id_usuario,
+              id_rol: rolActual.id_rol,
+            },
+          },
+        });
+      }
+
       const asignacion = await tx.usuario_rol.create({
         data: {
           id_usuario: Number(idUsuarioDestino),
@@ -38,19 +52,15 @@ export class AsignacionRepository {
         },
       });
 
-      // 2. Si es funcionario, usamos UPSERT en lugar de CREATE
       if (idTipoFuncionario) {
         await tx.funcionario.upsert({
           where: {
-            // Buscamos al funcionario por su ID de usuario (que es único según tu schema)
             id_usuario: Number(idUsuarioDestino),
           },
           update: {
-            // Si ya existía, simplemente le actualizamos la especialidad
             id_tipo_funcionario: Number(idTipoFuncionario),
           },
           create: {
-            // Si no existía, lo creamos desde cero
             id_usuario: Number(idUsuarioDestino),
             id_tipo_funcionario: Number(idTipoFuncionario),
           },
@@ -89,6 +99,19 @@ export class AsignacionRepository {
       where: {
         id_usuario: idUsuarioActual,
         rol: { nombre_rol: "Administrativo" },
+      },
+    });
+  }
+
+  async verificarRolGestionUsuarios(idUsuarioActual) {
+    return prisma.usuario_rol.findFirst({
+      where: {
+        id_usuario: idUsuarioActual,
+        rol: {
+          nombre_rol: {
+            in: ["Administrativo", "Directiva", "Coordinador Administrativo"],
+          },
+        },
       },
     });
   }

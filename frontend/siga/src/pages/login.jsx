@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import "../styles/login.css";
 import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
+import LogoSIGA from "../assets/Logo SIGA.svg";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
-  const { loginWithCredentials } = useAuth();
+  const { loginWithCredentials, login } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +35,13 @@ function InicioDeSesion() {
         const data = await loginWithCredentials({
           email: formData.email,
           password: formData.password,
+        });
+
+        login(data.token, data.role, {
+          nombre: data.nombre || data.usuario?.primer_nombre || "",
+          email: data.email || formData.email,
+          id_usuario: data.usuario?.id_usuario || data.id_usuario || null,
+          id: data.usuario?.id_usuario || data.id_usuario || null,
         });
 
         alert(data.mensaje);
@@ -68,7 +77,9 @@ function InicioDeSesion() {
   return (
     <div className="login-page-container">
       <div className="login-page-brand">
-        <div className="login-logo">SIGA</div>
+        <div className="login-logo">
+          <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+        </div>
         <div className="login-tagline">Sistema de gestión académica</div>
       </div>
 
@@ -156,15 +167,9 @@ function InicioDeSesion() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
               >
-                <span
-                  className="iconify"
-                  data-icon={
-                    showPassword ? "heroicons:eye-slash" : "heroicons:eye"
-                  }
-                  data-width="20"
-                  data-height="20"
-                ></span>
+                {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
               </button>
             </div>
           </div>

@@ -12,10 +12,22 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
+  const leerUsuarioDesdeStorage = () => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    if (!usuarioGuardado) return null;
+
+    try {
+      return JSON.parse(usuarioGuardado);
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
-    const usuarioGuardado = localStorage.getItem("usuario");
+    const usuarioGuardado = leerUsuarioDesdeStorage();
+    const idGuardado = localStorage.getItem("id_usuario");
 
     if (tokenGuardado) {
       setToken(tokenGuardado);
@@ -27,11 +39,7 @@ export function AuthProvider({ children }) {
     }
 
     if (usuarioGuardado) {
-      try {
-        setUsuario(JSON.parse(usuarioGuardado));
-      } catch {
-        localStorage.removeItem("usuario");
-      }
+      setUsuario({ ...usuarioGuardado, id_usuario: usuarioGuardado.id_usuario || usuarioGuardado.id || idGuardado });
     }
 
     setCargando(false);
@@ -49,8 +57,12 @@ export function AuthProvider({ children }) {
 
     if (datosUsuario) {
       localStorage.setItem("usuario", JSON.stringify(datosUsuario));
+      if (datosUsuario.id_usuario || datosUsuario.id) {
+        localStorage.setItem("id_usuario", String(datosUsuario.id_usuario || datosUsuario.id));
+      }
     } else {
       localStorage.removeItem("usuario");
+      localStorage.removeItem("id_usuario");
     }
   }, []);
 
@@ -79,6 +91,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");
+    localStorage.removeItem("id_usuario");
   }, []);
 
   const estaAutenticado = useCallback(() => {

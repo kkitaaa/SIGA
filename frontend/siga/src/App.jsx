@@ -15,6 +15,7 @@ import DocumentosPage from "./pages/documentos/DocumentosPage";
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
 //Estudiantes
+import EstudiantesPage from "./pages/estudiantes/EstudiantesPage";
 import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
 
 // Directiva
@@ -47,6 +48,7 @@ function App() {
             "Directiva",
             "Administracion",
             "Equipo PIE",
+            "PIE",
             "Profesor",
             "Funcionario",
             "Coordinador PIE",
@@ -67,6 +69,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/admin/estudiantes"
+        element={
+          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo", "Administracion"]}>
+            <EstudiantesPage />
+          </ProtectedRoute>
+        }
+      />
+
       {/* 🏢 Directiva */}
       <Route
         path="/asignacion-roles"
@@ -81,7 +92,7 @@ function App() {
       <Route
         path="/pie"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE"]}>
             <PieDashboard />
           </ProtectedRoute>
         }
@@ -89,7 +100,7 @@ function App() {
       <Route
         path="/pie/estudiantes"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE", "Directiva"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE", "Directiva"]}>
             <EstudiantesPIEPage />
           </ProtectedRoute>
         }
@@ -98,7 +109,7 @@ function App() {
       <Route
         path="/asignacion-pie"
         element={
-          <ProtectedRoute rolesPermitidos={["Equipo PIE", "Coordinador PIE"]}>
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE"]}>
             <AsignacionPIEPage />
           </ProtectedRoute>
         }

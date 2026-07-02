@@ -1,6 +1,8 @@
 import React from "react";
 
-function UsuarioFilters({ search, onSearchChange, roleFilter, onRoleFilterChange, roles }) {
+function UsuarioFilters({ search, onSearchChange, roleFilter, onRoleFilterChange, roles, sortOrder, onSortOrderChange }) {
+  const isOldestFirst = sortOrder === "oldest-first";
+
   return (
     <div className="usuarios-filters">
       <input
@@ -10,6 +12,17 @@ function UsuarioFilters({ search, onSearchChange, roleFilter, onRoleFilterChange
         placeholder="Buscar por nombre o correo"
         className="usuarios-input"
       />
+
+      <button
+        type="button"
+        className={`usuarios-sort-button ${isOldestFirst ? "is-active" : ""}`}
+        onClick={onSortOrderChange}
+        aria-pressed={isOldestFirst}
+        aria-label={isOldestFirst ? "Cambiar a más reciente" : "Cambiar a más antiguo"}
+        title={isOldestFirst ? "Cambiar a más reciente" : "Cambiar a más antiguo"}
+      >
+        {isOldestFirst ? "Más antiguo" : "Más reciente"}
+      </button>
 
       <select
         value={roleFilter}
@@ -22,6 +35,9 @@ function UsuarioFilters({ search, onSearchChange, roleFilter, onRoleFilterChange
             {role}
           </option>
         ))}
+        {!roles.includes("Sin rol") && (
+          <option value="Sin rol">Sin rol</option>
+        )}
       </select>
     </div>
   );
