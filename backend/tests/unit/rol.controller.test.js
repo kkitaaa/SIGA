@@ -9,7 +9,8 @@ jest.unstable_mockModule("../../src/services/rol.service.js", () => ({
 let listarRolesController;
 
 beforeAll(async () => {
-  ({ listarRolesController } = await import("../../src/controllers/rol.controller.js"));
+  ({ listarRolesController } =
+    await import("../../src/controllers/rol.controller.js"));
 });
 
 describe("rol.controller", () => {

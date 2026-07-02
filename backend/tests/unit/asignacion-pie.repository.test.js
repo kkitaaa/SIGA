@@ -12,12 +12,15 @@ const txMock = {
 
 const prismaMock = { asignacion: txMock.asignacion };
 
-jest.unstable_mockModule("../../src/config/prisma.js", () => ({ default: prismaMock }));
+jest.unstable_mockModule("../../src/config/prisma.js", () => ({
+  default: prismaMock,
+}));
 
 let AsignacionPieRepository;
 
 beforeAll(async () => {
-  ({ AsignacionPieRepository } = await import("../../src/repositories/asignacion-pie.repository.js"));
+  ({ AsignacionPieRepository } =
+    await import("../../src/repositories/asignacion-pie.repository.js"));
 });
 
 describe("AsignacionPieRepository", () => {
@@ -29,15 +32,21 @@ describe("AsignacionPieRepository", () => {
     const repo = new AsignacionPieRepository();
     txMock.asignacion.findFirst.mockResolvedValue({ id_asignacion: 1 });
 
-    await expect(repo.findActiveByStudent(10, txMock)).resolves.toEqual({ id_asignacion: 1 });
-    expect(txMock.asignacion.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id_estudiante: 10 } }));
+    await expect(repo.findActiveByStudent(10, txMock)).resolves.toEqual({
+      id_asignacion: 1,
+    });
+    expect(txMock.asignacion.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id_estudiante: 10 } }),
+    );
   });
 
   test("crea una asignación PIE", async () => {
     const repo = new AsignacionPieRepository();
     txMock.asignacion.create.mockResolvedValue({ id_asignacion: 2 });
 
-    await expect(repo.create({ idEstudiante: 10, idFuncionario: 3 }, txMock)).resolves.toEqual({ id_asignacion: 2 });
+    await expect(
+      repo.create({ idEstudiante: 10, idFuncionario: 3 }, txMock),
+    ).resolves.toEqual({ id_asignacion: 2 });
   });
 
   test("lista asignaciones y las obtiene por id", async () => {
@@ -46,7 +55,9 @@ describe("AsignacionPieRepository", () => {
     txMock.asignacion.findUnique.mockResolvedValue({ id_asignacion: 1 });
 
     await expect(repo.findAll(txMock)).resolves.toEqual([{ id_asignacion: 1 }]);
-    await expect(repo.findById(1, txMock)).resolves.toEqual({ id_asignacion: 1 });
+    await expect(repo.findById(1, txMock)).resolves.toEqual({
+      id_asignacion: 1,
+    });
   });
 
   test("finaliza una asignación", async () => {

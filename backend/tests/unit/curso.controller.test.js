@@ -14,7 +14,8 @@ let crearCursoController;
 let obtenerCursosController;
 
 beforeAll(async () => {
-  ({ crearCursoController, obtenerCursosController } = await import("../../src/controllers/curso.controller.js"));
+  ({ crearCursoController, obtenerCursosController } =
+    await import("../../src/controllers/curso.controller.js"));
 });
 
 describe("curso.controller", () => {
@@ -49,7 +50,9 @@ describe("curso.controller", () => {
   });
 
   test("devuelve 400 cuando el DTO tiene error de validación", async () => {
-    crearCursoMock.mockRejectedValue(new Error("VALIDATION_ERROR: dato inválido"));
+    crearCursoMock.mockRejectedValue(
+      new Error("VALIDATION_ERROR: dato inválido"),
+    );
     const req = {
       body: {
         nivel_educativo: "Media",
@@ -67,7 +70,9 @@ describe("curso.controller", () => {
   });
 
   test("devuelve 409 cuando hay un error de negocio", async () => {
-    crearCursoMock.mockRejectedValue(new Error("BUSINESS_ERROR: curso duplicado"));
+    crearCursoMock.mockRejectedValue(
+      new Error("BUSINESS_ERROR: curso duplicado"),
+    );
     const req = {
       body: {
         nivel_educativo: "Media",
@@ -99,6 +104,8 @@ describe("curso.controller", () => {
     await crearCursoController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "Error interno al crear el curso" });
+    expect(res.json).toHaveBeenCalledWith({
+      error: "Error interno al crear el curso",
+    });
   });
 });

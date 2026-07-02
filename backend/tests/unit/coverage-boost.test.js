@@ -43,9 +43,12 @@ jest.unstable_mockModule("../../src/services/asignacion.service.js", () => ({
   revocarRol: revocarRolMock,
 }));
 
-jest.unstable_mockModule("../../src/repositories/documento.repository.js", () => ({
-  DocumentoRepository: class DocumentoRepository {},
-}));
+jest.unstable_mockModule(
+  "../../src/repositories/documento.repository.js",
+  () => ({
+    DocumentoRepository: class DocumentoRepository {},
+  }),
+);
 
 jest.unstable_mockModule("../../src/services/documento.service.js", () => ({
   DocumentoService: class DocumentoService {
@@ -65,12 +68,18 @@ let subirDocumentoController;
 let listarDocumentosController;
 
 beforeAll(async () => {
-  ({ register, login } = await import("../../src/controllers/auth.controller.js"));
-  ({ listarRolesController } = await import("../../src/controllers/rol.controller.js"));
-  ({ listarProfesionalesController } = await import("../../src/controllers/funcionario.controller.js"));
-  ({ obtenerMetricasDashboard } = await import("../../src/controllers/dashboard.controller.js"));
-  ({ asignarRolController, revocarRolController } = await import("../../src/controllers/asignacion.controller.js"));
-  ({ subirDocumentoController, listarDocumentosController } = await import("../../src/controllers/documento.controller.js"));
+  ({ register, login } =
+    await import("../../src/controllers/auth.controller.js"));
+  ({ listarRolesController } =
+    await import("../../src/controllers/rol.controller.js"));
+  ({ listarProfesionalesController } =
+    await import("../../src/controllers/funcionario.controller.js"));
+  ({ obtenerMetricasDashboard } =
+    await import("../../src/controllers/dashboard.controller.js"));
+  ({ asignarRolController, revocarRolController } =
+    await import("../../src/controllers/asignacion.controller.js"));
+  ({ subirDocumentoController, listarDocumentosController } =
+    await import("../../src/controllers/documento.controller.js"));
 });
 
 describe("coverage boost - DTOs y controladores", () => {
@@ -84,7 +93,10 @@ describe("coverage boost - DTOs y controladores", () => {
   });
 
   test("LoginDTO valida y normaliza email y contraseña", () => {
-    const dto = new LoginDTO({ email: "  TEST@EXAMPLE.COM  ", password: "secret" });
+    const dto = new LoginDTO({
+      email: "  TEST@EXAMPLE.COM  ",
+      password: "secret",
+    });
 
     expect(dto.email).toBe("test@example.com");
     expect(dto.password).toBe("secret");
@@ -110,21 +122,51 @@ describe("coverage boost - DTOs y controladores", () => {
     expect(dto.nombre).toBe("Ana");
     expect(dto.email).toBe("ana@test.com");
 
-    expect(() => new RegisterDTO({ nombre: "", email: "a@test.com", password: "x", rut: "1-9" })).toThrow(
-      "VALIDATION_ERROR: El nombre es obligatorio",
-    );
-    expect(() => new RegisterDTO({ nombre: "Ana", email: "", password: "x", rut: "1-9" })).toThrow(
-      "VALIDATION_ERROR: El email es obligatorio",
-    );
-    expect(() => new RegisterDTO({ nombre: "Ana", email: "bad-email", password: "x", rut: "1-9" })).toThrow(
-      "VALIDATION_ERROR: El formato del email no es válido",
-    );
-    expect(() => new RegisterDTO({ nombre: "Ana", email: "a@test.com", password: "", rut: "1-9" })).toThrow(
-      "VALIDATION_ERROR: La contraseña es obligatoria",
-    );
-    expect(() => new RegisterDTO({ nombre: "Ana", email: "a@test.com", password: "x", rut: "" })).toThrow(
-      "VALIDATION_ERROR: El RUT es obligatorio",
-    );
+    expect(
+      () =>
+        new RegisterDTO({
+          nombre: "",
+          email: "a@test.com",
+          password: "x",
+          rut: "1-9",
+        }),
+    ).toThrow("VALIDATION_ERROR: El nombre es obligatorio");
+    expect(
+      () =>
+        new RegisterDTO({
+          nombre: "Ana",
+          email: "",
+          password: "x",
+          rut: "1-9",
+        }),
+    ).toThrow("VALIDATION_ERROR: El email es obligatorio");
+    expect(
+      () =>
+        new RegisterDTO({
+          nombre: "Ana",
+          email: "bad-email",
+          password: "x",
+          rut: "1-9",
+        }),
+    ).toThrow("VALIDATION_ERROR: El formato del email no es válido");
+    expect(
+      () =>
+        new RegisterDTO({
+          nombre: "Ana",
+          email: "a@test.com",
+          password: "",
+          rut: "1-9",
+        }),
+    ).toThrow("VALIDATION_ERROR: La contraseña es obligatoria");
+    expect(
+      () =>
+        new RegisterDTO({
+          nombre: "Ana",
+          email: "a@test.com",
+          password: "x",
+          rut: "",
+        }),
+    ).toThrow("VALIDATION_ERROR: El RUT es obligatorio");
   });
 
   test("CreateCursoDTO valida campos obligatorios", () => {
@@ -136,7 +178,9 @@ describe("coverage boost - DTOs y controladores", () => {
           letra: "A",
           id_profesor: 3,
         }),
-    ).toThrow("VALIDATION_ERROR: El nivel educativo es obligatorio (ej: Básica, Media)");
+    ).toThrow(
+      "VALIDATION_ERROR: El nivel educativo es obligatorio (ej: Básica, Media)",
+    );
 
     expect(
       () =>
@@ -146,7 +190,9 @@ describe("coverage boost - DTOs y controladores", () => {
           letra: "A",
           id_profesor: 3,
         }),
-    ).toThrow("VALIDATION_ERROR: El nivel del curso es obligatorio (ej: Primero, Segundo)");
+    ).toThrow(
+      "VALIDATION_ERROR: El nivel del curso es obligatorio (ej: Primero, Segundo)",
+    );
 
     expect(
       () =>
@@ -217,12 +263,12 @@ describe("coverage boost - DTOs y controladores", () => {
     expect(() => new UpdateEstudianteDTO({ sexo: 123 })).toThrow(
       "VALIDATION_ERROR: sexo debe ser string",
     );
-    expect(() => new UpdateEstudianteDTO({ fecha_nacimiento: "fecha inválida" })).toThrow(
-      "VALIDATION_ERROR: fecha_nacimiento inválida",
-    );
-    expect(() => new UpdateEstudianteDTO({ fecha_ingreso: "fecha inválida" })).toThrow(
-      "VALIDATION_ERROR: fecha_ingreso inválida",
-    );
+    expect(
+      () => new UpdateEstudianteDTO({ fecha_nacimiento: "fecha inválida" }),
+    ).toThrow("VALIDATION_ERROR: fecha_nacimiento inválida");
+    expect(
+      () => new UpdateEstudianteDTO({ fecha_ingreso: "fecha inválida" }),
+    ).toThrow("VALIDATION_ERROR: fecha_ingreso inválida");
     expect(() => new UpdateEstudianteDTO({ id_curso: "abc" })).toThrow(
       "VALIDATION_ERROR: id_curso debe ser entero",
     );
@@ -232,8 +278,17 @@ describe("coverage boost - DTOs y controladores", () => {
   });
 
   test("auth.controller devuelve 400 para errores de validación y 500 para errores inesperados", async () => {
-    registerUserMock.mockRejectedValue(new Error("VALIDATION_ERROR: datos inválidos"));
-    const req = { body: { nombre: "Ana", email: "a@test.com", password: "123", rut: "12345678-9" } };
+    registerUserMock.mockRejectedValue(
+      new Error("VALIDATION_ERROR: datos inválidos"),
+    );
+    const req = {
+      body: {
+        nombre: "Ana",
+        email: "a@test.com",
+        password: "123",
+        rut: "12345678-9",
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await register(req, res);
@@ -241,7 +296,9 @@ describe("coverage boost - DTOs y controladores", () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: "datos inválidos" });
 
-    loginUserMock.mockRejectedValue(new Error("VALIDATION_ERROR: datos inválidos"));
+    loginUserMock.mockRejectedValue(
+      new Error("VALIDATION_ERROR: datos inválidos"),
+    );
     await login({ body: { email: "a@test.com", password: "x" } }, res);
     expect(res.status).toHaveBeenCalledWith(400);
 
@@ -270,25 +327,45 @@ describe("coverage boost - DTOs y controladores", () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     asignarRolMock.mockRejectedValue(new Error("falló"));
-    await asignarRolController({ body: { idUsuarioDestino: 1, idRolAsignado: 2 }, user: { id_usuario: 3 } }, res);
+    await asignarRolController(
+      {
+        body: { idUsuarioDestino: 1, idRolAsignado: 2 },
+        user: { id_usuario: 3 },
+      },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(400);
 
     revocarRolMock.mockRejectedValue(new Error("falló"));
-    await revocarRolController({ params: { id: "1" }, user: { id_usuario: 3 } }, res);
+    await revocarRolController(
+      { params: { id: "1" }, user: { id_usuario: 3 } },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(403);
 
     asignarRolMock.mockResolvedValue({ ok: true });
-    await asignarRolController({ body: { idUsuarioDestino: 1, idRolAsignado: 2 }, user: { id_usuario: 3 } }, res);
+    await asignarRolController(
+      {
+        body: { idUsuarioDestino: 1, idRolAsignado: 2 },
+        user: { id_usuario: 3 },
+      },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
   test("documento.controller cubre archivo faltante y paginación con error", async () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-    await subirDocumentoController({ file: null, user: { id_usuario: 1 } }, res);
+    await subirDocumentoController(
+      { file: null, user: { id_usuario: 1 } },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(400);
 
-    obtenerDocumentosPaginadosMock.mockRejectedValue(new Error("error de paginación"));
+    obtenerDocumentosPaginadosMock.mockRejectedValue(
+      new Error("error de paginación"),
+    );
     await listarDocumentosController({ query: { page: 1, limit: 5 } }, res);
     expect(res.status).toHaveBeenCalledWith(400);
 

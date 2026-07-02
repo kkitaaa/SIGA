@@ -12,20 +12,22 @@ export default function EstudianteDetallePage() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchDetalle = async () => {
       try {
         setCargando(true);
-        // 1. Obtener datos base del estudiante
         const estRes = await api.get(`/estudiantes/${id}`);
-        setEstudiante(estRes.data);
+        
+        console.log("Respuesta del Backend:", estRes.data);
 
-        // 2. Si es NEE, intentar obtener sus profesionales asignados
-        if (estRes.data.es_nee) {
+        const datosEstudiante = estRes.data.estudiante || estRes.data.data || estRes.data;
+        
+        setEstudiante(datosEstudiante);
+
+        if (datosEstudiante.es_nee) {
           try {
             const asigRes = await api.get(`/asignacion-pie/estudiante/${id}`);
-            // Asumimos que el backend devuelve un arreglo de profesionales en "data.profesionales"
-            setProfesionales(asigRes.data.profesionales || []);
+            setProfesionales(asigRes.data.profesionales || asigRes.data.data || []);
           } catch (err) {
             console.warn("Este estudiante no tiene asignaciones o hubo un error al cargarlas", err);
           }

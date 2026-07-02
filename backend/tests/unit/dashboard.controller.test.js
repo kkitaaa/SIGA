@@ -11,7 +11,8 @@ jest.unstable_mockModule("../../src/services/dashboard.service.js", () => ({
 let obtenerMetricasDashboard;
 
 beforeAll(async () => {
-  ({ obtenerMetricasDashboard } = await import("../../src/controllers/dashboard.controller.js"));
+  ({ obtenerMetricasDashboard } =
+    await import("../../src/controllers/dashboard.controller.js"));
 });
 
 describe("dashboard.controller", () => {

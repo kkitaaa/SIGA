@@ -12,7 +12,8 @@ jest.unstable_mockModule("../../src/config/prisma.js", () => ({
 let RolRepository;
 
 beforeAll(async () => {
-  ({ RolRepository } = await import("../../src/repositories/rol.repository.js"));
+  ({ RolRepository } =
+    await import("../../src/repositories/rol.repository.js"));
 });
 
 describe("RolRepository", () => {
@@ -31,6 +32,8 @@ describe("RolRepository", () => {
     const repo = new RolRepository();
     prismaMock.usuario_rol.findFirst.mockResolvedValue({ id_rol: 2 });
 
-    await expect(repo.usuarioTieneRol(7, "Directiva")).resolves.toEqual({ id_rol: 2 });
+    await expect(repo.usuarioTieneRol(7, "Directiva")).resolves.toEqual({
+      id_rol: 2,
+    });
   });
 });

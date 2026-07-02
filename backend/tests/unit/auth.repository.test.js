@@ -12,7 +12,8 @@ jest.unstable_mockModule("../../src/config/prisma.js", () => ({
 let AuthRepository;
 
 beforeAll(async () => {
-  ({ AuthRepository } = await import("../../src/repositories/auth.repository.js"));
+  ({ AuthRepository } =
+    await import("../../src/repositories/auth.repository.js"));
 });
 
 describe("AuthRepository", () => {
@@ -43,7 +44,9 @@ describe("AuthRepository", () => {
     const repo = new AuthRepository();
     prismaMock.cuenta.findUnique.mockResolvedValue({ id_usuario: 1 });
 
-    await expect(repo.findCuentaByEmail("juan@test.com")).resolves.toEqual({ id_usuario: 1 });
+    await expect(repo.findCuentaByEmail("juan@test.com")).resolves.toEqual({
+      id_usuario: 1,
+    });
     expect(prismaMock.cuenta.findUnique).toHaveBeenCalledWith(
       expect.objectContaining({ where: { email: "juan@test.com" } }),
     );

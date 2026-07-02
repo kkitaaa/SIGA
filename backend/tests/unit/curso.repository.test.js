@@ -15,7 +15,8 @@ jest.unstable_mockModule("../../src/config/prisma.js", () => ({
 let CursoRepository;
 
 beforeAll(async () => {
-  ({ CursoRepository } = await import("../../src/repositories/curso.repository.js"));
+  ({ CursoRepository } =
+    await import("../../src/repositories/curso.repository.js"));
 });
 
 describe("CursoRepository", () => {
@@ -26,8 +27,12 @@ describe("CursoRepository", () => {
   test("busca un curso por detalles", async () => {
     prismaMock.curso.findFirst.mockResolvedValue({ id_curso: 1 });
 
-    await expect(CursoRepository.findByDetalles("Media", 4, "A")).resolves.toEqual({ id_curso: 1 });
-    expect(prismaMock.curso.findFirst).toHaveBeenCalledWith({ where: { nivel_educativo: "Media", nivel_curso: 4, letra: "A" } });
+    await expect(
+      CursoRepository.findByDetalles("Media", 4, "A"),
+    ).resolves.toEqual({ id_curso: 1 });
+    expect(prismaMock.curso.findFirst).toHaveBeenCalledWith({
+      where: { nivel_educativo: "Media", nivel_curso: 4, letra: "A" },
+    });
   });
 
   test("lista cursos con relaciones", async () => {
@@ -39,6 +44,13 @@ describe("CursoRepository", () => {
   test("crea un curso", async () => {
     prismaMock.curso.create.mockResolvedValue({ id_curso: 2 });
 
-    await expect(CursoRepository.create({ nivel_educativo: "Media", nivel_curso: 4, letra: "B", id_profesor: 3 })).resolves.toEqual({ id_curso: 2 });
+    await expect(
+      CursoRepository.create({
+        nivel_educativo: "Media",
+        nivel_curso: 4,
+        letra: "B",
+        id_profesor: 3,
+      }),
+    ).resolves.toEqual({ id_curso: 2 });
   });
 });

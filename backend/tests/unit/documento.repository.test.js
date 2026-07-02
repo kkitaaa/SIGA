@@ -8,12 +8,15 @@ const prismaMock = {
   },
 };
 
-jest.unstable_mockModule("../../src/config/prisma.js", () => ({ default: prismaMock }));
+jest.unstable_mockModule("../../src/config/prisma.js", () => ({
+  default: prismaMock,
+}));
 
 let DocumentoRepository;
 
 beforeAll(async () => {
-  ({ DocumentoRepository } = await import("../../src/repositories/documento.repository.js"));
+  ({ DocumentoRepository } =
+    await import("../../src/repositories/documento.repository.js"));
 });
 
 describe("DocumentoRepository", () => {
@@ -25,7 +28,9 @@ describe("DocumentoRepository", () => {
     const repo = new DocumentoRepository();
     prismaMock.documento.create.mockResolvedValue({ id_documento: 1 });
 
-    await expect(repo.crearDocumento({ nombre: "a.pdf" })).resolves.toEqual({ id_documento: 1 });
+    await expect(repo.crearDocumento({ nombre: "a.pdf" })).resolves.toEqual({
+      id_documento: 1,
+    });
   });
 
   test("lista documentos paginados y cuenta total", async () => {
@@ -33,6 +38,9 @@ describe("DocumentoRepository", () => {
     prismaMock.documento.findMany.mockResolvedValue([{ id_documento: 2 }]);
     prismaMock.documento.count.mockResolvedValue(1);
 
-    await expect(repo.findAllPaginated(0, 10)).resolves.toEqual({ documentos: [{ id_documento: 2 }], total: 1 });
+    await expect(repo.findAllPaginated(0, 10)).resolves.toEqual({
+      documentos: [{ id_documento: 2 }],
+      total: 1,
+    });
   });
 });

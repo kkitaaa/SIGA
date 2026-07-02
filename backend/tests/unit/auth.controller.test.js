@@ -13,7 +13,8 @@ let register;
 let login;
 
 beforeAll(async () => {
-  ({ register, login } = await import("../../src/controllers/auth.controller.js"));
+  ({ register, login } =
+    await import("../../src/controllers/auth.controller.js"));
 });
 
 describe("auth.controller", () => {
@@ -23,7 +24,14 @@ describe("auth.controller", () => {
 
   test("registra usuario con 201", async () => {
     serviceMock.registerUser.mockResolvedValue({ primer_nombre: "Ana" });
-    const req = { body: { nombre: "Ana Pérez", email: "ana@test.com", password: "123", rut: "12345678-9" } };
+    const req = {
+      body: {
+        nombre: "Ana Pérez",
+        email: "ana@test.com",
+        password: "123",
+        rut: "12345678-9",
+      },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await register(req, res);
@@ -32,7 +40,9 @@ describe("auth.controller", () => {
   });
 
   test("retorna 401 en login con credenciales inválidas", async () => {
-    serviceMock.loginUser.mockRejectedValue(new Error("CREDENCIALES_INVALIDAS"));
+    serviceMock.loginUser.mockRejectedValue(
+      new Error("CREDENCIALES_INVALIDAS"),
+    );
     const req = { body: { email: "a@test.com", password: "x" } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 

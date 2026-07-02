@@ -64,11 +64,16 @@ describe("estudiante.controller", () => {
     await listarEstudiantesController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ ok: true, estudiantes: [{ id_estudiante: 1 }] });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: true,
+      estudiantes: [{ id_estudiante: 1 }],
+    });
   });
 
   test("lista estudiantes NEE", async () => {
-    serviceMock.listarEstudiantesNee.mockResolvedValue([{ id_estudiante: 2, es_nee: true }]);
+    serviceMock.listarEstudiantesNee.mockResolvedValue([
+      { id_estudiante: 2, es_nee: true },
+    ]);
     const req = {};
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
@@ -78,7 +83,9 @@ describe("estudiante.controller", () => {
   });
 
   test("devuelve 404 cuando no existe el estudiante buscado", async () => {
-    serviceMock.obtenerEstudiantePorId.mockRejectedValue(new Error("BUSINESS_ERROR: Estudiante no encontrado"));
+    serviceMock.obtenerEstudiantePorId.mockRejectedValue(
+      new Error("BUSINESS_ERROR: Estudiante no encontrado"),
+    );
     const req = { params: { id: "99" } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
@@ -98,7 +105,9 @@ describe("estudiante.controller", () => {
   });
 
   test("devuelve 400 cuando falla la validación al registrar", async () => {
-    serviceMock.registrarEstudiante.mockRejectedValue(new Error("VALIDATION_ERROR: datos inválidos"));
+    serviceMock.registrarEstudiante.mockRejectedValue(
+      new Error("VALIDATION_ERROR: datos inválidos"),
+    );
     const req = {
       body: {
         rut: "12345678-9",
@@ -125,6 +134,9 @@ describe("estudiante.controller", () => {
     await listarEstudiantesController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ ok: false, error: "Error interno al obtener estudiantes" });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: false,
+      error: "Error interno al obtener estudiantes",
+    });
   });
 });
