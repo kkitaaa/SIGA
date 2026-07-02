@@ -27,6 +27,9 @@ const router = Router();
  *               archivo:
  *                 type: string
  *                 format: binary
+ *               nombre:
+ *                  type: string
+ *                  example: "Reglamento Interno"
  *     responses:
  *       201:
  *         description: Documento subido correctamente

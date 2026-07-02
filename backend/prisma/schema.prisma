@@ -52,6 +52,7 @@ model Usuario_rol {
 
 model Documento {
   id_documento Int      @id @default(autoincrement())
+  nombre       String   @default("Documento sin nombre")
   url          String
   fecha_subida DateTime @default(now())
 
