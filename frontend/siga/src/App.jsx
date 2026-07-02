@@ -14,7 +14,8 @@ import DocumentosPage from "./pages/documentos/DocumentosPage";
 // Roles
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
-
+//Estudiantes
+import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
 
 // Directiva
 import AsignacionRoles from "./pages/directiva/AsignacionRoles";
@@ -36,6 +37,7 @@ function App() {
       {/* 🔓 Públicas */}
       <Route path="/" element={<Login />} />
       <Route path="/documentos" element={<DocumentosPage />} />
+      <Route path="/estudiantes/:id" element={<EstudianteDetallePage />} />
 
       {/* 🏠 Home general */}
       <Route

@@ -13,7 +13,8 @@ let subirDocumentoController;
 let listarDocumentosController;
 
 beforeAll(async () => {
-  ({ subirDocumentoController, listarDocumentosController } = await import("../../src/controllers/documento.controller.js"));
+  ({ subirDocumentoController, listarDocumentosController } =
+    await import("../../src/controllers/documento.controller.js"));
 });
 
 describe("documento.controller", () => {
@@ -28,7 +29,10 @@ describe("documento.controller", () => {
     await subirDocumentoController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ ok: false, mensaje: "Debe adjuntar un archivo" });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: false,
+      mensaje: "Debe adjuntar un archivo",
+    });
   });
 
   test("sube documento y responde 201", async () => {
@@ -39,17 +43,27 @@ describe("documento.controller", () => {
     await subirDocumentoController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ ok: true, documento: { id_documento: 1 } });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: true,
+      documento: { id_documento: 1 },
+    });
   });
 
   test("lista documentos paginados", async () => {
-    serviceMock.obtenerDocumentosPaginados.mockResolvedValue({ documentos: [], total: 0 });
+    serviceMock.obtenerDocumentosPaginados.mockResolvedValue({
+      documentos: [],
+      total: 0,
+    });
     const req = { query: { page: 2, limit: 5 } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await listarDocumentosController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ ok: true, documentos: [], total: 0 });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: true,
+      documentos: [],
+      total: 0,
+    });
   });
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types'; 
+import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Input, Select, VStack, HStack } from '@chakra-ui/react';
 import api from '../../services/api';
 import { EstudiantesPIETable } from '../../components/pie/EstudiantesPIETable';
@@ -27,6 +28,8 @@ const cruzarDatosEstudiantes = (estsData, asigsData, funcsData) => {
 };
 
 export default function EstudiantesNEEPage({ user }) {
+  const navigate = useNavigate();
+
   const [estudiantes, setEstudiantes] = useState([]);
   const [cargando, setCargando] = useState(true);
 
@@ -50,22 +53,7 @@ export default function EstudiantesNEEPage({ user }) {
         const asigsData = asigsRes.data.asignaciones || [];
         const funcsData = funcsRes.data || []; 
 
-        const dataCruzada = estsData.map(est => {
-          
-          const misAsignaciones = asigsData.filter(a => a.id_estudiante === est.id_estudiante);
-          
-          const profesionales = misAsignaciones.map(a => {
-            const func = funcsData.find(f => f.id_funcionario === a.id_funcionario);
-            return func ? { nombre: func.nombre, especialidad: func.tipo_profesional } : null;
-          }).filter(Boolean); 
-
-          return {
-            ...est,
-            nombre_completo: `${est.primer_nombre} ${est.primer_apellido}`,
-            funcionarios_asignados: profesionales,
-            nombre_curso: est.id_curso ? `Curso ID: ${est.id_curso}` : 'Sin curso' 
-          };
-        });
+        const dataCruzada = cruzarDatosEstudiantes(estsData, asigsData, funcsData); // Usamos tu función externa!
 
         setEstudiantes(dataCruzada);
 
@@ -112,8 +100,7 @@ export default function EstudiantesNEEPage({ user }) {
   }, [estudiantes, busqueda, cursoFiltro, profesionalFiltro]);
 
   const handleVerDetalle = (estudiante) => {
-    console.log("Ver detalle del estudiante:", estudiante);
-    alert(`Próximamente: Detalle de ${estudiante.nombre_completo}`);
+    navigate(`/estudiantes/${estudiante.id_estudiante}`);
   };
 
   return (

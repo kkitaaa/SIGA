@@ -7,12 +7,15 @@ const prismaMock = {
   },
 };
 
-jest.unstable_mockModule("../../src/config/prisma.js", () => ({ default: prismaMock }));
+jest.unstable_mockModule("../../src/config/prisma.js", () => ({
+  default: prismaMock,
+}));
 
 let FuncionarioRepository;
 
 beforeAll(async () => {
-  ({ FuncionarioRepository } = await import("../../src/repositories/funcionario.repository.js"));
+  ({ FuncionarioRepository } =
+    await import("../../src/repositories/funcionario.repository.js"));
 });
 
 describe("FuncionarioRepository", () => {
@@ -24,12 +27,16 @@ describe("FuncionarioRepository", () => {
     const repo = new FuncionarioRepository();
     prismaMock.funcionario.findUnique.mockResolvedValue({ id_funcionario: 2 });
 
-    await expect(repo.findPieMemberByUserId(2, prismaMock)).resolves.toEqual({ id_funcionario: 2 });
+    await expect(repo.findPieMemberByUserId(2, prismaMock)).resolves.toEqual({
+      id_funcionario: 2,
+    });
   });
 
   test("lista funcionarios con relaciones", async () => {
     prismaMock.funcionario.findMany.mockResolvedValue([{ id_funcionario: 1 }]);
 
-    await expect(FuncionarioRepository.findAllFuncionarios()).resolves.toEqual([{ id_funcionario: 1 }]);
+    await expect(FuncionarioRepository.findAllFuncionarios()).resolves.toEqual([
+      { id_funcionario: 1 },
+    ]);
   });
 });

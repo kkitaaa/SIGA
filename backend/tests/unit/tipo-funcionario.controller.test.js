@@ -8,9 +8,12 @@ const serviceMock = {
   desactivarTipo: jest.fn(),
 };
 
-jest.unstable_mockModule("../../src/services/tipo-funcionario.service.js", () => ({
-  TipoFuncionarioService: jest.fn().mockImplementation(() => serviceMock),
-}));
+jest.unstable_mockModule(
+  "../../src/services/tipo-funcionario.service.js",
+  () => ({
+    TipoFuncionarioService: jest.fn().mockImplementation(() => serviceMock),
+  }),
+);
 
 let registrarTipoFuncionarioController;
 let listarTiposFuncionarioController;
@@ -40,7 +43,10 @@ describe("tipo-funcionario.controller", () => {
 
     await registrarTipoFuncionarioController(req, res);
 
-    expect(res.json).toHaveBeenCalledWith({ ok: true, mensaje: "Tipo de funcionario registrado correctamente" });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: true,
+      mensaje: "Tipo de funcionario registrado correctamente",
+    });
   });
 
   test("lista tipos", async () => {
@@ -71,6 +77,9 @@ describe("tipo-funcionario.controller", () => {
     await obtenerDetalleTipoFuncionarioController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ ok: false, mensaje: "No encontrado" });
+    expect(res.json).toHaveBeenCalledWith({
+      ok: false,
+      mensaje: "No encontrado",
+    });
   });
 });

@@ -70,19 +70,29 @@ describe("error branch coverage", () => {
     expect(res.status).toHaveBeenCalledWith(500);
 
     serviceMock.actualizarEstudiante.mockRejectedValue(new Error("boom"));
-    await actualizarEstudianteController({ params: { id: "1" }, body: {} }, res);
+    await actualizarEstudianteController(
+      { params: { id: "1" }, body: {} },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(500);
   });
 
   test("cubre el caso business_error para obtener y actualizar estudiante", async () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-    serviceMock.obtenerEstudiantePorId.mockRejectedValue(new Error("BUSINESS_ERROR: no existe"));
+    serviceMock.obtenerEstudiantePorId.mockRejectedValue(
+      new Error("BUSINESS_ERROR: no existe"),
+    );
     await obtenerEstudiantePorIdController({ params: { id: "1" } }, res);
     expect(res.status).toHaveBeenCalledWith(404);
 
-    serviceMock.actualizarEstudiante.mockRejectedValue(new Error("BUSINESS_ERROR: no existe"));
-    await actualizarEstudianteController({ params: { id: "1" }, body: {} }, res);
+    serviceMock.actualizarEstudiante.mockRejectedValue(
+      new Error("BUSINESS_ERROR: no existe"),
+    );
+    await actualizarEstudianteController(
+      { params: { id: "1" }, body: {} },
+      res,
+    );
     expect(res.status).toHaveBeenCalledWith(404);
   });
 });
