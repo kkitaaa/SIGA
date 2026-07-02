@@ -1,11 +1,9 @@
 import { DocumentoService } from "../services/documento.service.js";
 import { DocumentoRepository } from "../repositories/documento.repository.js";
 
-// Instanciamos las clases (Ensamblaje de dependencias)
 const repository = new DocumentoRepository();
 const service = new DocumentoService(repository);
 
-// Controlador original para subir
 export const subirDocumentoController = async (req, res) => {
   try {
     if (!req.file) {
@@ -15,9 +13,11 @@ export const subirDocumentoController = async (req, res) => {
       });
     }
 
-    // Llamamos al servicio instanciado
+    const nombreDocumento = req.body.nombre || req.file.originalname;
+
     const documento = await service.subirDocumento(
       req.file,
+      nombreDocumento,
       req.user.id_usuario,
     );
 
@@ -33,12 +33,10 @@ export const subirDocumentoController = async (req, res) => {
   }
 };
 
-// Nuevo controlador para listar
 export const listarDocumentosController = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
-    // Llamamos al servicio instanciado
     const resultado = await service.obtenerDocumentosPaginados(page, limit);
 
     return res.status(200).json({
