@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import { useAuth } from "../context/AuthContext";
-
+import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginWithCredentials } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,16 +30,9 @@ function InicioDeSesion() {
 
     if (isLogin) {
       try {
-        const res = await api.post("/auth/login", {
+        const data = await loginWithCredentials({
           email: formData.email,
           password: formData.password,
-        });
-
-        const data = res.data;
-
-        login(data.token, data.role, {
-          nombre: data.nombre || data.usuario?.primer_nombre || "",
-          email: data.email || formData.email,
         });
 
         alert(data.mensaje);
@@ -95,7 +87,7 @@ function InicioDeSesion() {
           </button>
 
           <button
-            className={!isLogin ? "active" : ""}
+            className={isLogin ? "" : "active"}
             onClick={() => setIsLogin(false)}
             type="button"
           >
@@ -106,8 +98,9 @@ function InicioDeSesion() {
         <form className="login-form" onSubmit={handleSubmit}>
           {!isLogin && (
             <div className="input-group">
-              <label>Nombre completo</label>
+              <label htmlFor="nombre">Nombre completo</label>
               <input
+                id="nombre"
                 type="text"
                 name="nombre"
                 value={formData.nombre}
@@ -120,8 +113,9 @@ function InicioDeSesion() {
 
           {!isLogin && (
             <div className="input-group">
-              <label>RUT</label>
+              <label htmlFor="rut">RUT</label>
               <input
+                id="rut"
                 type="text"
                 name="rut"
                 value={formData.rut}
@@ -133,8 +127,9 @@ function InicioDeSesion() {
           )}
 
           <div className="input-group">
-            <label>Correo electrónico</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
@@ -145,15 +140,16 @@ function InicioDeSesion() {
           </div>
 
           <div className="input-group">
-            <label>Contraseña</label>
+            <label htmlFor="password">Contraseña</label>
             <div className="password-wrapper">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="????????"
+                placeholder="••••••••"
               />
 
               <button

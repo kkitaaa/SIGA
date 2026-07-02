@@ -1,4 +1,4 @@
-.PHONY: lint format test test-integration test-e2e
+.PHONY: lint format test test-integration test-e2e coverage
 
 lint:
 	npm run lint
@@ -35,3 +35,6 @@ prisma:
 
 run:
 	npm run dev
+
+coverage:
+	npm run test:coverage

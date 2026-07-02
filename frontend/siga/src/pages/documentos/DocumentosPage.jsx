@@ -1,23 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  Box, 
-  Heading, 
-  Center, 
-  Spinner, 
-  Button, 
-  HStack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  FormControl,
-  FormLabel,
-  Input
-} from '@chakra-ui/react';
+import { Box, Heading, Center, Spinner } from '@chakra-ui/react';
 import api from '../../services/api';
 import { DocumentoCard } from '../../components/documentos/DocumentoCard';
 import { useNotification } from '../../hooks/useNotification';
@@ -28,6 +10,7 @@ const validateChildren = (props, propName, componentName) => {
   if (props[propName] == null) {
     return new Error(`Prop ${propName} is required in ${componentName}.`);
   }
+
   return null;
 };
 
@@ -35,6 +18,7 @@ const validateUser = (props, propName, componentName) => {
   if (props[propName] != null && (typeof props[propName] !== 'object' || Array.isArray(props[propName]))) {
     return new Error(`Prop ${propName} should be an object in ${componentName}.`);
   }
+
   return null;
 };
 
@@ -56,70 +40,31 @@ export default function DocumentosPage({ user }) {
   const [busqueda, setBusqueda] = useState('');
   const [filtroFecha, setFiltroFecha] = useState('recientes');
   
-  // Estados para la subida de documentos
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
-  const [subiendo, setSubiendo] = useState(false);
-
-  const { showError, showSuccess } = useNotification();
-
-  const fetchDocumentos = async () => {
-    try {
-      const response = await api.get('/documentos?page=1&limit=50');
-      setDocumentos(response.data.documentos || []);
-    } catch (error) {
-      const message = error instanceof Error
-        ? error.message
-        : 'No se pudieron cargar los documentos.';
-      console.error('Error al cargar documentos', error);
-      showError('Error', message, { duration: 5000 });
-    } finally {
-      setCargando(false);
-    }
-  };
+  const { showError } = useNotification();
 
   useEffect(() => {
+    const fetchDocumentos = async () => {
+      try {
+        const response = await api.get('/documentos?page=1&limit=50');
+        setDocumentos(response.data.documentos || []);
+      } catch (error) {
+        const message = error instanceof Error
+          ? error.message
+          : 'No se pudieron cargar los documentos.';
+
+        console.error('Error al cargar documentos', error);
+        showError(
+          'Error',
+          message,
+          { duration: 5000 }
+        );
+      } finally {
+        setCargando(false);
+      }
+    };
+
     fetchDocumentos();
   }, [showError]);
-
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setArchivoSeleccionado(e.target.files[0]);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!archivoSeleccionado) {
-      showError('Advertencia', 'Por favor selecciona un archivo primero.', { duration: 3000 });
-      return;
-    }
-
-    try {
-      setSubiendo(true);
-      
-      const formData = new FormData();
-      formData.append('archivo', archivoSeleccionado); 
-
-      await api.post('/documentos', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      showSuccess('Éxito', 'Documento subido correctamente.');
-      
-      setArchivoSeleccionado(null);
-      onClose();
-      
-      fetchDocumentos();
-
-    } catch (error) {
-      console.error('Error al subir documento', error);
-      showError('Error', 'No se pudo subir el documento.', { duration: 5000 });
-    } finally {
-      setSubiendo(false);
-    }
-  };
 
   const documentosFiltrados = useMemo(() => {
     return documentos
@@ -168,14 +113,7 @@ export default function DocumentosPage({ user }) {
       <main className="home-main" style={{ display: 'block', maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
         
         <Box bg="white" p={6} borderRadius="lg" shadow="sm" borderWidth="1px">
-          
-          {/* Cabecera con título y botón de subida */}
-          <HStack justifyContent="space-between" mb={6}>
-            <Heading size="lg" color="gray.700">Repositorio de Documentos</Heading>
-            <Button colorScheme="blue" onClick={onOpen}>
-              + Subir Documento
-            </Button>
-          </HStack>
+          <Heading size="lg" mb={6} color="gray.700">Repositorio de Documentos</Heading>
           
           <DocumentoFilters 
             busqueda={busqueda}
@@ -188,41 +126,6 @@ export default function DocumentosPage({ user }) {
           {content}
 
         </Box>
-
-        {/* Modal de Subida de Documentos */}
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Subir Nuevo Documento</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <FormControl>
-                <FormLabel>Selecciona un archivo de tu equipo</FormLabel>
-                <Input 
-                  type="file" 
-                  onChange={handleFileChange} 
-                  p={1} 
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" // Puedes ajustar las extensiones permitidas
-                />
-              </FormControl>
-            </ModalBody>
-
-            <ModalFooter>
-              <Button variant="ghost" mr={3} onClick={onClose} isDisabled={subiendo}>
-                Cancelar
-              </Button>
-              <Button 
-                colorScheme="blue" 
-                onClick={handleUpload} 
-                isLoading={subiendo}
-                loadingText="Subiendo..."
-              >
-                Subir
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
       </main>
     </div>
   );

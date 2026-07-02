@@ -35,7 +35,10 @@ export const AuthService = {
     const nombreCompleto = [
       cuenta.usuario.primer_nombre,
       cuenta.usuario.primer_apellido,
-    ].filter(Boolean).join(" ").trim();
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
 
     const token = jwt.sign(
       { id_usuario: cuenta.id_usuario, email: cuenta.email, role },

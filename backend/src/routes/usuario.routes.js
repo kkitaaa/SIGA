@@ -6,7 +6,6 @@ import {
   listarUsuariosSinRolController,
   listarUsuariosController,
 } from "../controllers/usuario.controller.js";
-import { ROLES } from "../constants/roles.js";
 
 const router = Router();
 

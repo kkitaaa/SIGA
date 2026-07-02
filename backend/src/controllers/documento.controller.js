@@ -16,7 +16,10 @@ export const subirDocumentoController = async (req, res) => {
     }
 
     // Llamamos al servicio instanciado
-    const documento = await service.subirDocumento(req.file, req.user.id_usuario);
+    const documento = await service.subirDocumento(
+      req.file,
+      req.user.id_usuario,
+    );
 
     return res.status(201).json({
       ok: true,
@@ -34,19 +37,20 @@ export const subirDocumentoController = async (req, res) => {
 export const listarDocumentosController = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    
+
     // Llamamos al servicio instanciado
     const resultado = await service.obtenerDocumentosPaginados(page, limit);
 
     return res.status(200).json({
       ok: true,
-      ...resultado
+      ...resultado,
     });
   } catch (error) {
     const statusCode = error.message.includes("paginación") ? 400 : 500;
     return res.status(statusCode).json({
       ok: false,
-      mensaje: statusCode === 400 ? error.message : "Error interno del servidor",
+      mensaje:
+        statusCode === 400 ? error.message : "Error interno del servidor",
     });
   }
 };

@@ -4,6 +4,7 @@ import {
   listarEstudiantesController,
   listarEstudiantesNeeController,
   obtenerEstudiantePorIdController,
+  actualizarEstudianteController,
 } from "../controllers/estudiante.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
@@ -124,7 +125,7 @@ router.post(
   "/",
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
-  registrarEstudianteController
+  registrarEstudianteController,
 );
 
 /**
@@ -232,5 +233,48 @@ router.get("/nee", authMiddleware, listarEstudiantesNeeController);
  */
 router.get("/:id", authMiddleware, obtenerEstudiantePorIdController);
 
+/**
+ * @swagger
+ * /api/estudiantes/{id}:
+ *   put:
+ *     summary: Actualizar un estudiante
+ *     description: Permite actualizar información académica y personal de un estudiante.
+ *     tags:
+ *       - Estudiantes
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del estudiante
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Estudiante'
+ *     responses:
+ *       200:
+ *         description: Estudiante actualizado correctamente
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: No tiene permisos para realizar esta acción
+ *       404:
+ *         description: Estudiante no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.put(
+  "/:id",
+  authMiddleware,
+  verifyRole("Directiva"),
+  actualizarEstudianteController,
+);
 
 export default router;

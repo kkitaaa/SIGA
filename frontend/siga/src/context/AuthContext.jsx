@@ -1,6 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useMemo, useCallback } from "react";
+import PropTypes from "prop-types";
+import { setAuthToken } from "../services/api";
+import { authService } from "../services/auth.service";
 
-const AuthContext = createContext();
+// Lo exportamos para que el hook pueda consumirlo
+export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
@@ -8,25 +12,14 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  const leerUsuarioDesdeStorage = () => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    if (!usuarioGuardado) return null;
-
-    try {
-      return JSON.parse(usuarioGuardado);
-    } catch {
-      return null;
-    }
-  };
-
-  // Cargar sesión almacenada
   useEffect(() => {
     const tokenGuardado = localStorage.getItem("token");
     const rolGuardado = localStorage.getItem("role");
-    const usuarioGuardado = leerUsuarioDesdeStorage();
+    const usuarioGuardado = localStorage.getItem("usuario");
 
     if (tokenGuardado) {
       setToken(tokenGuardado);
+      setAuthToken(tokenGuardado);
     }
 
     if (rolGuardado) {
@@ -34,16 +27,22 @@ export function AuthProvider({ children }) {
     }
 
     if (usuarioGuardado) {
-      setUsuario(usuarioGuardado);
+      try {
+        setUsuario(JSON.parse(usuarioGuardado));
+      } catch {
+        localStorage.removeItem("usuario");
+      }
     }
 
     setCargando(false);
   }, []);
 
-  const login = (tokenJWT, rolUsuario, datosUsuario = null) => {
+  // Usamos useCallback para que estas funciones no se recreen en cada render
+  const login = useCallback((tokenJWT, rolUsuario, datosUsuario = null) => {
     setToken(tokenJWT);
     setRol(rolUsuario);
     setUsuario(datosUsuario);
+    setAuthToken(tokenJWT);
 
     localStorage.setItem("token", tokenJWT);
     localStorage.setItem("role", rolUsuario);
@@ -53,27 +52,44 @@ export function AuthProvider({ children }) {
     } else {
       localStorage.removeItem("usuario");
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const loginWithCredentials = useCallback(async (credentials) => {
+    const data = await authService.login(credentials);
+    const usuario = data.usuario
+      ? {
+          ...data.usuario,
+          nombre: data.nombre || data.usuario?.primer_nombre || "",
+          email: data.email || credentials.email,
+        }
+      : {
+          nombre: data.nombre || "",
+          email: data.email || credentials.email,
+        };
+
+    login(data.token, data.role, usuario);
+    return data;
+  }, [login]);
+
+  const logout = useCallback(() => {
     setToken(null);
     setRol(null);
     setUsuario(null);
-
+    setAuthToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("usuario");
-  };
+  }, []);
 
-  const estaAutenticado = () => {
+  const estaAutenticado = useCallback(() => {
     return !!token;
-  };
+  }, [token]);
 
-  const tieneRol = (...roles) => {
+  const tieneRol = useCallback((...roles) => {
     return roles.includes(rol);
-  };
+  }, [rol]);
 
-  const obtenerHeaders = () => {
+  const obtenerHeaders = useCallback(() => {
     if (!token) {
       return {
         "Content-Type": "application/json",
@@ -84,33 +100,29 @@ export function AuthProvider({ children }) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-  };
+  }, [token]);
+
+  // SOLUCIÓN SONARQUBE S6481: Memorizamos el objeto 'value'
+  const contextValue = useMemo(() => ({
+    token,
+    rol,
+    usuario,
+    cargando,
+    login,
+    loginWithCredentials,
+    logout,
+    estaAutenticado,
+    tieneRol,
+    obtenerHeaders,
+  }), [token, rol, usuario, cargando, login, logout, estaAutenticado, tieneRol, obtenerHeaders]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        token,
-        rol,
-        usuario,
-        cargando,
-        login,
-        logout,
-        estaAutenticado,
-        tieneRol,
-        obtenerHeaders,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
-  const contexto = useContext(AuthContext);
-
-  if (!contexto) {
-    throw new Error("useAuth debe usarse dentro de un AuthProvider");
-  }
-
-  return contexto;
-}
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

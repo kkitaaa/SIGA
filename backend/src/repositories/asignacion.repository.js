@@ -41,13 +41,13 @@ export class AsignacionRepository {
       // 2. Si es funcionario, usamos UPSERT en lugar de CREATE
       if (idTipoFuncionario) {
         await tx.funcionario.upsert({
-          where: { 
+          where: {
             // Buscamos al funcionario por su ID de usuario (que es único según tu schema)
-            id_usuario: Number(idUsuarioDestino) 
+            id_usuario: Number(idUsuarioDestino),
           },
           update: {
             // Si ya existía, simplemente le actualizamos la especialidad
-            id_tipo_funcionario: Number(idTipoFuncionario)
+            id_tipo_funcionario: Number(idTipoFuncionario),
           },
           create: {
             // Si no existía, lo creamos desde cero
@@ -88,5 +88,4 @@ export class AsignacionRepository {
       },
     });
   }
-
 }

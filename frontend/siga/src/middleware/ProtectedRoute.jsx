@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import PropTypes from "prop-types";
+import { useAuth } from "../hooks/useAuth";
 
 function ProtectedRoute({ children, rolesPermitidos = [] }) {
   const { estaAutenticado, cargando, rol } = useAuth();
@@ -9,20 +10,22 @@ function ProtectedRoute({ children, rolesPermitidos = [] }) {
   }
 
   if (!estaAutenticado()) {
-    // Si no tiene token, se va al login
     return <Navigate to="/" replace />;
   }
 
-  // Ahora sí lee correctamente los roles permitidos
   if (
     rolesPermitidos.length > 0 &&
     !rolesPermitidos.includes(rol)
   ) {
-    // Si el usuario no tiene el rol necesario, lo mandamos al inicio
     return <Navigate to="/home" replace />;
   }
 
   return children;
 }
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired, 
+  rolesPermitidos: PropTypes.arrayOf(PropTypes.string), 
+};
 
 export default ProtectedRoute;

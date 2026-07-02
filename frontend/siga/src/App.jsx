@@ -14,24 +14,30 @@ import DocumentosPage from "./pages/documentos/DocumentosPage";
 // Roles
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
+//Estudiantes
+import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
+
 // Directiva
-import DirectivaDashboard from "./pages/directiva/DirectivaDashboard";
 import AsignacionRoles from "./pages/directiva/AsignacionRoles";
+
+
+
+
 
 // PIE
 import PieDashboard from "./pages/pie/PieDashboard";
 import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
 import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
 
-
-
 function App() {
+
   return (
     <Routes>
 
       {/* 🔓 Públicas */}
       <Route path="/" element={<Login />} />
       <Route path="/documentos" element={<DocumentosPage />} />
+      <Route path="/estudiantes/:id" element={<EstudianteDetallePage />} />
 
       {/* 🏠 Home general */}
       <Route

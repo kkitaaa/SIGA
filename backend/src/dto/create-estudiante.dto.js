@@ -43,7 +43,10 @@ export class CreateEstudianteDTO {
       throw new Error("VALIDATION_ERROR: El curso es obligatorio");
     }
 
-    if (!this.fecha_nacimiento || isNaN(this.fecha_nacimiento.getTime())) {
+    if (
+      !this.fecha_nacimiento ||
+      Number.isNaN(this.fecha_nacimiento.getTime())
+    ) {
       throw new Error(
         "VALIDATION_ERROR: La fecha de nacimiento es obligatoria",
       );

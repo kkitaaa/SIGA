@@ -1,5 +1,4 @@
-import { asignarRol } from "../services/asignacion.service.js";
-import { revocarRol } from "../services/asignacion.service.js";
+import { asignarRol, revocarRol } from "../services/asignacion.service.js";
 
 export const asignarRolController = async (req, res) => {
   try {
@@ -17,7 +16,7 @@ export const asignarRolController = async (req, res) => {
       idUsuarioDestino,
       idRolAsignado,
       idUsuarioActual,
-      idTipoFuncionario
+      idTipoFuncionario,
     );
 
     return res.status(200).json({ ok: true, resultado });
@@ -44,4 +43,4 @@ export const revocarRolController = async (req, res) => {
       mensaje: err.message,
     });
   }
-}
+};

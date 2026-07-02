@@ -15,7 +15,7 @@ export class DocumentoRepository {
         skip,
         take,
         // Ordenamos por los más recientes primero (ajusta 'id_documento' si usas 'fecha_subida')
-        orderBy: { id_documento: 'desc' }, 
+        orderBy: { id_documento: "desc" },
       }),
       prisma.documento.count(),
     ]);

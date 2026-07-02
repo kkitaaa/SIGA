@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UsuarioFilters from "../../components/usuarios/UsuarioFilters";
 import UsuariosTable from "../../components/usuarios/UsuariosTable";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import ProfileMenu from "../../components/dashboard/ProfileMenu";
 import { usuarioService } from "../../services/usuario.service";
 import "../../styles/usuarios.css";

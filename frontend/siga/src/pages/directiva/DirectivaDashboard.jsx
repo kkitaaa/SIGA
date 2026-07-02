@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import PropTypes from "prop-types";
 import ProfileMenu from "../../components/dashboard/ProfileMenu";
 import { dashboardService } from "../../services/dashboardService";
 import "../../styles/home.css";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 function AdminDashboard({ user }) {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  
   const [metrics, setMetrics] = useState({
     estudiantes: 0,
     funcionarios: 0,
@@ -108,5 +108,12 @@ function AdminDashboard({ user }) {
     </div>
   );
 }
+
+AdminDashboard.propTypes = {
+  user: PropTypes.shape({
+    nombre: PropTypes.string,
+    rol: PropTypes.string,
+  }),
+};
 
 export default AdminDashboard;
