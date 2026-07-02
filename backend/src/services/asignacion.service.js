@@ -16,9 +16,9 @@ export const asignarRol = async (
   }
 
   // Verificar permisos
-  const esAdministrativo =
-    await repo.verificarRolAdministrativo(idUsuarioActual);
-  if (!esAdministrativo)
+  const esDirectiva =
+    await repo.verificarRolDirectiva(idUsuarioActual);
+  if (!esDirectiva)
     throw new Error("No tienes permisos para asignar roles");
 
   // Verificar existencia del usuario
@@ -46,9 +46,9 @@ export const asignarRol = async (
 
 export const revocarRol = async (idUsuarioDestino, idUsuarioActual) => {
   // Verificar permisos
-  const esAdministrativo =
-    await repo.verificarRolAdministrativo(idUsuarioActual);
-  if (!esAdministrativo)
+  const esDirectiva =
+    await repo.verificarRolDirectiva(idUsuarioActual);
+  if (!esDirectiva)
     throw new Error("No tienes permisos para revocar roles");
 
   // Verificar existencia del usuario

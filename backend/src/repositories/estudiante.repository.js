@@ -45,7 +45,6 @@ export class EstudianteRepository {
       include: {
         curso: true,
         asignaciones: true,
-        asignacionPieLogs: true,
       },
     });
   }
