@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import { useAuth } from "../context/AuthContext";
-
+import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
 
 function InicioDeSesion() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginWithCredentials } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +30,7 @@ function InicioDeSesion() {
 
     if (isLogin) {
       try {
-        const res = await api.post("/auth/login", {
+        const data = await loginWithCredentials({
           email: formData.email,
           password: formData.password,
         });
@@ -125,7 +124,7 @@ function InicioDeSesion() {
             <div className="input-group">
               <label htmlFor="rut">RUT</label>
               <input
-                id="rut" 
+                id="rut"
                 type="text"
                 name="rut"
                 value={formData.rut}
@@ -153,7 +152,7 @@ function InicioDeSesion() {
             <label htmlFor="password">Contraseña</label>
             <div className="password-wrapper">
               <input
-                id="password" 
+                id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}

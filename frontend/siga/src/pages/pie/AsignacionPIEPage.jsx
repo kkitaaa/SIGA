@@ -3,14 +3,30 @@ import {
   Box,
   Select,
   Button,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import api from "../../services/api";
-
-// Importamos el menú de perfil y los estilos que le darán el look del dashboard
-import ProfileMenu from "../../components/dashboard/ProfileMenu"; // Ajusta la ruta si es necesario
+import { useNotification } from "../../hooks/useNotification";
+import ProfileMenu from "../../components/dashboard/ProfileMenu"; 
 import "../../styles/home.css";
+
+const validateUser = (props, propName, componentName) => {
+  const value = props[propName];
+
+  if (value == null) {
+    return null;
+  }
+
+  if (typeof value !== "object" || Array.isArray(value)) {
+    return new Error(`Prop ${propName} should be an object in ${componentName}.`);
+  }
+
+  if (value.rol != null && typeof value.rol !== "string") {
+    return new Error(`Prop ${propName}.rol should be a string in ${componentName}.`);
+  }
+
+  return null;
+};
 
 export default function AsignacionPIEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -20,7 +36,7 @@ export default function AsignacionPIEPage({ user }) {
   const [estudianteId, setEstudianteId] = useState("");
   const [funcionarioId, setFuncionarioId] = useState("");
 
-  const toast = useToast();
+  const { showSuccess, showWarning, showError } = useNotification();
 
   const cargarDatos = async () => {
     try {
@@ -36,11 +52,10 @@ export default function AsignacionPIEPage({ user }) {
       
     } catch (error) {
       console.error(error);
-      toast({
-        title: "Error cargando datos",
-        description: "Hubo un problema al conectar con el servidor.",
-        status: "error",
-      });
+      showError(
+        "Error cargando datos",
+        "Hubo un problema al conectar con el servidor."
+      );
     }
   };
 
@@ -50,11 +65,10 @@ export default function AsignacionPIEPage({ user }) {
 
   const crearAsignacion = async () => {
     if (!estudianteId || !funcionarioId) {
-      toast({
-        title: "Faltan datos",
-        description: "Por favor selecciona un estudiante y un funcionario.",
-        status: "warning",
-      });
+      showWarning(
+        "Faltan datos",
+        "Por favor selecciona un estudiante y un funcionario."
+      );
       return;
     }
 
@@ -64,10 +78,7 @@ export default function AsignacionPIEPage({ user }) {
         idFuncionario: Number(funcionarioId),
       });
 
-      toast({
-        title: "Asignación creada",
-        status: "success",
-      });
+      showSuccess("Asignación creada");
 
       setEstudianteId("");
       setFuncionarioId("");
@@ -75,17 +86,15 @@ export default function AsignacionPIEPage({ user }) {
       cargarDatos();
     } catch (error) {
       console.error(error);
-      toast({
-        title: "Error al crear asignación",
-        description: error.response?.data?.mensaje || "Error interno del servidor",
-        status: "error",
-      });
+      showError(
+        "Error al crear asignación",
+        error.response?.data?.mensaje || "Error interno del servidor"
+      );
     }
   };
 
   return (
     <div className="home-page">
-      {/* HEADER AL ESTILO DASHBOARD */}
       <header className="home-topbar">
         <div className="home-brand">SIGA</div>
         <div className="home-topbar-actions">
@@ -94,10 +103,8 @@ export default function AsignacionPIEPage({ user }) {
         </div>
       </header>
 
-      {/* CONTENIDO PRINCIPAL */}
       <main className="home-main">
         
-        {/* SECCIÓN IZQUIERDA: Formulario */}
         <section className="home-panel home-welcome-panel">
           <div className="home-welcome-title">Asignación PIE</div>
           <p className="home-welcome-subtitle">
@@ -107,7 +114,6 @@ export default function AsignacionPIEPage({ user }) {
           <div className="home-card">
             <h2>Registrar nueva asignación</h2>
             
-            {/* Formulario usando Chakra UI pero dentro de la tarjeta del dashboard */}
             <VStack spacing={4} align="stretch" mt={4}>
               <Select
                 placeholder="Selecciona estudiante (Solo NEE)"
@@ -142,7 +148,6 @@ export default function AsignacionPIEPage({ user }) {
           </div>
         </section>
 
-        {/* SECCIÓN DERECHA: Lista de asignaciones activas */}
         <aside className="home-panel home-news-panel">
           <div className="home-aside-card">
             <h2>Asignaciones Activas</h2>
@@ -176,3 +181,7 @@ export default function AsignacionPIEPage({ user }) {
     </div>
   );
 }
+
+AsignacionPIEPage.propTypes = {
+  user: validateUser,
+};

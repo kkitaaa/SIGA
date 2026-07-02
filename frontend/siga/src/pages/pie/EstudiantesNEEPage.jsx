@@ -1,11 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Box, Heading, Input, Select, VStack, HStack, useToast } from '@chakra-ui/react';
+import PropTypes from 'prop-types'; 
+import { Box, Heading, Input, Select, VStack, HStack } from '@chakra-ui/react';
 import api from '../../services/api';
 import { EstudiantesPIETable } from '../../components/pie/EstudiantesPIETable';
+import { useNotification } from '../../hooks/useNotification';
 import "../../styles/home.css";
 
-// TODO: PARA CUANDO TENGAS EL HOOK DE NOTIFICACIONES, DESCOMENTA ESTO:
-// import { useNotification } from '../../hooks/useNotification';
+const cruzarDatosEstudiantes = (estsData, asigsData, funcsData) => {
+  return estsData.map((est) => {
+    const misAsignaciones = asigsData.filter((a) => a.id_estudiante === est.id_estudiante);
+
+    const profesionales = misAsignaciones
+      .map((a) => {
+        const func = funcsData.find((f) => f.id_funcionario === a.id_funcionario);
+        return func ? { nombre: func.nombre, especialidad: func.tipo_profesional } : null;
+      })
+      .filter(Boolean);
+
+    return {
+      ...est,
+      nombre_completo: `${est.primer_nombre} ${est.primer_apellido}`,
+      funcionarios_asignados: profesionales,
+      nombre_curso: est.id_curso ? `Curso ID: ${est.id_curso}` : 'Sin curso',
+    };
+  });
+};
 
 export default function EstudiantesNEEPage({ user }) {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -16,45 +35,34 @@ export default function EstudiantesNEEPage({ user }) {
   const [cursoFiltro, setCursoFiltro] = useState('');
   const [profesionalFiltro, setProfesionalFiltro] = useState('');
 
-  const toast = useToast();
-  
-  // TODO: PARA CUANDO TENGAS EL HOOK, DESCOMENTA ESTO:
-  // const { showError } = useNotification();
+  const { showError } = useNotification();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. LLAMAMOS A LOS 3 ENDPOINTS QUE YA EXISTEN EN TU BACKEND
         const [estsRes, asigsRes, funcsRes] = await Promise.all([
           api.get('/estudiantes/nee'),
           api.get('/asignacion-pie'),
           api.get('/funcionarios')
         ]);
 
-        // 2. EXTRAEMOS LA DATA SEGÚN LA ESTRUCTURA DE TU BACKEND
         const estsData = estsRes.data.estudiantes || [];
         const asigsData = asigsRes.data.asignaciones || [];
-        // Recordando tu otro componente, funcionarios viene directo en data
         const funcsData = funcsRes.data || []; 
 
-        // 3. CRUZAMOS LA INFORMACIÓN AQUÍ EN EL FRONTEND
         const dataCruzada = estsData.map(est => {
           
-          // Buscamos las asignaciones de este estudiante en específico
           const misAsignaciones = asigsData.filter(a => a.id_estudiante === est.id_estudiante);
           
-          // Mapeamos los ID de esas asignaciones para traer el nombre del funcionario
           const profesionales = misAsignaciones.map(a => {
             const func = funcsData.find(f => f.id_funcionario === a.id_funcionario);
             return func ? { nombre: func.nombre, especialidad: func.tipo_profesional } : null;
-          }).filter(Boolean); // filter(Boolean) elimina los nulos por si acaso
+          }).filter(Boolean); 
 
           return {
             ...est,
             nombre_completo: `${est.primer_nombre} ${est.primer_apellido}`,
-            // Guardamos la lista de profesionales armadita para la tabla
             funcionarios_asignados: profesionales,
-            // Si el backend no te trae el nombre del curso, mostramos el ID por ahora
             nombre_curso: est.id_curso ? `Curso ID: ${est.id_curso}` : 'Sin curso' 
           };
         });
@@ -63,23 +71,19 @@ export default function EstudiantesNEEPage({ user }) {
 
       } catch (error) {
         console.error("Error al cargar la data:", error);
-        toast({
-          title: "Error de conexión",
-          description: "No se pudieron cargar los datos de los estudiantes.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "top-right"
-        });
+        showError(
+          "Error de conexión",
+          "No se pudieron cargar los datos de los estudiantes.",
+          { duration: 5000 }
+        );
       } finally {
         setCargando(false);
       }
     };
 
     fetchData();
-  }, [toast]);
+  }, [showError]);
 
-  // Extraer listas únicas para los selectores de filtros protegiendo contra nulos (?)
   const cursosDisponibles = useMemo(() => {
     const cursos = estudiantes.map(e => e.nombre_curso).filter(Boolean);
     return [...new Set(cursos)];
@@ -90,7 +94,6 @@ export default function EstudiantesNEEPage({ user }) {
     return [...new Set(profes)];
   }, [estudiantes]);
 
-  // Lógica de filtrado cruzado protegiendo contra nulos
   const estudiantesFiltrados = useMemo(() => {
     return estudiantes.filter(est => {
       const nombre = est.nombre_completo?.toLowerCase() || '';
@@ -120,7 +123,6 @@ export default function EstudiantesNEEPage({ user }) {
         <Box bg="white" p={6} borderRadius="lg" shadow="sm" borderWidth="1px">
           <Heading size="lg" mb={6} color="gray.700">Listado Estudiantes PIE</Heading>
           
-          {/* BARRA DE FILTROS */}
           <VStack spacing={4} align="stretch" mb={6}>
             <HStack spacing={4}>
               <Input 
@@ -154,7 +156,6 @@ export default function EstudiantesNEEPage({ user }) {
             </HStack>
           </VStack>
 
-          {/* TABLA DE RESULTADOS */}
           {cargando ? (
             <Box textAlign="center" py={10} color="gray.500">Cargando datos...</Box>
           ) : (
@@ -169,3 +170,10 @@ export default function EstudiantesNEEPage({ user }) {
     </div>
   );
 }
+
+EstudiantesNEEPage.propTypes = {
+  user: PropTypes.shape({
+    nombre: PropTypes.string,
+    rol: PropTypes.string,
+  }),
+};

@@ -60,4 +60,13 @@ export class EstudianteRepository {
       },
     });
   }
+
+  static async update(idEstudiante, data, tx = prisma) {
+    return await tx.estudiante.update({
+      where: {
+        id_estudiante: Number(idEstudiante),
+      },
+      data,
+    });
+  }
 }

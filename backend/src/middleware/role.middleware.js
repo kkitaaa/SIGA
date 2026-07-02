@@ -1,5 +1,4 @@
 import { verificarRolUsuario } from "../services/rol.service.js";
-import { ROLES } from "../constants/roles.js";
 
 export const verifyRole = (requiredRole) => {
   return async (req, res, next) => {

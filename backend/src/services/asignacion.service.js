@@ -12,7 +12,7 @@ export const asignarRol = async (
     typeof idRolAsignado === "string" ? Number(idRolAsignado) : idRolAsignado;
 
   if (!Number.isInteger(parsedRolId)) {
-    throw new Error("El id de rol debe ser un número entero");
+    throw new TypeError("El id de rol debe ser un número entero");
   }
 
   // Verificar permisos

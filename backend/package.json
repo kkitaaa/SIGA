@@ -28,7 +28,8 @@
     "format:check": "prettier --check .",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/integration",
-    "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/e2e"
+    "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/e2e",
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
   },
   "type": "module"
 }

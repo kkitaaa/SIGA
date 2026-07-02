@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "node:path";
 
-
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
 import asignacionPieRoutes from "./routes/asignacion-pie.routes.js";
@@ -25,10 +24,14 @@ app.disable("x-powered-by");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:3000",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 app.use(express.json());
@@ -62,4 +65,3 @@ app.get("/", (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor iniciado");
 });
-
