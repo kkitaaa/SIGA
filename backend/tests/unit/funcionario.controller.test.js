@@ -11,7 +11,8 @@ jest.unstable_mockModule("../../src/services/funcionario.service.js", () => ({
 let listarProfesionalesController;
 
 beforeAll(async () => {
-  ({ listarProfesionalesController } = await import("../../src/controllers/funcionario.controller.js"));
+  ({ listarProfesionalesController } =
+    await import("../../src/controllers/funcionario.controller.js"));
 });
 
 describe("funcionario.controller", () => {
@@ -20,13 +21,17 @@ describe("funcionario.controller", () => {
   });
 
   test("devuelve la lista de profesionales", async () => {
-    serviceMock.listarProfesionales.mockResolvedValue([{ id_funcionario: 1, nombre: "Ana López" }]);
+    serviceMock.listarProfesionales.mockResolvedValue([
+      { id_funcionario: 1, nombre: "Ana López" },
+    ]);
     const req = {};
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await listarProfesionalesController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([{ id_funcionario: 1, nombre: "Ana López" }]);
+    expect(res.json).toHaveBeenCalledWith([
+      { id_funcionario: 1, nombre: "Ana López" },
+    ]);
   });
 });

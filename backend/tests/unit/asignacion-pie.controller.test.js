@@ -7,9 +7,12 @@ const serviceMock = {
   finalizarAsignacion: jest.fn(),
 };
 
-jest.unstable_mockModule("../../src/services/asignacion-pie.service.js", () => ({
-  AsignacionPieService: jest.fn().mockImplementation(() => serviceMock),
-}));
+jest.unstable_mockModule(
+  "../../src/services/asignacion-pie.service.js",
+  () => ({
+    AsignacionPieService: jest.fn().mockImplementation(() => serviceMock),
+  }),
+);
 
 let crearAsignacionPieController;
 let listarAsignacionesPieController;

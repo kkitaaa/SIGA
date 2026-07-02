@@ -12,7 +12,8 @@ let asignarRolController;
 let revocarRolController;
 
 beforeAll(async () => {
-  ({ asignarRolController, revocarRolController } = await import("../../src/controllers/asignacion.controller.js"));
+  ({ asignarRolController, revocarRolController } =
+    await import("../../src/controllers/asignacion.controller.js"));
 });
 
 describe("asignacion.controller", () => {

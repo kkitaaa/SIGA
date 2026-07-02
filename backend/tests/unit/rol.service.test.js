@@ -13,7 +13,8 @@ let listarRoles;
 let verificarRolUsuario;
 
 beforeAll(async () => {
-  ({ listarRoles, verificarRolUsuario } = await import("../../src/services/rol.service.js"));
+  ({ listarRoles, verificarRolUsuario } =
+    await import("../../src/services/rol.service.js"));
 });
 
 describe("rol.service", () => {
@@ -28,6 +29,8 @@ describe("rol.service", () => {
 
   test("verifica si un usuario tiene el rol requerido", async () => {
     repoMock.usuarioTieneRol.mockResolvedValue({ id_usuario: 2 });
-    await expect(verificarRolUsuario(2, "Directiva")).resolves.toEqual({ id_usuario: 2 });
+    await expect(verificarRolUsuario(2, "Directiva")).resolves.toEqual({
+      id_usuario: 2,
+    });
   });
 });
