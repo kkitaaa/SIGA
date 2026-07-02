@@ -94,11 +94,11 @@ export class AsignacionRepository {
     });
   }
 
-  async verificarRolAdministrativo(idUsuarioActual) {
+  async verificarRolDirectiva(idUsuarioActual) {
     return prisma.usuario_rol.findFirst({
       where: {
         id_usuario: idUsuarioActual,
-        rol: { nombre_rol: "Administrativo" },
+        rol: { nombre_rol: "Directiva" },
       },
     });
   }

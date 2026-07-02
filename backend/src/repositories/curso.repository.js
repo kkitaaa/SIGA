@@ -1,7 +1,7 @@
 import prisma from "../config/prisma.js";
 
 export class CursoRepository {
-  static async findByDetalles(nivel_educativo, nivel_curso, letra) {
+  async findByDetalles(nivel_educativo, nivel_curso, letra) {
     return await prisma.curso.findFirst({
       where: {
         nivel_educativo,
@@ -11,7 +11,7 @@ export class CursoRepository {
     });
   }
 
-  static async findAll() {
+  async findAll() {
     return await prisma.curso.findMany({
       include: {
         profesor: {
@@ -28,7 +28,7 @@ export class CursoRepository {
     });
   }
 
-  static async create(data) {
+  async create(data) {
     return await prisma.curso.create({
       data: {
         nivel_educativo: data.nivel_educativo,
@@ -36,6 +36,17 @@ export class CursoRepository {
         letra: data.letra,
         id_profesor: data.id_profesor,
       },
+    });
+  }
+
+  async findById(id_curso) {
+    return await prisma.curso.findUnique({
+      where: { 
+        id_curso: Number(id_curso) 
+      },
+      include: { 
+        estudiantes: true
+      }
     });
   }
 }
