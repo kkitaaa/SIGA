@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import "../styles/login.css";
 import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
@@ -166,15 +167,9 @@ function InicioDeSesion() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
               >
-                <span
-                  className="iconify"
-                  data-icon={
-                    showPassword ? "heroicons:eye-slash" : "heroicons:eye"
-                  }
-                  data-width="20"
-                  data-height="20"
-                ></span>
+                {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
               </button>
             </div>
           </div>

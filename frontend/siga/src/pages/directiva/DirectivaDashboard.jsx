@@ -101,14 +101,22 @@ function AdminDashboard({ user }) {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <button
-              type="button"
-              className="usuarios-action"
-              style={{ marginTop: "1rem" }}
-              onClick={() => navigate("/admin/usuarios")}
-            >
-              Ver usuarios y asignar roles
-            </button>
+            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1rem" }}>
+              <button
+                type="button"
+                className="usuarios-action"
+                onClick={() => navigate("/admin/usuarios")}
+              >
+                Ver usuarios y asignar roles
+              </button>
+              <button
+                type="button"
+                className="usuarios-action is-active"
+                onClick={() => navigate("/admin/estudiantes")}
+              >
+                Gestionar estudiantes
+              </button>
+            </div>
           </div>
         </section>
 

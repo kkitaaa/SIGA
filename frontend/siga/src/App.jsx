@@ -15,6 +15,7 @@ import DocumentosPage from "./pages/documentos/DocumentosPage";
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 
 //Estudiantes
+import EstudiantesPage from "./pages/estudiantes/EstudiantesPage";
 import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
 
 // Directiva
@@ -64,6 +65,15 @@ function App() {
         element={
           <ProtectedRoute rolesPermitidos={["Directiva", "Administrativo", "Coordinador Administrativo"]}>
             <UsuariosPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/estudiantes"
+        element={
+          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo", "Administracion"]}>
+            <EstudiantesPage />
           </ProtectedRoute>
         }
       />
