@@ -13,6 +13,17 @@ const emptyForm = {
   es_nee: false,
 };
 
+const toDateInputValue = (value) => {
+  if (!value) return "";
+  if (typeof value !== "string") return "";
+  if (value.includes("/")) {
+    const [day, month, year] = value.split("/");
+    if (!day || !month || !year) return "";
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  }
+  return value.split("T")[0];
+};
+
 function EstudianteForm({ initialValues, onSubmit, onCancel, submitLabel, cursos = [] }) {
   const [form, setForm] = useState(emptyForm);
 
@@ -20,8 +31,8 @@ function EstudianteForm({ initialValues, onSubmit, onCancel, submitLabel, cursos
     setForm({
       ...emptyForm,
       ...(initialValues || {}),
-      fecha_nacimiento: initialValues?.fecha_nacimiento ? initialValues.fecha_nacimiento.split("T")[0] : "",
-      fecha_ingreso: initialValues?.fecha_ingreso ? initialValues.fecha_ingreso.split("T")[0] : "",
+      fecha_nacimiento: toDateInputValue(initialValues?.fecha_nacimiento),
+      fecha_ingreso: toDateInputValue(initialValues?.fecha_ingreso),
       id_curso: initialValues?.id_curso ?? "",
     });
   }, [initialValues]);
@@ -38,6 +49,8 @@ function EstudianteForm({ initialValues, onSubmit, onCancel, submitLabel, cursos
     event.preventDefault();
     onSubmit({
       ...form,
+      fecha_nacimiento: form.fecha_nacimiento ? `${form.fecha_nacimiento}T00:00:00.000Z` : null,
+      fecha_ingreso: form.fecha_ingreso ? `${form.fecha_ingreso}T00:00:00.000Z` : null,
       id_curso: Number(form.id_curso),
       es_nee: Boolean(form.es_nee),
     });

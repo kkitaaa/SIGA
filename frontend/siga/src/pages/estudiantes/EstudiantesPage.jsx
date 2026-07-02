@@ -26,6 +26,7 @@ function EstudiantesPage() {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [feedbackType, setFeedbackType] = useState("success");
+  const [pendingDeactivation, setPendingDeactivation] = useState(null);
 
   const loadData = async () => {
     try {
@@ -97,7 +98,21 @@ function EstudiantesPage() {
     }
   };
 
-  const handleDeactivate = async (estudiante) => {
+  const handleDeactivate = (estudiante) => {
+    setPendingDeactivation({ estudiante, confirmStep: "initial" });
+  };
+
+  const handleConfirmDeactivate = async () => {
+    if (!pendingDeactivation) return;
+
+    if (pendingDeactivation.confirmStep === "initial") {
+      setPendingDeactivation({ ...pendingDeactivation, confirmStep: "final" });
+      return;
+    }
+
+    const estudiante = pendingDeactivation.estudiante;
+    const nombreCompleto = `${estudiante?.primer_nombre || ""} ${estudiante?.primer_apellido || ""}`.trim();
+
     try {
       setEstudiantes((current) =>
         current.map((item) =>
@@ -106,7 +121,7 @@ function EstudiantesPage() {
       );
 
       await estudianteService.desactivarEstudiante(estudiante.id_estudiante);
-      setFeedback("Estudiante desactivado correctamente.");
+      setFeedback(`Estudiante ${nombreCompleto || "seleccionado"} desactivado correctamente.`);
       setFeedbackType("success");
     } catch (error) {
       setEstudiantes((current) =>
@@ -117,6 +132,8 @@ function EstudiantesPage() {
       console.error("No se pudo desactivar el estudiante", error);
       setFeedback(error?.response?.data?.error || "No se pudo desactivar el estudiante.");
       setFeedbackType("error");
+    } finally {
+      setPendingDeactivation(null);
     }
   };
 
@@ -239,6 +256,43 @@ function EstudiantesPage() {
         <>
           <EstudianteCard estudiante={selectedStudent} onBack={backToList} />
         </>
+      )}
+
+      {pendingDeactivation && (
+        <div className="usuarios-modal-backdrop" role="presentation">
+          <div className="usuarios-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-deactivation-title">
+            <h2 id="confirm-deactivation-title">Confirmar desactivación</h2>
+            <p>
+              ¿Está seguro que desea desactivar a <strong>{`${pendingDeactivation.estudiante?.primer_nombre || ""} ${pendingDeactivation.estudiante?.primer_apellido || ""}`.trim() || "este estudiante"}</strong>?
+            </p>
+            {pendingDeactivation.confirmStep === "initial" && (
+              <p className="usuarios-modal-warning">
+                Esta acción cambiará el estado del estudiante y deberá confirmarla una segunda vez antes de continuar.
+              </p>
+            )}
+            {pendingDeactivation.confirmStep === "final" && (
+              <p className="usuarios-modal-warning">
+                Está a punto de desactivar este registro. Confirme esta acción una segunda vez.
+              </p>
+            )}
+            <div className="usuarios-modal-actions">
+              <button
+                type="button"
+                className="usuarios-modal-cancel"
+                onClick={() => setPendingDeactivation(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="usuarios-modal-confirm"
+                onClick={handleConfirmDeactivate}
+              >
+                {pendingDeactivation.confirmStep === "initial" ? "Confirmar" : "Sí, desactivar"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

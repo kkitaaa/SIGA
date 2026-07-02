@@ -3,6 +3,27 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api'; 
 import '../../styles/home.css'; 
 
+const formatDateToDDMMYYYY = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+const toDateInputValue = (value) => {
+  if (!value) return '';
+  if (typeof value !== 'string') return '';
+  if (value.includes('/')) {
+    const [day, month, year] = value.split('/');
+    if (!day || !month || !year) return '';
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+  return value.split('T')[0];
+};
+
 export default function EstudianteDetallePage() {
   const { id } = useParams(); 
   const navigate = useNavigate();
@@ -28,8 +49,8 @@ export default function EstudianteDetallePage() {
         
         setFormData({
           ...datosEstudiante,
-          fecha_nacimiento: datosEstudiante.fecha_nacimiento ? datosEstudiante.fecha_nacimiento.split('T')[0] : '',
-          fecha_ingreso: datosEstudiante.fecha_ingreso ? datosEstudiante.fecha_ingreso.split('T')[0] : ''
+          fecha_nacimiento: toDateInputValue(datosEstudiante.fecha_nacimiento),
+          fecha_ingreso: toDateInputValue(datosEstudiante.fecha_ingreso)
         });
 
         if (datosEstudiante.es_nee) {
@@ -66,11 +87,11 @@ export default function EstudianteDetallePage() {
       
       const datosParaEnviar = { ...formData };
 
-      if (datosParaEnviar.fecha_nacimiento && !datosParaEnviar.fecha_nacimiento.includes('T')) {
+      if (datosParaEnviar.fecha_nacimiento) {
         datosParaEnviar.fecha_nacimiento = `${datosParaEnviar.fecha_nacimiento}T00:00:00.000Z`;
       }
       
-      if (datosParaEnviar.fecha_ingreso && !datosParaEnviar.fecha_ingreso.includes('T')) {
+      if (datosParaEnviar.fecha_ingreso) {
         datosParaEnviar.fecha_ingreso = `${datosParaEnviar.fecha_ingreso}T00:00:00.000Z`;
       }
 
@@ -94,8 +115,8 @@ export default function EstudianteDetallePage() {
   const handleCancel = () => {
     setFormData({
       ...estudiante,
-      fecha_nacimiento: estudiante.fecha_nacimiento ? estudiante.fecha_nacimiento.split('T')[0] : '',
-      fecha_ingreso: estudiante.fecha_ingreso ? estudiante.fecha_ingreso.split('T')[0] : ''
+      fecha_nacimiento: toDateInputValue(estudiante.fecha_nacimiento),
+      fecha_ingreso: toDateInputValue(estudiante.fecha_ingreso)
     });
     setIsEditing(false);
   };
@@ -170,7 +191,7 @@ export default function EstudianteDetallePage() {
 
             <p><strong>Fecha de Nacimiento:</strong> {isEditing ? (
               <input type="date" name="fecha_nacimiento" value={formData.fecha_nacimiento || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }} />
-            ) : new Date(estudiante.fecha_nacimiento).toLocaleDateString()}</p>
+            ) : formatDateToDDMMYYYY(estudiante.fecha_nacimiento)}</p>
           </div>
 
           {/* INFORMACIÓN ACADÉMICA */}
@@ -183,7 +204,7 @@ export default function EstudianteDetallePage() {
             
             <p><strong>Fecha de Ingreso:</strong> {isEditing ? (
               <input type="date" name="fecha_ingreso" value={formData.fecha_ingreso || ''} onChange={handleChange} style={{ marginLeft: '10px', padding: '4px' }} />
-            ) : new Date(estudiante.fecha_ingreso).toLocaleDateString()}</p>
+            ) : formatDateToDDMMYYYY(estudiante.fecha_ingreso)}</p>
           </div>
 
           {/* ESTADO PIE / NEE */}
