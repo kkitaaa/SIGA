@@ -10,6 +10,7 @@ const dashboardStrategy = {
   administrador: AdminDashboard,
   profesor: ProfesorDashboard,
   pie: PieDashboard,
+  funcionario: ProfesorDashboard,
   "equipo pie": PieDashboard,
   "coordinador pie": PieDashboard,
   directiva: AdminDashboard,
@@ -19,10 +20,11 @@ const dashboardStrategy = {
 function DashboardRouter() {
   const { user, role } = useCurrentUser();
   const pendingRoles = ["", "sinrol", "sin rol"];
-  const isPendingRole = pendingRoles.includes(role);
-  const DashboardComponent = isPendingRole || !dashboardStrategy[role]
+  const normalizedRole = String(role || "").trim().toLowerCase();
+  const isPendingRole = pendingRoles.includes(normalizedRole);
+  const DashboardComponent = isPendingRole || !dashboardStrategy[normalizedRole]
     ? PendingRoleDashboard
-    : dashboardStrategy[role];
+    : dashboardStrategy[normalizedRole];
 
   return <DashboardComponent user={user} />;
 }

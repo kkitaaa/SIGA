@@ -1,6 +1,16 @@
 import React from "react";
 
-function UsuariosTable({ usuarios, selectedUser, onSelectUser, page, totalPages, onPageChange }) {
+function UsuariosTable({
+  usuarios,
+  selectedUser,
+  onToggleDetail,
+  page,
+  totalPages,
+  onPageChange,
+  roleOptions,
+  onRoleChangeRequest,
+  currentUserId,
+}) {
   return (
     <div className="usuarios-card">
       <table className="usuarios-table">
@@ -17,15 +27,56 @@ function UsuariosTable({ usuarios, selectedUser, onSelectUser, page, totalPages,
             <tr key={usuario.id_usuario}>
               <td>{usuario.nombre || `${usuario.primer_nombre || ""} ${usuario.primer_apellido || ""}`.trim()}</td>
               <td>{usuario.correo || usuario.email || "—"}</td>
-              <td>{usuario.rol || "SinRol"}</td>
               <td>
-                <button
-                  type="button"
-                  className="usuarios-action"
-                  onClick={() => onSelectUser(usuario)}
-                >
-                  {selectedUser?.id_usuario === usuario.id_usuario ? "Seleccionado" : "Ver detalle"}
-                </button>
+                {Number(usuario.id_usuario) === Number(currentUserId) ? (
+                  <span className="usuarios-role-text">{usuario.rol || "Sin rol"}</span>
+                ) : (
+                  <select
+                    className="usuarios-role-select"
+                    value={
+                      roleOptions.some((role) => role.nombre_rol === usuario.rol)
+                        ? usuario.rol || ""
+                        : roleOptions[0]?.nombre_rol || ""
+                    }
+                    onChange={(event) => onRoleChangeRequest(usuario, event.target.value)}
+                  >
+                    {roleOptions.length === 0 ? (
+                      <option value="">Sin roles disponibles</option>
+                    ) : (
+                      roleOptions.map((role) => (
+                        <option key={role.id_rol} value={role.nombre_rol}>
+                          {role.nombre_rol}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                )}
+              </td>
+              <td>
+                <div className="usuarios-action-cell">
+                  <button
+                    type="button"
+                    className={`usuarios-action ${selectedUser?.id_usuario === usuario.id_usuario ? "is-active" : ""}`}
+                    onClick={() => onToggleDetail(usuario)}
+                  >
+                    {selectedUser?.id_usuario === usuario.id_usuario ? "Ocultar" : "Ver detalle"}
+                  </button>
+
+                  {selectedUser?.id_usuario === usuario.id_usuario && (
+                    <div className="usuarios-detail-popover" role="dialog" aria-live="polite">
+                      <h3>Detalle de usuario</h3>
+                      <p>
+                        <strong>Nombre:</strong> {selectedUser.nombre || `${selectedUser.primer_nombre || ""} ${selectedUser.primer_apellido || ""}`.trim()}
+                      </p>
+                      <p>
+                        <strong>Correo:</strong> {selectedUser.correo || selectedUser.email || "—"}
+                      </p>
+                      <p>
+                        <strong>Rol:</strong> {selectedUser.rol || "Sin rol"}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

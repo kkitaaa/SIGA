@@ -4,6 +4,16 @@ import { useAuth } from "../context/AuthContext";
 function ProtectedRoute({ children, rolesPermitidos = [] }) {
   const { estaAutenticado, cargando, rol } = useAuth();
 
+  const normalizeRole = (value) => {
+    if (!value) return "";
+    return String(value)
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ");
+  };
+
   if (cargando) {
     return <p>Cargando...</p>;
   }
@@ -14,9 +24,12 @@ function ProtectedRoute({ children, rolesPermitidos = [] }) {
   }
 
   // Ahora sí lee correctamente los roles permitidos
+  const normalizedRole = normalizeRole(rol);
+  const normalizedAllowedRoles = rolesPermitidos.map(normalizeRole);
+
   if (
     rolesPermitidos.length > 0 &&
-    !rolesPermitidos.includes(rol)
+    !normalizedAllowedRoles.includes(normalizedRole)
   ) {
     // Si el usuario no tiene el rol necesario, lo mandamos al inicio
     return <Navigate to="/home" replace />;

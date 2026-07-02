@@ -10,4 +10,17 @@ export const usuarioService = {
     const { data } = await api.get("/usuario/usuarios-sin-rol");
     return data?.usuarios || [];
   },
+
+  async listarRoles() {
+    const { data } = await api.get("/asignacion/roles");
+    return data?.roles || [];
+  },
+
+  async cambiarRol(idUsuarioDestino, idRolAsignado) {
+    const { data } = await api.post("/asignacion", {
+      idUsuarioDestino,
+      idRolAsignado,
+    });
+    return data;
+  },
 };

@@ -41,6 +41,8 @@ function InicioDeSesion() {
         login(data.token, data.role, {
           nombre: data.nombre || data.usuario?.primer_nombre || "",
           email: data.email || formData.email,
+          id_usuario: data.usuario?.id_usuario || data.id_usuario || null,
+          id: data.usuario?.id_usuario || data.id_usuario || null,
         });
 
         alert(data.mensaje);
