@@ -45,9 +45,6 @@ function ProfileMenu({ user }) {
             <p className="home-profile-role">{user?.rol || "Sin rol"}</p>
             <div className="home-profile-role-line" />
             <p className="home-profile-email">{user?.email || "usuario@ejemplo.com"}</p>
-            <p className="home-profile-description">
-              Aquí irá una futura descripción breve del perfil, mostrando el estado actual o información adicional.
-            </p>
           </div>
 
           <div className="home-profile-menu-divider" />

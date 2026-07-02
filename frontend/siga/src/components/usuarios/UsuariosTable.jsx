@@ -13,6 +13,7 @@ function UsuariosTable({
   isCoordinatorAdmin = false,
   canEditUserInfo = false,
   onEditUser,
+  enableRoleSelect = false,
 }) {
   return (
     <div className="usuarios-card">
@@ -31,9 +32,7 @@ function UsuariosTable({
               <td>{usuario.nombre || `${usuario.primer_nombre || ""} ${usuario.primer_apellido || ""}`.trim()}</td>
               <td>{usuario.correo || usuario.email || "—"}</td>
               <td>
-                {Number(usuario.id_usuario) === Number(currentUserId) ? (
-                  <span className="usuarios-role-text">{usuario.rol || "Sin rol"}</span>
-                ) : (
+                {enableRoleSelect ? (
                   <select
                     className="usuarios-role-select"
                     value={
@@ -56,6 +55,8 @@ function UsuariosTable({
                         ))
                     )}
                   </select>
+                ) : (
+                  <span className="usuarios-role-text">{usuario.rol || "Sin rol"}</span>
                 )}
               </td>
               <td>
