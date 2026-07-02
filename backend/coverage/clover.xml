@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1782954595356" clover="3.2.0">
-  <project timestamp="1782954595356" name="All files">
-    <metrics statements="440" coveredstatements="401" conditionals="230" coveredconditionals="185" methods="95" coveredmethods="91" elements="765" coveredelements="677" complexity="0" loc="440" ncloc="440" packages="7" files="34" classes="34"/>
+<coverage generated="1782955548942" clover="3.2.0">
+  <project timestamp="1782955548942" name="All files">
+    <metrics statements="440" coveredstatements="402" conditionals="230" coveredconditionals="195" methods="95" coveredmethods="92" elements="765" coveredelements="689" complexity="0" loc="440" ncloc="440" packages="7" files="34" classes="34"/>
     <package name="config">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="prisma.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\config\prisma.js">
@@ -362,15 +362,15 @@
       </file>
     </package>
     <package name="repositories">
-      <metrics statements="31" coveredstatements="30" conditionals="12" coveredconditionals="2" methods="30" coveredmethods="29"/>
+      <metrics statements="31" coveredstatements="31" conditionals="12" coveredconditionals="12" methods="30" coveredmethods="30"/>
       <file name="asignacion-pie.repository.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\repositories\asignacion-pie.repository.js">
-        <metrics statements="6" coveredstatements="5" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="5"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
+        <metrics statements="6" coveredstatements="6" conditionals="6" coveredconditionals="6" methods="6" coveredmethods="6"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
       </file>
       <file name="auth.repository.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\repositories\auth.repository.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -390,19 +390,19 @@
         <line num="23" count="1" type="stmt"/>
       </file>
       <file name="estudiante.repository.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\repositories\estudiante.repository.js">
-        <metrics statements="7" coveredstatements="7" conditionals="5" coveredconditionals="2" methods="7" coveredmethods="7"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="65" count="1" type="stmt"/>
+        <metrics statements="7" coveredstatements="7" conditionals="5" coveredconditionals="5" methods="7" coveredmethods="7"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="54" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
       </file>
       <file name="funcionario.repository.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\repositories\funcionario.repository.js">
-        <metrics statements="2" coveredstatements="2" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <metrics statements="2" coveredstatements="2" conditionals="1" coveredconditionals="1" methods="2" coveredmethods="2"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
       </file>
       <file name="rol.repository.js" path="C:\Users\chaco\Documents\GitHub\SIGA\backend\src\repositories\rol.repository.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
