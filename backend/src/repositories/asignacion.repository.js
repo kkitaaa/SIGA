@@ -61,6 +61,10 @@ export class AsignacionRepository {
     });
   }
 
+  async cambiarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario) {
+    return this.asignarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario);
+  }
+
   async revocarRol(idUsuarioDestino) {
     const rolAsignado = await prisma.usuario_rol.findFirst({
       where: { id_usuario: Number(idUsuarioDestino) },

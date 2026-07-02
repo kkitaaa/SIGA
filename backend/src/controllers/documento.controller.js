@@ -13,12 +13,12 @@ export const subirDocumentoController = async (req, res) => {
       });
     }
 
-    const nombreDocumento = req.body.nombre || req.file.originalname;
+    const nombreDocumento = req.body?.nombre || req.file.originalname;
 
     const documento = await service.subirDocumento(
       req.file,
       nombreDocumento,
-      req.user.id_usuario,
+      req.user?.id_usuario,
     );
 
     return res.status(201).json({
