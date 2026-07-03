@@ -20,6 +20,7 @@
   background: white;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
   margin-bottom: 0.85rem;
+  grid-column: 1 / -1;
 }
 
 .usuarios-eyebrow {
@@ -62,6 +63,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  justify-self: start;
+  width: auto;
+  max-width: 280px;
 }
 
 .usuarios-loading {
@@ -169,6 +173,35 @@
   border-radius: 1.25rem;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+}
+
+/* Narrow, centered card variant used for single forms like Configurar Perfil */
+.usuarios-card--centered {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  padding: 1.25rem;
+  /* span full grid so automatic centering uses full page width */
+  grid-column: 1 / -1;
+}
+
+.usuarios-card--centered .usuarios-form-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.usuarios-card--centered label {
+  display: block;
+}
+
+.usuarios-card--centered .usuarios-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.usuarios-card--centered .usuarios-input {
+  width: 100%;
 }
 
 .usuarios-table {

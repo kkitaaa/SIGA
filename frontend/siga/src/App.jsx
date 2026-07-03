@@ -17,6 +17,7 @@ import UsuariosPage from "./pages/usuarios/UsuariosPage";
 //Estudiantes
 import EstudiantesPage from "./pages/estudiantes/EstudiantesPage";
 import EstudianteDetallePage from "./pages/estudiantes/EstudianteDetallePage";
+import ConfigurarPerfilPage from "./pages/perfil/ConfigurarPerfilPage";
 
 // Directiva
 import AsignacionRoles from "./pages/directiva/AsignacionRoles";
@@ -43,6 +44,22 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/documentos" element={<DocumentosPage />} />
       <Route path="/estudiantes/:id" element={<EstudianteDetallePage />} />
+      <Route
+        path="/perfil/configurar"
+        element={
+          <ProtectedRoute rolesPermitidos={[
+            "Directiva",
+            "Administrativo",
+            "PIE",
+            "Profesor",
+            "Funcionario",
+            "Coordinador PIE",
+            "Coordinador Administrativo",
+          ]}>
+            <ConfigurarPerfilPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/cursos/:id" element={<CursoDetallePage />} />
       <Route path="/cursos" element={<CursosPage />} />
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 function ProfileMenu() {
@@ -7,6 +7,8 @@ function ProfileMenu() {
   const profileRef = useRef(null);
   const navigate = useNavigate();
   const { usuario, rol, logout } = useAuth();
+  const location = useLocation();
+  const hideToggle = location.pathname === '/perfil/configurar';
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -26,16 +28,18 @@ function ProfileMenu() {
 
   return (
     <div className="home-profile-wrapper" ref={profileRef}>
-      <button
-        type="button"
-        className={`home-profile-btn ${menuOpen ? "open" : ""}`}
-        onClick={() => setMenuOpen((open) => !open)}
-      >
-        Ver perfil{" "}
-        <span className="home-profile-arrow" aria-hidden="true">
-          ▼
-        </span>
-      </button>
+      {!hideToggle && (
+        <button
+          type="button"
+          className={`home-profile-btn ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          Ver perfil{" "}
+          <span className="home-profile-arrow" aria-hidden="true">
+            ▼
+          </span>
+        </button>
+      )}
 
       {menuOpen && (
         <div className="home-profile-menu" role="menu">
@@ -49,7 +53,7 @@ function ProfileMenu() {
           <div className="home-profile-menu-divider" />
 
           <div className="home-profile-actions">
-            <button type="button" className="home-profile-action home-profile-action-config">
+            <button type="button" className="home-profile-action home-profile-action-config" onClick={() => { setMenuOpen(false); navigate('/perfil/configurar'); }}>
               Configurar perfil
             </button>
             <button
