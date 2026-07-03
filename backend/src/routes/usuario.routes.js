@@ -57,7 +57,7 @@ const router = Router();
 router.get(
   "/usuarios-sin-rol",
   authMiddleware,
-  verifyRole("Directiva", "Coordinador Administrativo"),
+  verifyRole("Directiva", "Administrativo"),
   listarUsuariosSinRolController,
 );
 
@@ -65,7 +65,7 @@ router.get(
 router.get(
   "/usuarios",
   authMiddleware,
-  verifyRole("Directiva", "Coordinador Administrativo"),
+  verifyRole("Directiva", "Administrativo"),
   listarUsuariosController,
 );
 
