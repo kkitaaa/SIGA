@@ -4,10 +4,10 @@ const crearCursoMock = jest.fn();
 const obtenerCursosMock = jest.fn();
 
 jest.unstable_mockModule("../../src/services/curso.service.js", () => ({
-  CursoService: {
+  CursoService: jest.fn().mockImplementation(() => ({
     crearCurso: crearCursoMock,
     obtenerCursos: obtenerCursosMock,
-  },
+  })),
 }));
 
 let crearCursoController;

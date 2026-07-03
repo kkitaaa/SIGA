@@ -31,11 +31,10 @@ jobs:
         run: npm run format:check
 
       - name: Run Tests with Coverage
-        # Usamos el script que creamos anteriormente
         run: npm run test:coverage
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: backend/coverage/lcov.info
+          path: backend/coverage/**

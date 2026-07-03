@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { register, login } from "../controllers/auth.controller.js";
+import {
+  register,
+  login,
+  refresh,
+  logout,
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
@@ -69,6 +74,9 @@ router.post("/register", register);
  *         description: Credenciales inválidas
  */
 router.post("/login", login);
+
+router.post("/refresh", refresh);
+router.post("/logout", logout);
 
 router.get("/", (req, res) => {
   res.send("Auth funcionando");

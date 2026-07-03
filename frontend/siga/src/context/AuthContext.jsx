@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState, useMemo, useCallback } from 
 import PropTypes from "prop-types";
 import { setAuthToken } from "../services/api";
 import { authService } from "../services/auth.service";
+import api from "../services/api";
 
 // Lo exportamos para que el hook pueda consumirlo
 export const AuthContext = createContext();
@@ -84,6 +85,13 @@ export function AuthProvider({ children }) {
   }, [login]);
 
   const logout = useCallback(() => {
+    // notify backend to revoke refresh token cookie
+    try {
+      api.post('/auth/logout');
+    } catch (e) {
+      // ignore
+    }
+
     setToken(null);
     setRol(null);
     setUsuario(null);

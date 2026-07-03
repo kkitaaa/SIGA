@@ -27,6 +27,7 @@ import CursosPage from "./pages/cursos/CursosPage";
 
 //Profesores
 import ProfesoresDashboard from "./pages/profesor/ProfesorDashboard";
+import MisCursosPage from "./pages/profesor/MisCursosPage";
 
 // PIE
 import PieDashboard from "./pages/pie/PieDashboard";
@@ -120,16 +121,14 @@ function App() {
         }
       />
 
-    {/*
       <Route
-        path="/profesores"
+        path="/mis-cursos"
         element={
           <ProtectedRoute rolesPermitidos={["Profesor"]}>
-            <ProfesoresDashboard />
+            <MisCursosPage />
           </ProtectedRoute>
         }
       />
-      */}
 
       {/* 🚫 fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -34,7 +34,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/usuarios-sin-rol:
+ * /api/asignacion/usuarios-sin-rol:
  *   get:
  *     summary: Listar usuarios sin rol asignado
  *     tags:

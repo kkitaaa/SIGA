@@ -25,27 +25,30 @@ describe("CursoRepository", () => {
   });
 
   test("busca un curso por detalles", async () => {
+    const repo = new CursoRepository();
     prismaMock.curso.findFirst.mockResolvedValue({ id_curso: 1 });
 
-    await expect(
-      CursoRepository.findByDetalles("Media", 4, "A"),
-    ).resolves.toEqual({ id_curso: 1 });
+    await expect(repo.findByDetalles("Media", 4, "A")).resolves.toEqual({
+      id_curso: 1,
+    });
     expect(prismaMock.curso.findFirst).toHaveBeenCalledWith({
       where: { nivel_educativo: "Media", nivel_curso: 4, letra: "A" },
     });
   });
 
   test("lista cursos con relaciones", async () => {
+    const repo = new CursoRepository();
     prismaMock.curso.findMany.mockResolvedValue([{ id_curso: 1 }]);
 
-    await expect(CursoRepository.findAll()).resolves.toEqual([{ id_curso: 1 }]);
+    await expect(repo.findAll()).resolves.toEqual([{ id_curso: 1 }]);
   });
 
   test("crea un curso", async () => {
+    const repo = new CursoRepository();
     prismaMock.curso.create.mockResolvedValue({ id_curso: 2 });
 
     await expect(
-      CursoRepository.create({
+      repo.create({
         nivel_educativo: "Media",
         nivel_curso: 4,
         letra: "B",
