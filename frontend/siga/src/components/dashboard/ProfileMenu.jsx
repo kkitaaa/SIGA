@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import { useAuth } from "../../hooks/useAuth";
 
-function ProfileMenu({ user }) {
+function ProfileMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { usuario, rol, logout } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,11 +40,10 @@ function ProfileMenu({ user }) {
       {menuOpen && (
         <div className="home-profile-menu" role="menu">
           <div className="home-profile-card-head">
-            <h3>{user?.nombre || "Usuario"}</h3>
-            <p className="home-profile-role">{user?.rol || "Sin rol"}</p>
+            <h3>{usuario?.nombre || "Usuario"}</h3>
+            <p className="home-profile-role">{rol || "Sin rol"}</p>
             <div className="home-profile-role-line" />
-            <p className="home-profile-email">{user?.email || "usuario@ejemplo.com"}</p>
-            {/* descripción futura eliminada */}
+            <p className="home-profile-email">{usuario?.email || "usuario@ejemplo.com"}</p>
           </div>
 
           <div className="home-profile-menu-divider" />
@@ -67,13 +65,5 @@ function ProfileMenu({ user }) {
     </div>
   );
 }
-
-ProfileMenu.propTypes = {
-  user: PropTypes.shape({
-    nombre: PropTypes.string,
-    rol: PropTypes.string,
-    email: PropTypes.string,
-  }),
-};
 
 export default ProfileMenu;
