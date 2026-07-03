@@ -5,7 +5,7 @@ import { authService } from "../services/auth.service";
 import api from "../services/api";
 
 // Lo exportamos para que el hook pueda consumirlo
-export const AuthContext = createContext();
+export const authContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
@@ -138,9 +138,9 @@ export function AuthProvider({ children }) {
   }), [token, rol, usuario, cargando, login, logout, estaAutenticado, tieneRol, obtenerHeaders]);
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <authContext.Provider value={contextValue}>
       {children}
-    </AuthContext.Provider>
+    </authContext.Provider>
   );
 }
 

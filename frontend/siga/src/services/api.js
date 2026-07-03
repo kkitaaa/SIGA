@@ -32,10 +32,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Try refresh token flow (using httpOnly cookie)
-      const originalRequest = error.config;
+    const originalRequest = error.config;
+    const requestUrl = originalRequest?.url || "";
+    const isAuthRoute = requestUrl.startsWith("/auth/") || requestUrl.includes("/auth/");
 
+    if (error.response?.status === 401 && !isAuthRoute) {
+      // Try refresh token flow (using httpOnly cookie)
       if (!originalRequest._retry) {
         originalRequest._retry = true;
         return api.post('/auth/refresh', {}, { withCredentials: true })
@@ -44,10 +46,14 @@ api.interceptors.response.use(
             if (newToken) {
               localStorage.setItem('token', newToken);
               api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
+              if (!originalRequest.headers) {
+                originalRequest.headers = {};
+              }
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               return api(originalRequest);
             }
-            // fallback to logout
+
+            // fallback to logout if refresh did not return a token
             localStorage.removeItem("token");
             localStorage.removeItem("role");
             localStorage.removeItem("usuario");
@@ -55,6 +61,7 @@ api.interceptors.response.use(
             if (globalThis.location.pathname !== "/") {
               globalThis.location.href = "/";
             }
+            return Promise.reject(error);
           })
           .catch(() => {
             localStorage.removeItem("token");
@@ -64,6 +71,7 @@ api.interceptors.response.use(
             if (globalThis.location.pathname !== "/") {
               globalThis.location.href = "/";
             }
+            return Promise.reject(error);
           });
       }
     }
