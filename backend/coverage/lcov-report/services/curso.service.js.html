@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for repositories/rol.repository.js</title>
+    <title>Code coverage report for services/curso.service.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">repositories</a> rol.repository.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">services</a> curso.service.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>8/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>8/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -99,31 +99,28 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,46 +129,52 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import prisma from "../config/prisma.js";
-import { ROLES } from "../constants/roles.js";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export class CursoService {
+  // El constructor inyecta el repositorio, tal como en tus otros servicios
+  constructor(cursoRepository) {
+    this.repository = cursoRepository;
+  }
 &nbsp;
-export class RolRepository {
-<span class="fstat-no" title="function not covered" >  as</span>ync ensureDefaultRoles() {
-    const rolesPorDefecto = <span class="cstat-no" title="statement not covered" >Object.values(ROLES);</span>
-    const rolesExistentes = <span class="cstat-no" title="statement not covered" >await prisma.rol.findMany({</span>
-      select: { nombre_rol: true },
-    });
-    const nombresExistentes = <span class="cstat-no" title="statement not covered" >new Set(</span>
-      rolesExistentes.map(<span class="fstat-no" title="function not covered" >(r</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >rol.nombre_rol)</span>,
+  async crearCurso(dto) {
+    // Usamos this.repository en lugar de la clase CursoRepository directamente
+    const cursoExistente = await this.repository.findByDetalles(
+      dto.nivel_educativo,
+      dto.nivel_curso,
+      dto.letra,
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (const nombreRol of rolesPorDefecto) {</span>
-<span class="cstat-no" title="statement not covered" >      if (!nombresExistentes.has(nombreRol)) {</span>
-<span class="cstat-no" title="statement not covered" >        await prisma.rol.create({ data: { nombre_rol: nombreRol } });</span>
-<span class="cstat-no" title="statement not covered" >        nombresExistentes.add(nombreRol);</span>
-      }
+    if (cursoExistente) {
+      throw new Error(
+        "BUSINESS_ERROR: Ya existe un curso registrado con este nivel y letra",
+      );
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return prisma.rol.findMany();</span>
+    return await this.repository.create(dto);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync findAllRoles() {
-<span class="cstat-no" title="statement not covered" >    return this.ensureDefaultRoles();</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync obtenerCursos() {
+<span class="cstat-no" title="statement not covered" >    return await this.repository.findAll();</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync usuarioTieneRol(userId, requiredRole) {
-<span class="cstat-no" title="statement not covered" >    return prisma.usuario_rol.findFirst({</span>
-      where: {
-        id_usuario: userId,
-        rol: { nombre_rol: requiredRole },
-      },
-    });
+  async obtenerCursoPorId(id) {
+    // Aquí es donde fallaba antes, ahora this.repository existe y es la instancia correcta
+    const curso = await this.repository.findById(id);
+    
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!curso) {
+      throw new Error("Curso no encontrado");
+    }
+    
+<span class="cstat-no" title="statement not covered" >    return curso;</span>
   }
-}
-&nbsp;</pre></td></tr></table></pre>
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

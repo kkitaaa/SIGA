@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for repositories/rol.repository.js</title>
+    <title>Code coverage report for repositories/usuario.repository.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">repositories</a> rol.repository.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">repositories</a> usuario.repository.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
                 <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -99,23 +99,12 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,40 +124,63 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import prisma from "../config/prisma.js";
-import { ROLES } from "../constants/roles.js";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/repositories/usuario.repository.js
+import prisma from "../config/prisma.js";
 &nbsp;
-export class RolRepository {
-<span class="fstat-no" title="function not covered" >  as</span>ync ensureDefaultRoles() {
-    const rolesPorDefecto = <span class="cstat-no" title="statement not covered" >Object.values(ROLES);</span>
-    const rolesExistentes = <span class="cstat-no" title="statement not covered" >await prisma.rol.findMany({</span>
-      select: { nombre_rol: true },
-    });
-    const nombresExistentes = <span class="cstat-no" title="statement not covered" >new Set(</span>
-      rolesExistentes.map(<span class="fstat-no" title="function not covered" >(r</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >rol.nombre_rol)</span>,
-    );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    for (const nombreRol of rolesPorDefecto) {</span>
-<span class="cstat-no" title="statement not covered" >      if (!nombresExistentes.has(nombreRol)) {</span>
-<span class="cstat-no" title="statement not covered" >        await prisma.rol.create({ data: { nombre_rol: nombreRol } });</span>
-<span class="cstat-no" title="statement not covered" >        nombresExistentes.add(nombreRol);</span>
-      }
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return prisma.rol.findMany();</span>
+export class UsuarioRepository {
+<span class="fstat-no" title="function not covered" >  as</span>ync findAll() {
+<span class="cstat-no" title="statement not covered" >    return prisma.usuario.findMany({ include: { cuenta: true, roles: true } });</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync findAllRoles() {
-<span class="cstat-no" title="statement not covered" >    return this.ensureDefaultRoles();</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync create(data) {
+<span class="cstat-no" title="statement not covered" >    return prisma.usuario.create({ data });</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync usuarioTieneRol(userId, requiredRole) {
-<span class="cstat-no" title="statement not covered" >    return prisma.usuario_rol.findFirst({</span>
-      where: {
-        id_usuario: userId,
-        rol: { nombre_rol: requiredRole },
+<span class="fstat-no" title="function not covered" >  as</span>ync findUsuariosSinRol() {
+<span class="cstat-no" title="statement not covered" >    return prisma.usuario.findMany({</span>
+      where: { roles: { none: {} } },
+      select: {
+        id_usuario: true,
+        primer_nombre: true,
+        primer_apellido: true,
+        cuenta: { select: { email: true } },
       },
     });
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  as</span>ync findAllConRol() {
+    const usuarios = <span class="cstat-no" title="statement not covered" >await prisma.usuario.findMany({</span>
+      include: {
+        roles: { include: { rol: true } },
+        cuenta: { select: { email: true } },
+      },
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return usuarios.map(<span class="fstat-no" title="function not covered" >(u</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+      id_usuario: u.id_usuario,
+      nombre: `${u.primer_nombre} ${u.primer_apellido}`,
+      correo: u.cuenta?.email || "sin correo",
+      rol: u.roles[0]?.rol.nombre_rol || "SinRol",
+    }));
   }
 }
 &nbsp;</pre></td></tr></table></pre>
