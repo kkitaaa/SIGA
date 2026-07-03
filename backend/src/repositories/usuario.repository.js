@@ -22,14 +22,14 @@ export class UsuarioRepository {
     });
   }
 
-  async findAllConRol() {
-    const usuarios = await prisma.usuario.findMany({
-      include: {
-        roles: { include: { rol: true } },
-        cuenta: { select: { email: true } },
-      },
-    });
-
+    async findAllConRol() {
+      return prisma.usuario.findMany({
+        include: {
+          cuenta: { select: { email: true } },
+          roles: { include: { rol: true } },
+        },
+      });
+    
     return usuarios.map((u) => ({
       id_usuario: u.id_usuario,
       nombre: `${u.primer_nombre} ${u.primer_apellido}`,

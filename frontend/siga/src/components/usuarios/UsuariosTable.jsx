@@ -26,11 +26,13 @@ function UsuariosTable({
         <tbody>
           {usuarios.map((usuario) => (
             <tr key={usuario.id_usuario}>
-              <td>{usuario.nombre || `${usuario.primer_nombre || ""} ${usuario.primer_apellido || ""}`.trim()}</td>
-              <td>{usuario.correo || usuario.email || "—"}</td>
+              <td>{usuario.nombre}</td>
+              <td>{usuario.correo}</td>
               <td>
                 {Number(usuario.id_usuario) === Number(currentUserId) ? (
-                  <span className="usuarios-role-text">{usuario.rol || "Sin rol"}</span>
+                  <span className="usuarios-role-text">
+                    {usuario.rol || "Sin rol"}
+                  </span>
                 ) : (
                   <select
                     className="usuarios-role-select"
@@ -39,14 +41,20 @@ function UsuariosTable({
                         ? usuario.rol || ""
                         : roleOptions[0]?.nombre_rol || ""
                     }
-                    onChange={(event) => onRoleChangeRequest(usuario, event.target.value)}
-                    aria-label={`Cambiar rol de ${usuario.nombre || `${usuario.primer_nombre || ""} ${usuario.primer_apellido || ""}`.trim()}`}
+                    onChange={(event) =>
+                      onRoleChangeRequest(usuario, event.target.value)
+                    }
+                    aria-label={`Cambiar rol de ${usuario.nombre}`}
                   >
                     {roleOptions.length === 0 ? (
                       <option value="">Sin roles disponibles</option>
                     ) : (
                       roleOptions
-                        .filter((role) => !isCoordinatorAdmin || role.nombre_rol !== "Directiva")
+                        .filter(
+                          (role) =>
+                            !isCoordinatorAdmin ||
+                            role.nombre_rol !== "Directiva"
+                        )
                         .map((role) => (
                           <option key={role.id_rol} value={role.nombre_rol}>
                             {role.nombre_rol}
@@ -60,20 +68,30 @@ function UsuariosTable({
                 <div className="usuarios-action-cell">
                   <button
                     type="button"
-                    className={`usuarios-action ${selectedUser?.id_usuario === usuario.id_usuario ? "is-active" : ""}`}
+                    className={`usuarios-action ${
+                      selectedUser?.id_usuario === usuario.id_usuario
+                        ? "is-active"
+                        : ""
+                    }`}
                     onClick={() => onToggleDetail(usuario)}
                   >
-                    {selectedUser?.id_usuario === usuario.id_usuario ? "Ocultar" : "Ver detalle"}
+                    {selectedUser?.id_usuario === usuario.id_usuario
+                      ? "Ocultar"
+                      : "Ver detalle"}
                   </button>
 
                   {selectedUser?.id_usuario === usuario.id_usuario && (
-                    <div className="usuarios-detail-popover" role="dialog" aria-live="polite">
+                    <div
+                      className="usuarios-detail-popover"
+                      role="dialog"
+                      aria-live="polite"
+                    >
                       <h3>Detalle de usuario</h3>
                       <p>
-                        <strong>Nombre:</strong> {selectedUser.nombre || `${selectedUser.primer_nombre || ""} ${selectedUser.primer_apellido || ""}`.trim()}
+                        <strong>Nombre:</strong> {selectedUser.nombre}
                       </p>
                       <p>
-                        <strong>Correo:</strong> {selectedUser.correo || selectedUser.email || "—"}
+                        <strong>Correo:</strong> {selectedUser.correo}
                       </p>
                       <p>
                         <strong>Rol:</strong> {selectedUser.rol || "Sin rol"}
@@ -88,13 +106,21 @@ function UsuariosTable({
       </table>
 
       <div className="usuarios-pagination">
-        <button type="button" disabled={page === 1} onClick={() => onPageChange(page - 1)}>
+        <button
+          type="button"
+          disabled={page === 1}
+          onClick={() => onPageChange(page - 1)}
+        >
           Anterior
         </button>
         <span>
           Página {page} de {totalPages}
         </span>
-        <button type="button" disabled={page === totalPages} onClick={() => onPageChange(page + 1)}>
+        <button
+          type="button"
+          disabled={page === totalPages}
+          onClick={() => onPageChange(page + 1)}
+        >
           Siguiente
         </button>
       </div>
