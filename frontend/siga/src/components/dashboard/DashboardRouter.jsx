@@ -3,6 +3,7 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 import AdminDashboard from "../../pages/directiva/DirectivaDashboard";
 import AdministracionDashboard from "../../pages/directiva/AdministracionDashboard";
 import ProfesorDashboard from "../../pages/profesor/ProfesorDashboard";
+import FuncionarioDashboard from "../../pages/funcionario/FuncionarioDashboard";
 import PieDashboard from "../../pages/pie/PieDashboard";
 import PendingRoleDashboard from "../../pages/pending/PendingRoleDashboard";
 
@@ -11,7 +12,7 @@ const dashboardStrategy = {
   administrador: AdminDashboard,
   profesor: ProfesorDashboard,
   pie: PieDashboard,
-  funcionario: ProfesorDashboard,
+  funcionario: FuncionarioDashboard,
   "equipo pie": PieDashboard,
   "coordinador pie": PieDashboard,
   directiva: AdminDashboard,

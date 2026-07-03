@@ -20,16 +20,36 @@ function ProfesorDashboard() {
 
   const [misCursos, setMisCursos] = useState([]);
 
+  const normalizedRole = String(usuario?.rol || "").trim().toLowerCase();
+  const isFuncionario = normalizedRole === "funcionario";
+  const primaryRoute = isFuncionario ? "/cursos" : "/mis-cursos";
+  const primaryLabel = isFuncionario ? "Cursos" : "Mis Cursos";
+  const actionLabel = isFuncionario ? "Ver cursos" : "Ver mis cursos";
+  const coursesPanelTitle = isFuncionario ? "Cursos disponibles" : "Mis Cursos";
+  const coursesPanelRoute = isFuncionario ? "/cursos" : "/mis-cursos";
+
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const [docsRes, metricasRes, cursosRes] = await Promise.all([
-          api.get('/documentos?page=1&limit=5'),
-          api.get('/dashboard/profesor'),
-          api.get('/cursos/mis-cursos')
-        ]);
-        
+        const docsRes = await api.get('/documentos?page=1&limit=5');
         setRecentDocuments(docsRes.data.documentos || []);
+
+        if (isFuncionario) {
+          const cursosRes = await api.get('/cursos');
+          setMetricas({
+            estudiantesTotales: 0,
+            estudiantesPie: 0,
+            cursosTotales: cursosRes.data?.length || 0,
+          });
+          setMisCursos(cursosRes.data?.cursos || cursosRes.data || []);
+          return;
+        }
+
+        const [metricasRes, cursosRes] = await Promise.all([
+          api.get('/dashboard/profesor'),
+          api.get('/cursos/mis-cursos'),
+        ]);
+
         setMetricas(metricasRes.data);
         setMisCursos(cursosRes.data || []);
       } catch (error) {
@@ -38,7 +58,7 @@ function ProfesorDashboard() {
     };
 
     loadDashboardData();
-  }, []);
+  }, [isFuncionario]);
 
   return (
     <div className="home-page">
@@ -51,7 +71,7 @@ function ProfesorDashboard() {
 
         <div className="home-topbar-center">
           <div className="home-topbar-nav" aria-label="Navegación principal">
-            <button type="button" className="home-nav-button" onClick={() => navigate("/mis-cursos")}>Mis Cursos</button>
+            <button type="button" className="home-nav-button" onClick={() => navigate(primaryRoute)}>{primaryLabel}</button>
             <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate("/home")} aria-label="Ir al inicio">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
@@ -62,7 +82,7 @@ function ProfesorDashboard() {
         </div>
 
         <div className="home-topbar-actions">
-          <span className="home-role-badge">{usuario?.rol || "Profesor"}</span>
+          <span className="home-role-badge">{usuario?.rol || (isFuncionario ? "Funcionario" : "Profesor")}</span>
           <ProfileMenu />
         </div>
       </header>
@@ -96,17 +116,19 @@ function ProfesorDashboard() {
               <button
                 type="button"
                 className="usuarios-action"
-                onClick={() => navigate("/mis-cursos")}
+                onClick={() => navigate(primaryRoute)}
               >
-                Ver mis cursos
+                {actionLabel}
               </button>
-              <button
-                type="button"
-                className="usuarios-action is-active"
-                onClick={() => navigate("/estudiantes")}
-              >
-                Gestionar estudiantes
-              </button>
+              {isFuncionario && (
+                <button
+                  type="button"
+                  className="usuarios-action is-active"
+                  onClick={() => navigate("/admin/estudiantes")}
+                >
+                  Gestionar estudiantes
+                </button>
+              )}
             </div>
           </div>
         </section>
@@ -139,7 +161,7 @@ function ProfesorDashboard() {
         <div className="home-main" style={{ marginTop: "2rem" }}>
           <section className="home-panel home-welcome-panel">
             <div className="home-card home-feed-card">
-              <h2>Mis Cursos</h2>
+              <h2>{coursesPanelTitle}</h2>
               <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "1rem" }}>
                   <thead>
@@ -168,7 +190,7 @@ function ProfesorDashboard() {
                 type="button"
                 className="usuarios-action"
                 style={{ marginTop: "1rem" }}
-                onClick={() => navigate("/mis-cursos")}
+                onClick={() => navigate(coursesPanelRoute)}
               >
                 Ver todo
               </button>

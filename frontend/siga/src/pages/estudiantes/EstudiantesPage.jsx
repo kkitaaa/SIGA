@@ -15,6 +15,8 @@ const PAGE_SIZE = 8;
 function EstudiantesPage() {
   const navigate = useNavigate();
   const { rol, usuario } = useAuth();
+  const normalizedRole = String(rol || "").trim().toLowerCase();
+  const canCreateStudents = ["directiva", "coordinador administrativo", "administrativo"].includes(normalizedRole);
   const [estudiantes, setEstudiantes] = useState([]);
   const [cursos, setCursos] = useState([]);
   const [search, setSearch] = useState("");
@@ -176,13 +178,15 @@ function EstudiantesPage() {
           <p className="usuarios-subtitle">Gestiona estudiantes, filtra por curso o estado y crea o edita registros desde aquí.</p>
         </div>
         <div className="usuarios-header-actions">
-          <button
-            type="button"
-            className={`usuarios-action ${mode === "list" ? "is-active" : ""}`}
-            onClick={mode === "list" ? startCreate : backToList}
-          >
-            {mode === "list" ? "Registrar estudiante" : "Gestionar estudiantes"}
-          </button>
+          {canCreateStudents && (
+            <button
+              type="button"
+              className={`usuarios-action ${mode === "list" ? "is-active" : ""}`}
+              onClick={mode === "list" ? startCreate : backToList}
+            >
+              {mode === "list" ? "Registrar estudiante" : "Gestionar estudiantes"}
+            </button>
+          )}
         </div>
       </div>
 
