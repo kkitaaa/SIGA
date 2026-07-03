@@ -34,34 +34,29 @@ function UsuariosTable({
                     {usuario.rol || "Sin rol"}
                   </span>
                 ) : (
-                  <select
-                    className="usuarios-role-select"
-                    value={
-                      roleOptions.some((role) => role.nombre_rol === usuario.rol)
-                        ? usuario.rol || ""
-                        : roleOptions[0]?.nombre_rol || ""
-                    }
-                    onChange={(event) =>
-                      onRoleChangeRequest(usuario, event.target.value)
-                    }
-                    aria-label={`Cambiar rol de ${usuario.nombre}`}
-                  >
-                    {roleOptions.length === 0 ? (
-                      <option value="">Sin roles disponibles</option>
-                    ) : (
-                      roleOptions
-                        .filter(
-                          (role) =>
-                            !isCoordinatorAdmin ||
-                            role.nombre_rol !== "Directiva"
-                        )
-                        .map((role) => (
-                          <option key={role.id_rol} value={role.nombre_rol}>
-                            {role.nombre_rol}
-                          </option>
-                        ))
-                    )}
-                  </select>
+                  (() => {
+                    const rawRole = usuario.rol || "";
+                    const normalizedRole = String(rawRole).trim().toLowerCase().replace(/\s+/g, "");
+                    const hasRole = normalizedRole && normalizedRole !== "sinrol";
+                    return (
+                      <select
+                        className="usuarios-role-select"
+                        value={hasRole ? rawRole : ""}
+                        onChange={(event) => onRoleChangeRequest(usuario, event.target.value)}
+                        aria-label={`Cambiar rol de ${usuario.nombre}`}
+                      >
+                        {roleOptions.length === 0 && <option value="">Sin roles disponibles</option>}
+                        {!hasRole && <option value="">- Asignar rol -</option>}
+                        {roleOptions
+                          .filter((role) => !isCoordinatorAdmin || role.nombre_rol !== "Directiva")
+                          .map((role) => (
+                            <option key={role.id_rol} value={role.nombre_rol}>
+                              {role.nombre_rol}
+                            </option>
+                          ))}
+                      </select>
+                    );
+                  })()
                 )}
               </td>
               <td>
@@ -94,7 +89,12 @@ function UsuariosTable({
                         <strong>Correo:</strong> {selectedUser.correo}
                       </p>
                       <p>
-                        <strong>Rol:</strong> {selectedUser.rol || "Sin rol"}
+                        <strong>Rol:</strong>{' '}
+                        {(() => {
+                          const r = selectedUser.rol || "";
+                          const norm = String(r).trim().toLowerCase().replace(/\s+/g, "");
+                          return norm && norm !== "sinrol" ? selectedUser.rol : "- asignar rol -";
+                        })()}
                       </p>
                     </div>
                   )}
