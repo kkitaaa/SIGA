@@ -9,6 +9,16 @@ import { usuarioService } from "../../services/usuario.service";
 import "../../styles/usuarios.css";
 
 const PAGE_SIZE = 8;
+const STATIC_ROLE_NAMES = [
+  "Directiva",
+  "Coordinador Administrativo",
+  "Administrativo",
+  "Profesor",
+  "Funcionario",
+  "PIE",
+  "Coordinador PIE",
+  "Sin rol",
+];
 
 const normalizeRole = (role) => {
   const value = String(role ?? "").trim();
@@ -68,21 +78,19 @@ function UsuariosPage() {
     fetchUsuarios();
   }, []);
 
-  const roles = useMemo(() => {
-    const backendRoles = roleOptions
-      .map((role) => role?.nombre_rol)
-      .filter(Boolean)
-      .map((role) => String(role).trim())
-      .filter((r) => r !== "Alumno");
+  const roleFilterOptions = useMemo(() => {
+    const baseRoles = STATIC_ROLE_NAMES.filter((roleName) => roleName !== "Sin rol");
+    return isCoordinatorAdmin ? baseRoles.filter((roleName) => roleName !== "Directiva") : baseRoles;
+  }, [isCoordinatorAdmin]);
 
-    const existingRoles = usuarios
-      .map((usuario) => normalizeRole(usuario?.rol))
-      .filter((role) => role !== "Sin rol" && role !== "Alumno");
+  const roles = useMemo(() => {
+    const baseRoles = isCoordinatorAdmin
+      ? STATIC_ROLE_NAMES.filter((roleName) => roleName !== "Directiva")
+      : STATIC_ROLE_NAMES;
 
     const hasPendingRoles = usuarios.some((usuario) => normalizeRole(usuario?.rol) === "Sin rol");
-
-    return [...new Set([...backendRoles, ...existingRoles, ...(hasPendingRoles ? ["Sin rol"] : [])])].sort();
-  }, [usuarios, roleOptions]);
+    return hasPendingRoles ? baseRoles : baseRoles.filter((roleName) => roleName !== "Sin rol");
+  }, [isCoordinatorAdmin, usuarios]);
 
   const getUserSortValue = (usuario) => {
     const candidateFields = [
@@ -146,7 +154,9 @@ function UsuariosPage() {
       return;
     }
 
-    const selectedRole = roleOptions.find((role) => role.nombre_rol === nextRoleName);
+    const selectedRole = roleOptions.find(
+      (role) => String(role?.nombre_rol || "").trim() === String(nextRoleName || "").trim(),
+    );
     const currentUserId = usuarioAutenticado?.id_usuario ?? usuarioAutenticado?.id ?? null;
     const isSelfChange = Number(targetUser.id_usuario) === Number(currentUserId);
     const isDirectivaChange = nextRoleName === "Directiva";
@@ -309,7 +319,7 @@ function UsuariosPage() {
         onSearchChange={setSearch}
         roleFilter={roleFilter}
         onRoleFilterChange={setRoleFilter}
-        roles={roles}
+        roles={roleFilterOptions}
         sortOrder={sortOrder}
         onSortOrderChange={() => setSortOrder((current) => (current === "oldest-first" ? "default" : "oldest-first"))}
       />
@@ -329,6 +339,7 @@ function UsuariosPage() {
             totalPages={totalPages}
             onPageChange={setPage}
             roleOptions={roleOptions}
+            roleNames={roles}
             onRoleChangeRequest={handleRoleChangeRequest}
             currentUserId={usuarioAutenticado?.id_usuario ?? usuarioAutenticado?.id ?? null}
             isCoordinatorAdmin={isCoordinatorAdmin}

@@ -8,6 +8,7 @@ function UsuariosTable({
   totalPages,
   onPageChange,
   roleOptions,
+  roleNames = [],
   onRoleChangeRequest,
   currentUserId,
   isCoordinatorAdmin = false,
@@ -29,35 +30,9 @@ function UsuariosTable({
               <td>{usuario.nombre}</td>
               <td>{usuario.correo}</td>
               <td>
-                {Number(usuario.id_usuario) === Number(currentUserId) ? (
-                  <span className="usuarios-role-text">
-                    {usuario.rol || "Sin rol"}
-                  </span>
-                ) : (
-                  (() => {
-                    const rawRole = usuario.rol || "";
-                    const normalizedRole = String(rawRole).trim().toLowerCase().replace(/\s+/g, "");
-                    const hasRole = normalizedRole && normalizedRole !== "sinrol";
-                    return (
-                      <select
-                        className="usuarios-role-select"
-                        value={hasRole ? rawRole : ""}
-                        onChange={(event) => onRoleChangeRequest(usuario, event.target.value)}
-                        aria-label={`Cambiar rol de ${usuario.nombre}`}
-                      >
-                        {roleOptions.length === 0 && <option value="">Sin roles disponibles</option>}
-                        {!hasRole && <option value="">- Asignar rol -</option>}
-                        {roleOptions
-                          .filter((role) => !isCoordinatorAdmin || role.nombre_rol !== "Directiva")
-                          .map((role) => (
-                            <option key={role.id_rol} value={role.nombre_rol}>
-                              {role.nombre_rol}
-                            </option>
-                          ))}
-                      </select>
-                    );
-                  })()
-                )}
+                <span className="usuarios-role-text">
+                  {usuario.rol || "Sin rol"}
+                </span>
               </td>
               <td>
                 <div className="usuarios-action-cell">
