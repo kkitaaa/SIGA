@@ -44,22 +44,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/documentos" element={<DocumentosPage />} />
       <Route path="/estudiantes/:id" element={<EstudianteDetallePage />} />
-      <Route
-        path="/perfil/configurar"
-        element={
-          <ProtectedRoute rolesPermitidos={[
-            "Directiva",
-            "Administrativo",
-            "PIE",
-            "Profesor",
-            "Funcionario",
-            "Coordinador PIE",
-            "Coordinador Administrativo",
-          ]}>
-            <ConfigurarPerfilPage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/perfil/configurar" element={<ConfigurarPerfilPage /> }/>
       <Route path="/cursos/:id" element={<CursoDetallePage />} />
       <Route path="/cursos" element={<CursosPage />} />
 
@@ -95,7 +80,7 @@ function App() {
       <Route
         path="/admin/estudiantes"
         element={
-          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo", "Funcionario"]}>
+          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo", "Funcionario", "Coordinador PIE", "PIE"]}>
             <EstudiantesPage />
           </ProtectedRoute>
         }
@@ -115,7 +100,7 @@ function App() {
       <Route
         path="/pie"
         element={
-          <ProtectedRoute rolesPermitidos={["PIE", "Coordinador PIE"]}>
+          <ProtectedRoute rolesPermitidos={["PIE", "Coordinador PIE", "Directiva"]}>
             <PieDashboard />
           </ProtectedRoute>
         }
@@ -132,7 +117,7 @@ function App() {
       <Route
         path="/asignacion-pie"
         element={
-          <ProtectedRoute rolesPermitidos={["Coordinador PIE"]}>
+          <ProtectedRoute rolesPermitidos={["Coordinador PIE", "Directiva"]}>
             <AsignacionPIEPage />
           </ProtectedRoute>
         }
@@ -141,7 +126,7 @@ function App() {
       <Route
         path="/funcionarios"
         element={
-          <ProtectedRoute rolesPermitidos={["PIE", "Coordinador PIE", "Directiva"]}>
+          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo"]}>
             <FuncionariosPage />
           </ProtectedRoute>
         }

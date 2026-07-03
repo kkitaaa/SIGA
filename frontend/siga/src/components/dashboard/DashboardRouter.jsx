@@ -8,8 +8,8 @@ import PieDashboard from "../../pages/pie/PieDashboard";
 import PendingRoleDashboard from "../../pages/pending/PendingRoleDashboard";
 
 const dashboardStrategy = {
-  administrativo: AdminDashboard,
-  administrador: AdminDashboard,
+  administrativo: AdministracionDashboard,
+  administrador: AdministracionDashboard,
   profesor: ProfesorDashboard,
   pie: PieDashboard,
   funcionario: FuncionarioDashboard,
