@@ -45,7 +45,7 @@ const router = Router();
 router.get(
   "/",
   authMiddleware,
-  verifyRole("Directiva", "Coordinador Administrativo"),
+  verifyRole("Directiva", "Coordinador Administrativo", "Administrativo"),
   obtenerMetricasDashboard,
 );
 

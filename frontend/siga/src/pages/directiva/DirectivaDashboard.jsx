@@ -82,18 +82,18 @@ function AdminDashboard({ user }) {
           <div className="home-card home-feed-card">
             <h2>Resumen general</h2>
             <div className="home-stat-row">
-              <div className="home-stat-card">
-                <strong>{metrics.estudiantes}</strong>
-                <span>Estudiantes</span>
-              </div>
-              <div className="home-stat-card">
-                <strong>{metrics.funcionarios}</strong>
-                <span>Funcionarios</span>
-              </div>
-              <div className="home-stat-card">
-                <strong>{metrics.documentos}</strong>
-                <span>Documentos</span>
-              </div>
+                <div className="home-stat-card">
+                  <strong>{metrics.estudiantes}</strong>
+                  <span>Estudiantes</span>
+                </div>
+                <div className="home-stat-card">
+                  <strong>{metrics.funcionarios}</strong>
+                  <span>Funcionarios</span>
+                </div>
+                <div className="home-stat-card">
+                  <strong>{metrics.documentos}</strong>
+                  <span>Documentos</span>
+                </div>
             </div>
           </div>
 

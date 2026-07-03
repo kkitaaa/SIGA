@@ -8,7 +8,10 @@ import '../../styles/usuarios.css';
 
 export default function ConfigurarPerfilPage() {
   const navigate = useNavigate();
-  const { usuario } = useAuth();
+  const { usuario, rol } = useAuth();
+  const normalizedRole = String(rol || usuario?.rol || '').trim().toLowerCase();
+  const canAssignRoles = ['directiva', 'administrativo', 'coordinador administrativo'].includes(normalizedRole);
+  const isPIE = normalizedRole.includes('pie') || normalizedRole.includes('nee');
   const [form, setForm] = useState({
     nombre: usuario?.nombre || '',
     email: usuario?.email || '',
@@ -79,13 +82,24 @@ export default function ConfigurarPerfilPage() {
 
         <div className="home-topbar-center">
           <div className="home-topbar-nav" aria-label="Navegación principal">
-            <button type="button" className="home-nav-button" onClick={() => navigate('/home')}>Inicio</button>
-            <button type="button" className="home-nav-button" onClick={() => navigate('/documentos')}>Documentos</button>
+            <button type="button" className="home-nav-button" onClick={() => navigate('/home')}>Cursos</button>
+            <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate('/home')} aria-label="Ir al inicio">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
+              </svg>
+            </button>
+            {isPIE && (
+              <button type="button" className="home-nav-button" onClick={() => navigate('/documentos')}>Documentos</button>
+            )}
+
+            {canAssignRoles && (
+              <button type="button" className="home-nav-button" onClick={() => navigate('/admin/usuarios')}>Asignar roles</button>
+            )}
           </div>
         </div>
 
         <div className="home-topbar-actions">
-          <span className="home-role-badge">{usuario?.rol || 'Usuario'}</span>
+          <span className="home-role-badge">{rol || usuario?.rol || 'Sin rol'}</span>
           <ProfileMenu />
         </div>
       </header>
