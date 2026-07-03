@@ -33,6 +33,7 @@ import MisCursosPage from "./pages/profesor/MisCursosPage";
 import PieDashboard from "./pages/pie/PieDashboard";
 import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
 import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
+import FuncionariosPage from "./pages/pie/FuncionariosPage";
 
 function App() {
   return (
@@ -117,6 +118,15 @@ function App() {
         element={
           <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE"]}>
             <AsignacionPIEPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/funcionarios"
+        element={
+          <ProtectedRoute rolesPermitidos={["Equipo PIE", "PIE", "Coordinador PIE", "Directiva"]}>
+            <FuncionariosPage />
           </ProtectedRoute>
         }
       />

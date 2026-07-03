@@ -168,12 +168,20 @@
   background: white;
   border-radius: 1.25rem;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
-  overflow: visible;
+  overflow: hidden;
 }
 
 .usuarios-table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.usuarios-table thead tr th:first-child {
+  border-top-left-radius: 1.25rem;
+}
+
+.usuarios-table thead tr th:last-child {
+  border-top-right-radius: 1.25rem;
 }
 
 .usuarios-table th,

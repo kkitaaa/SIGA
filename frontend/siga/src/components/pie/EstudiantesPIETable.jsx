@@ -77,14 +77,11 @@ export const EstudiantesPIETable = ({ estudiantes, onVerDetalle }) => {
           </Td>
 
           <Td>
-            <Button
-              size="sm"
-              colorScheme="blue"
-              variant="outline"
-              onClick={() => onVerDetalle(est)}
-            >
-              Ver detalle
-            </Button>
+            <div className="usuarios-action-cell">
+              <button type="button" className="usuarios-action" onClick={() => onVerDetalle(est)}>
+                Ver detalle
+              </button>
+            </div>
           </Td>
         </Tr>
       )}

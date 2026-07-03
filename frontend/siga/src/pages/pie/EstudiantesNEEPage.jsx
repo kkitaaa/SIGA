@@ -5,7 +5,10 @@ import { Box, Heading, Input, Select, VStack, HStack } from '@chakra-ui/react';
 import api from '../../services/api';
 import { EstudiantesPIETable } from '../../components/pie/EstudiantesPIETable';
 import { useNotification } from '../../hooks/useNotification';
+import ProfileMenu from '../../components/dashboard/ProfileMenu';
+import LogoSIGA from '../../assets/Logo SIGA.svg';
 import "../../styles/home.css";
+import "../../styles/usuarios.css";
 
 const cruzarDatosEstudiantes = (estsData, asigsData, funcsData) => {
   return estsData.map((est) => {
@@ -29,6 +32,8 @@ const cruzarDatosEstudiantes = (estsData, asigsData, funcsData) => {
 
 export default function EstudiantesNEEPage({ user }) {
   const navigate = useNavigate();
+  const PAGE_SIZE = 8;
+  const [page, setPage] = useState(1);
 
   const [estudiantes, setEstudiantes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -99,17 +104,61 @@ export default function EstudiantesNEEPage({ user }) {
     });
   }, [estudiantes, busqueda, cursoFiltro, profesionalFiltro]);
 
+  const totalPages = Math.max(1, Math.ceil(estudiantesFiltrados.length / PAGE_SIZE));
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [busqueda, cursoFiltro, profesionalFiltro]);
+
+  const paginatedEstudiantes = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return estudiantesFiltrados.slice(start, start + PAGE_SIZE);
+  }, [estudiantesFiltrados, page]);
+
   const handleVerDetalle = (estudiante) => {
     navigate(`/estudiantes/${estudiante.id_estudiante}`);
   };
 
   return (
-    <div className="home-page">
-      <main className="home-main" style={{ display: 'block', maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
-        
+    <div className="usuarios-page">
+      <header className="home-topbar usuarios-topbar">
+        <div className="home-topbar-left">
+          <div className="home-brand">
+            <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+          </div>
+        </div>
+
+        <div className="home-topbar-center">
+          <div className="home-topbar-nav" aria-label="Navegación principal">
+            <button type="button" className="home-nav-button" onClick={() => navigate('/cursos')}>Cursos</button>
+            <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate('/home')} aria-label="Ir al inicio">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
+              </svg>
+            </button>
+            <button type="button" className="home-nav-button" onClick={() => navigate('/documentos')}>Documentos</button>
+          </div>
+        </div>
+
+        <div className="home-topbar-actions">
+          <span className="home-role-badge">{user?.rol || 'Coordinador PIE'}</span>
+          <ProfileMenu user={user} />
+        </div>
+      </header>
+
+      <button type="button" className="usuarios-back-link" onClick={() => navigate('/pie')}>← Volver</button>
+
+      <div className="usuarios-header">
+        <div>
+          <p className="usuarios-eyebrow">Gestión</p>
+          <h1>Estudiantes PIE</h1>
+          <p className="usuarios-subtitle">Listado y gestión de estudiantes PIE. Selecciona un estudiante para ver el detalle.</p>
+        </div>
+        <div className="usuarios-header-actions" />
+      </div>
+
+      <div className="usuarios-content">
         <Box bg="white" p={6} borderRadius="lg" shadow="sm" borderWidth="1px">
-          <Heading size="lg" mb={6} color="gray.700">Listado Estudiantes PIE</Heading>
-          
           <VStack spacing={4} align="stretch" mb={6}>
             <HStack spacing={4}>
               <Input 
@@ -146,14 +195,21 @@ export default function EstudiantesNEEPage({ user }) {
           {cargando ? (
             <Box textAlign="center" py={10} color="gray.500">Cargando datos...</Box>
           ) : (
-            <EstudiantesPIETable 
-              estudiantes={estudiantesFiltrados} 
-              onVerDetalle={handleVerDetalle} 
-            />
-          )}
+            <>
+              <EstudiantesPIETable 
+                estudiantes={paginatedEstudiantes} 
+                onVerDetalle={handleVerDetalle} 
+              />
 
+              <div className="usuarios-pagination" style={{ marginTop: '1rem' }}>
+                <button type="button" disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>Anterior</button>
+                <span>Página {page} de {totalPages}</span>
+                <button type="button" disabled={page === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>Siguiente</button>
+              </div>
+            </>
+          )}
         </Box>
-      </main>
+      </div>
     </div>
   );
 }
