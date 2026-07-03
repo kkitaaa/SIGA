@@ -24,6 +24,9 @@ import { DocumentoCard } from '../../components/documentos/DocumentoCard';
 import { useNotification } from '../../hooks/useNotification';
 import { DocumentoFilters } from '../../components/documentos/DocumentoFilters';
 import "../../styles/home.css";
+import ProfileMenu from "../../components/dashboard/ProfileMenu";
+import LogoSIGA from "../../assets/Logo SIGA.svg";
+import { useAuth } from '../../hooks/useAuth';
 
 const validateChildren = (props, propName, componentName) => {
   if (props[propName] == null) {
@@ -51,6 +54,7 @@ DocumentGallery.propTypes = {
 
 export default function DocumentosPage({ user }) {
   const navigate = useNavigate();
+  const { rol, usuario: usuarioAutenticado } = useAuth();
 
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -177,6 +181,38 @@ export default function DocumentosPage({ user }) {
 
   return (
     <div className="home-page">
+      <header className="home-topbar">
+        <div className="home-topbar-left">
+          <div className="home-brand">
+            <img src={LogoSIGA} alt="SIGA" className="site-logo" />
+          </div>
+        </div>
+
+        <div className="home-topbar-center">
+          <div className="home-topbar-nav" aria-label="Navegación principal">
+            <button type="button" className="home-nav-button" onClick={() => navigate('/home')}>Cursos</button>
+            <button type="button" className="home-nav-button home-nav-button-home" onClick={() => navigate('/home')} aria-label="Ir al inicio">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
+              </svg>
+            </button>
+            {(() => {
+              const roleVal = String(rol || usuarioAutenticado?.rol || user?.rol || "").trim().toLowerCase();
+              const canAssignRoles = ["directiva", "administrativo", "coordinador administrativo"].includes(roleVal);
+              return canAssignRoles ? (
+                <button type="button" className="home-nav-button" onClick={() => navigate('/asignacion-roles')}>Asignar roles</button>
+              ) : (
+                <button type="button" className="home-nav-button" onClick={() => navigate('/documentos')}>Documentos</button>
+              );
+            })()}
+          </div>
+        </div>
+
+        <div className="home-topbar-actions">
+          <span className="home-role-badge">{rol || (user?.rol ?? 'Sin rol')}</span>
+          <ProfileMenu user={user || usuarioAutenticado} />
+        </div>
+      </header>
       <main className="home-main" style={{ display: 'block', maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
         
         {/* Botón de Volver */}

@@ -27,6 +27,7 @@
   align-items: center;
   gap: 0.75rem;
   justify-self: start;
+  grid-column: 1; /* ensure left column */
 }
 
 .home-topbar-actions {
@@ -35,12 +36,14 @@
   gap: 0.75rem;
   flex-shrink: 0;
   justify-self: end;
+  grid-column: 3; /* force into right column */
 }
 
 .home-topbar-center {
   display: flex;
   justify-content: center;
   width: 100%;
+  grid-column: 2; /* center column */
 }
 
 .home-brand {
@@ -351,6 +354,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  justify-self: end;
+  grid-column: 3;
 }
 
 .home-role-badge {

@@ -27,6 +27,17 @@ function DashboardRouter() {
     ? PendingRoleDashboard
     : dashboardStrategy[normalizedRole];
 
+  if (!DashboardComponent) {
+    return (
+      <div style={{ padding: "2rem" }}>
+        <h2>Panel no disponible</h2>
+        <pre style={{ whiteSpace: "pre-wrap" }}>
+          {`user: ${JSON.stringify(user, null, 2)}\nrole: ${String(role)}\nnormalizedRole: ${normalizedRole}`}
+        </pre>
+      </div>
+    );
+  }
+
   return <DashboardComponent user={user} />;
 }
 

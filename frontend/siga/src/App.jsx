@@ -35,7 +35,6 @@ import AsignacionPIEPage from "./pages/pie/AsignacionPIEPage";
 import EstudiantesPIEPage from "./pages/pie/EstudiantesNEEPage";
 
 function App() {
-
   return (
     <Routes>
 
@@ -53,6 +52,7 @@ function App() {
           <ProtectedRoute rolesPermitidos={[
             "Directiva",
             "Administrativo",
+            "SinRol",
             "Equipo PIE",
             "PIE",
             "Profesor",
