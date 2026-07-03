@@ -2,9 +2,16 @@ import { jest } from "@jest/globals";
 import express from "express";
 import request from "supertest";
 
-const authServiceMock = { registerUser: jest.fn(), loginUser: jest.fn() };
+const authServiceMock = {
+  registerUser: jest.fn(),
+  loginUser: jest.fn(),
+  refreshToken: jest.fn(),
+  revokeRefreshToken: jest.fn(),
+};
 
-jest.unstable_mockModule("../../../src/services/auth.service.js", () => ({ AuthService: authServiceMock }));
+jest.unstable_mockModule("../../../src/services/auth.service.js", () => ({
+  AuthService: authServiceMock,
+}));
 
 let authRoutes;
 
@@ -27,20 +34,47 @@ describe("Auth routes (supertest)", () => {
 
     const app = buildApp();
 
-    const res = await request(app).post("/api/auth/register").send({ nombre: "Ana", email: "a@b.com", password: "p", rut: "1-9" });
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ nombre: "Ana", email: "a@b.com", password: "p", rut: "1-9" });
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("mensaje");
   });
 
   test("POST /api/auth/login -> 200", async () => {
-    authServiceMock.loginUser.mockResolvedValue({ token: "t", role: "Directiva", nombre: "Ana", email: "a@b" });
+    authServiceMock.loginUser.mockResolvedValue({
+      token: "t",
+      role: "Directiva",
+      nombre: "Ana",
+      email: "a@b",
+    });
 
     const app = buildApp();
 
-    const res = await request(app).post("/api/auth/login").send({ email: "a@b", password: "p" });
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: "a@b", password: "p" });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("token");
+  });
+
+  test("POST /api/auth/refresh -> 400 without cookie", async () => {
+    authServiceMock.refreshToken.mockResolvedValue(null);
+
+    const app = buildApp();
+    const res = await request(app).post("/api/auth/refresh");
+
+    expect(res.status).toBe(400);
+  });
+
+  test("POST /api/auth/logout -> 400 without cookie", async () => {
+    authServiceMock.revokeRefreshToken.mockResolvedValue({});
+
+    const app = buildApp();
+    const res = await request(app).post("/api/auth/logout");
+
+    expect(res.status).toBe(400);
   });
 });

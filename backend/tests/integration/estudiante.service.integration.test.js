@@ -9,14 +9,18 @@ const repoMock = {
   update: jest.fn(),
 };
 
-jest.unstable_mockModule("../../src/repositories/estudiante.repository.js", () => ({
-  EstudianteRepository: repoMock,
-}));
+jest.unstable_mockModule(
+  "../../src/repositories/estudiante.repository.js",
+  () => ({
+    EstudianteRepository: repoMock,
+  }),
+);
 
 let EstudianteService;
 
 beforeAll(async () => {
-  ({ EstudianteService } = await import("../../src/services/estudiante.service.js"));
+  ({ EstudianteService } =
+    await import("../../src/services/estudiante.service.js"));
 });
 
 describe("EstudianteService integration", () => {
@@ -39,13 +43,15 @@ describe("EstudianteService integration", () => {
 
     await expect(
       EstudianteService.registrarEstudiante({ rut: "2-7" }),
-    ).rejects.toThrow("BUSINESS_ERROR: Ya existe un estudiante registrado con este RUT");
+    ).rejects.toThrow(
+      "BUSINESS_ERROR: Ya existe un estudiante registrado con este RUT",
+    );
   });
 
   test("obtenerEstudiantePorId valida id y no existe", async () => {
-    await expect(EstudianteService.obtenerEstudiantePorId("abc")).rejects.toThrow(
-      "VALIDATION_ERROR: ID inválido",
-    );
+    await expect(
+      EstudianteService.obtenerEstudiantePorId("abc"),
+    ).rejects.toThrow("VALIDATION_ERROR: ID inválido");
 
     repoMock.findById.mockResolvedValue(null);
     await expect(EstudianteService.obtenerEstudiantePorId(999)).rejects.toThrow(
@@ -55,9 +61,14 @@ describe("EstudianteService integration", () => {
 
   test("actualizarEstudiante exitoso", async () => {
     repoMock.findById.mockResolvedValue({ id_estudiante: 3 });
-    repoMock.update.mockResolvedValue({ id_estudiante: 3, primer_nombre: "Updated" });
+    repoMock.update.mockResolvedValue({
+      id_estudiante: 3,
+      primer_nombre: "Updated",
+    });
 
-    const res = await EstudianteService.actualizarEstudiante(3, { primer_nombre: "Updated" });
+    const res = await EstudianteService.actualizarEstudiante(3, {
+      primer_nombre: "Updated",
+    });
 
     expect(res).toEqual({ id_estudiante: 3, primer_nombre: "Updated" });
     expect(repoMock.update).toHaveBeenCalledWith(3, expect.any(Object));

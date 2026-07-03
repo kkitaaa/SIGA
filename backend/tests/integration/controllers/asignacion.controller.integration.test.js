@@ -13,7 +13,8 @@ jest.unstable_mockModule("../../../src/services/asignacion.service.js", () => ({
 let asignacionController;
 
 beforeAll(async () => {
-  asignacionController = await import("../../../src/controllers/asignacion.controller.js");
+  asignacionController =
+    await import("../../../src/controllers/asignacion.controller.js");
 });
 
 describe("Asignacion Controller", () => {
@@ -31,13 +32,18 @@ describe("Asignacion Controller", () => {
   test("asignarRolController - success", async () => {
     serviceMock.asignarRol.mockResolvedValue({ ok: true });
 
-    const req = { body: { idUsuarioDestino: 2, idRolAsignado: 3 }, user: { id_usuario: 5 } };
+    const req = {
+      body: { idUsuarioDestino: 2, idRolAsignado: 3 },
+      user: { id_usuario: 5 },
+    };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
     await asignacionController.asignarRolController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ ok: true }));
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: true }),
+    );
   });
 
   test("revocarRolController - success", async () => {
@@ -49,7 +55,9 @@ describe("Asignacion Controller", () => {
     await asignacionController.revocarRolController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ ok: true }));
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: true }),
+    );
   });
 
   test("revocarRolController - error returns 403", async () => {

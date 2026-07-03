@@ -7,12 +7,15 @@ const prismaMock = {
   },
 };
 
-jest.unstable_mockModule("../../src/config/prisma.js", () => ({ default: prismaMock }));
+jest.unstable_mockModule("../../src/config/prisma.js", () => ({
+  default: prismaMock,
+}));
 
 let AsignacionRepository;
 
 beforeAll(async () => {
-  ({ AsignacionRepository } = await import("../../src/repositories/asignacion.repository.js"));
+  ({ AsignacionRepository } =
+    await import("../../src/repositories/asignacion.repository.js"));
 });
 
 describe("AsignacionRepository", () => {

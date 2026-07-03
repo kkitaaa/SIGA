@@ -4,14 +4,18 @@ const repoMock = {
   findAllFuncionarios: jest.fn(),
 };
 
-jest.unstable_mockModule("../../src/repositories/funcionario.repository.js", () => ({
-  FuncionarioRepository: repoMock,
-}));
+jest.unstable_mockModule(
+  "../../src/repositories/funcionario.repository.js",
+  () => ({
+    FuncionarioRepository: repoMock,
+  }),
+);
 
 let FuncionarioService;
 
 beforeAll(async () => {
-  ({ FuncionarioService } = await import("../../src/services/funcionario.service.js"));
+  ({ FuncionarioService } =
+    await import("../../src/services/funcionario.service.js"));
 });
 
 describe("FuncionarioService integration", () => {

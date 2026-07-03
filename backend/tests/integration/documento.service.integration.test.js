@@ -21,19 +21,29 @@ describe("DocumentoService integration", () => {
 
   test("subirDocumento usa storage y crea documento", async () => {
     storageMock.upload.mockResolvedValue({ url: "http://file" });
-    repoMock.crearDocumento.mockResolvedValue({ id_documento: 1, url: "http://file" });
+    repoMock.crearDocumento.mockResolvedValue({
+      id_documento: 1,
+      url: "http://file",
+    });
 
     const service = new DocumentoService(repoMock);
 
     const res = await service.subirDocumento({ buffer: "x" }, "nombre", 5);
 
     expect(storageMock.upload).toHaveBeenCalled();
-    expect(repoMock.crearDocumento).toHaveBeenCalledWith({ nombre: "nombre", url: "http://file", id_usuario: 5 });
+    expect(repoMock.crearDocumento).toHaveBeenCalledWith({
+      nombre: "nombre",
+      url: "http://file",
+      id_usuario: 5,
+    });
     expect(res).toEqual({ id_documento: 1, url: "http://file" });
   });
 
   test("obtenerDocumentosPaginados valida parámetros y retorna paginación", async () => {
-    repoMock.findAllPaginated.mockResolvedValue({ documentos: [{ id: 1 }], total: 3 });
+    repoMock.findAllPaginated.mockResolvedValue({
+      documentos: [{ id: 1 }],
+      total: 3,
+    });
 
     const service = new DocumentoService(repoMock);
 

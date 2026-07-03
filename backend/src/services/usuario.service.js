@@ -9,6 +9,13 @@ export const UsuarioService = {
   },
 
   async obtenerUsuariosConRol() {
-    return repo.findAllConRol();
+    const usuarios = await repo.findAllConRol();
+
+    return usuarios.map((u) => ({
+      id_usuario: u.id_usuario,
+      nombre: `${u.primer_nombre} ${u.primer_apellido}`,
+      correo: u.cuenta?.email || "sin correo",
+      rol: u.roles[0]?.rol?.nombre_rol || "SinRol",
+    }));
   },
 };

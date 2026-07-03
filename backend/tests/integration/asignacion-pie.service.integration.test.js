@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 
 let AsignacionPieService;
 let eventBus;
@@ -20,7 +20,11 @@ describe("AsignacionPieService integration scenarios", () => {
     });
 
     await expect(
-      service.crearAsignacion({ idEstudiante: 1, idFuncionario: 2, idUsuario: 3 }),
+      service.crearAsignacion({
+        idEstudiante: 1,
+        idFuncionario: 2,
+        idUsuario: 3,
+      }),
     ).rejects.toMatchObject({ statusCode: 409 });
   });
 
@@ -33,7 +37,11 @@ describe("AsignacionPieService integration scenarios", () => {
     });
 
     await expect(
-      service.crearAsignacion({ idEstudiante: 10, idFuncionario: 2, idUsuario: 3 }),
+      service.crearAsignacion({
+        idEstudiante: 10,
+        idFuncionario: 2,
+        idUsuario: 3,
+      }),
     ).rejects.toMatchObject({ statusCode: 404 });
   });
 
@@ -46,7 +54,11 @@ describe("AsignacionPieService integration scenarios", () => {
     });
 
     await expect(
-      service.crearAsignacion({ idEstudiante: 10, idFuncionario: 2, idUsuario: 3 }),
+      service.crearAsignacion({
+        idEstudiante: 10,
+        idFuncionario: 2,
+        idUsuario: 3,
+      }),
     ).rejects.toMatchObject({ statusCode: 404 });
   });
 
@@ -78,12 +90,23 @@ describe("AsignacionPieService integration scenarios", () => {
       prismaClient,
     });
 
-    const res = await service.crearAsignacion({ idEstudiante: 10, idFuncionario: 2, idUsuario: 99 });
+    const res = await service.crearAsignacion({
+      idEstudiante: 10,
+      idFuncionario: 2,
+      idUsuario: 99,
+    });
 
     expect(res.ok).toBe(true);
     expect(res.data).toBe(created);
-    expect(estudianteRepository.updateNeeStatus).toHaveBeenCalledWith(10, true, expect.anything());
-    expect(spy).toHaveBeenCalledWith("asignacionPIE", expect.objectContaining({ usuarioId: 99 }));
+    expect(estudianteRepository.updateNeeStatus).toHaveBeenCalledWith(
+      10,
+      true,
+      expect.anything(),
+    );
+    expect(spy).toHaveBeenCalledWith(
+      "asignacionPIE",
+      expect.objectContaining({ usuarioId: 99 }),
+    );
 
     spy.mockRestore();
   });
@@ -96,7 +119,9 @@ describe("AsignacionPieService integration scenarios", () => {
       prismaClient: {},
     });
 
-    await expect(service.finalizarAsignacion(1, 2)).rejects.toMatchObject({ statusCode: 404 });
+    await expect(service.finalizarAsignacion(1, 2)).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 
   test("finalizarAsignacion exitoso actualiza NEE cuando no quedan asignaciones", async () => {
@@ -124,8 +149,15 @@ describe("AsignacionPieService integration scenarios", () => {
     const res = await service.finalizarAsignacion(7, 42);
 
     expect(res.ok).toBe(true);
-    expect(estudianteRepository.updateNeeStatus).toHaveBeenCalledWith(20, false, expect.anything());
-    expect(spy).toHaveBeenCalledWith("asignacionPIE", expect.objectContaining({ usuarioId: 42 }));
+    expect(estudianteRepository.updateNeeStatus).toHaveBeenCalledWith(
+      20,
+      false,
+      expect.anything(),
+    );
+    expect(spy).toHaveBeenCalledWith(
+      "asignacionPIE",
+      expect.objectContaining({ usuarioId: 42 }),
+    );
 
     spy.mockRestore();
   });
@@ -156,7 +188,10 @@ describe("AsignacionPieService integration scenarios", () => {
 
     expect(res.ok).toBe(true);
     expect(estudianteRepository.updateNeeStatus).not.toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith("asignacionPIE", expect.objectContaining({ usuarioId: 55 }));
+    expect(spy).toHaveBeenCalledWith(
+      "asignacionPIE",
+      expect.objectContaining({ usuarioId: 55 }),
+    );
 
     spy.mockRestore();
   });

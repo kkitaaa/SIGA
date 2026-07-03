@@ -9,6 +9,9 @@ const createRepoMock = () => ({
   createUsuario: jest.fn(),
   findCuentaByEmail: jest.fn(),
   createRefreshToken: jest.fn(),
+  findRefreshToken: jest.fn(),
+  findCuentaById: jest.fn(),
+  revokeRefreshToken: jest.fn(),
 });
 
 const repoMock = createRepoMock();
@@ -103,5 +106,38 @@ describe("AuthService", () => {
     await expect(
       AuthService.loginUser({ email: "maria@example.com", password: "wrong" }),
     ).rejects.toThrow("CREDENCIALES_INVALIDAS");
+  });
+
+  test("rechaza refresh token inválido", async () => {
+    repoMock.findRefreshToken.mockResolvedValue(null);
+
+    await expect(AuthService.refreshToken("bad-token")).resolves.toBeNull();
+    expect(repoMock.findRefreshToken).toHaveBeenCalledWith("bad-token");
+  });
+
+  test("rota refresh token válido y devuelve un nuevo token", async () => {
+    const expiresAt = new Date(Date.now() + 10000).toISOString();
+
+    repoMock.findRefreshToken
+      .mockResolvedValueOnce({ id_cuenta: 1, revoked: false, expiresAt })
+      .mockResolvedValueOnce({ id_cuenta: 1, revoked: false, expiresAt });
+    repoMock.revokeRefreshToken.mockResolvedValue({});
+    repoMock.findCuentaById.mockResolvedValue({
+      id_usuario: 1,
+      email: "juan@example.com",
+      usuario: {
+        primer_nombre: "Juan",
+        primer_apellido: "Pérez",
+        roles: [{ rol: { nombre_rol: "Directiva" } }],
+      },
+    });
+
+    const result = await AuthService.refreshToken("old-refresh");
+
+    expect(result.token).toEqual(expect.any(String));
+    expect(result.token.split(".")).toHaveLength(3);
+    expect(result.refreshToken).toEqual(expect.any(String));
+    expect(repoMock.revokeRefreshToken).toHaveBeenCalledWith("old-refresh");
+    expect(repoMock.findCuentaById).toHaveBeenCalledWith(1);
   });
 });

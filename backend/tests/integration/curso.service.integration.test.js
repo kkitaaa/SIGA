@@ -26,7 +26,11 @@ describe("CursoService integration", () => {
 
     const service = new CursoService(repoMock);
 
-    const res = await service.crearCurso({ nivel_educativo: "Básico", nivel_curso: 1, letra: "A" });
+    const res = await service.crearCurso({
+      nivel_educativo: "Básico",
+      nivel_curso: 1,
+      letra: "A",
+    });
 
     expect(res).toEqual({ id_curso: 1 });
     expect(repoMock.create).toHaveBeenCalled();
@@ -37,7 +41,13 @@ describe("CursoService integration", () => {
 
     const service = new CursoService(repoMock);
 
-    await expect(service.crearCurso({ nivel_educativo: "Básico", nivel_curso: 1, letra: "A" })).rejects.toThrow(
+    await expect(
+      service.crearCurso({
+        nivel_educativo: "Básico",
+        nivel_curso: 1,
+        letra: "A",
+      }),
+    ).rejects.toThrow(
       "BUSINESS_ERROR: Ya existe un curso registrado con este nivel y letra",
     );
   });
@@ -46,6 +56,8 @@ describe("CursoService integration", () => {
     repoMock.findById.mockResolvedValue(null);
     const service = new CursoService(repoMock);
 
-    await expect(service.obtenerCursoPorId(99)).rejects.toThrow("Curso no encontrado");
+    await expect(service.obtenerCursoPorId(99)).rejects.toThrow(
+      "Curso no encontrado",
+    );
   });
 });

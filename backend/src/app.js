@@ -45,7 +45,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/asignacion", asignacionRoutes);
 app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
-app.get("/api/usuarios-sin-rol", authMiddleware, listarUsuariosSinRolController);
+app.get(
+  "/api/usuarios-sin-rol",
+  authMiddleware,
+  listarUsuariosSinRolController,
+);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
 app.use("/api/cursos", cursoRoutes);

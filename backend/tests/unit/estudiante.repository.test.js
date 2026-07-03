@@ -10,47 +10,6 @@ const prismaMock = {
   },
 };
 
-jest.unstable_mockModule("../../src/config/prisma.js", () => ({ default: prismaMock }));
-
-let EstudianteRepository;
-
-beforeAll(async () => {
-  ({ EstudianteRepository } = await import("../../src/repositories/estudiante.repository.js"));
-});
-
-describe("EstudianteRepository", () => {
-  beforeEach(() => jest.clearAllMocks());
-
-  test("findByRut delega a prisma.findFirst", async () => {
-    prismaMock.estudiante.findFirst.mockResolvedValue({ id_estudiante: 1 });
-    const res = await EstudianteRepository.findByRut("1-9");
-    expect(res).toEqual({ id_estudiante: 1 });
-  });
-
-  test("create llama prisma.create", async () => {
-    prismaMock.estudiante.create.mockResolvedValue({ id_estudiante: 2 });
-    const res = await EstudianteRepository.create({ rut: "2-7" });
-    expect(res).toEqual({ id_estudiante: 2 });
-  });
-
-  test("findById llama findUnique con include", async () => {
-    prismaMock.estudiante.findUnique.mockResolvedValue({ id_estudiante: 3 });
-    const res = await EstudianteRepository.findById(3, prismaMock);
-    expect(res).toEqual({ id_estudiante: 3 });
-  });
-});
-import { jest } from "@jest/globals";
-
-const prismaMock = {
-  estudiante: {
-    findFirst: jest.fn(),
-    create: jest.fn(),
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    update: jest.fn(),
-  },
-};
-
 jest.unstable_mockModule("../../src/config/prisma.js", () => ({
   default: prismaMock,
 }));

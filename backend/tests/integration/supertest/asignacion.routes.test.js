@@ -19,7 +19,8 @@ jest.unstable_mockModule("../../../src/middleware/auth.js", () => ({
 let asignacionRoutes;
 
 beforeAll(async () => {
-  asignacionRoutes = (await import("../../../src/routes/asignacion.routes.js")).default;
+  asignacionRoutes = (await import("../../../src/routes/asignacion.routes.js"))
+    .default;
 });
 
 describe("Asignacion routes (supertest)", () => {
@@ -37,7 +38,9 @@ describe("Asignacion routes (supertest)", () => {
 
     const app = buildApp();
 
-    const res = await request(app).post("/api/asignacion").send({ idUsuarioDestino: 2, idRolAsignado: 3 });
+    const res = await request(app)
+      .post("/api/asignacion")
+      .send({ idUsuarioDestino: 2, idRolAsignado: 3 });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("ok", true);

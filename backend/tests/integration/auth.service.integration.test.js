@@ -3,7 +3,11 @@ import { jest } from "@jest/globals";
 const bcryptMock = { hash: jest.fn(), compare: jest.fn() };
 const jwtMock = { sign: jest.fn(() => "tok") };
 
-const createRepoMock = () => ({ createUsuario: jest.fn(), findCuentaByEmail: jest.fn() });
+const createRepoMock = () => ({
+  createUsuario: jest.fn(),
+  findCuentaByEmail: jest.fn(),
+  createRefreshToken: jest.fn(),
+});
 const repoMock = createRepoMock();
 
 jest.unstable_mockModule("bcrypt", () => ({ default: bcryptMock }));
@@ -28,18 +32,41 @@ describe("AuthService integration", () => {
   test("registra un usuario y genera un hash para la contraseña", async () => {
     repoMock.createUsuario.mockResolvedValue({ id_usuario: 1 });
 
-    const datos = { nombre: "Ana María López", email: "ana@example.com", password: "123456", rut: "12345678-9" };
+    const datos = {
+      nombre: "Ana María López",
+      email: "ana@example.com",
+      password: "123456",
+      rut: "12345678-9",
+    };
 
     const result = await AuthService.registerUser(datos);
 
     expect(result).toEqual({ id_usuario: 1 });
-    expect(repoMock.createUsuario).toHaveBeenCalledWith(expect.objectContaining({ rut: datos.rut, email: datos.email, contraseña: expect.any(String) }));
+    expect(repoMock.createUsuario).toHaveBeenCalledWith(
+      expect.objectContaining({
+        rut: datos.rut,
+        email: datos.email,
+        contraseña: expect.any(String),
+      }),
+    );
   });
 
   test("inicia sesión y devuelve un token cuando las credenciales son válidas", async () => {
-    repoMock.findCuentaByEmail.mockResolvedValue({ id_usuario: 2, email: "juan@example.com", contraseña: "hashed-password", usuario: { primer_nombre: "Juan", primer_apellido: "Pérez", roles: [{ rol: { nombre_rol: "Directiva" } }] } });
+    repoMock.findCuentaByEmail.mockResolvedValue({
+      id_usuario: 2,
+      email: "juan@example.com",
+      contraseña: "hashed-password",
+      usuario: {
+        primer_nombre: "Juan",
+        primer_apellido: "Pérez",
+        roles: [{ rol: { nombre_rol: "Directiva" } }],
+      },
+    });
 
-    const result = await AuthService.loginUser({ email: "juan@example.com", password: "password123" });
+    const result = await AuthService.loginUser({
+      email: "juan@example.com",
+      password: "password123",
+    });
 
     expect(result.token).toBeTruthy();
     expect(result.role).toBe("Directiva");

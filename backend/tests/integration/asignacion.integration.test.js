@@ -7,12 +7,15 @@ const repoMock = {
   rolExiste: jest.fn(),
   usuarioTieneRol: jest.fn(),
   cambiarRol: jest.fn(),
+  asignarRol: jest.fn(),
   revocarRol: jest.fn(),
 };
 
 jest.unstable_mockModule(
   "../../src/repositories/asignacion.repository.js",
-  () => ({ AsignacionRepository: jest.fn().mockImplementation(() => repoMock) }),
+  () => ({
+    AsignacionRepository: jest.fn().mockImplementation(() => repoMock),
+  }),
 );
 
 let asignarRol;
@@ -34,11 +37,11 @@ describe("Asignacion service integration", () => {
     repoMock.usuarioExiste.mockResolvedValue(true);
     repoMock.rolExiste.mockResolvedValue({ nombre_rol: "Funcionario" });
     repoMock.usuarioTieneRol.mockResolvedValue(false);
-    repoMock.cambiarRol.mockResolvedValue({ ok: true });
+    repoMock.asignarRol.mockResolvedValue({ ok: true });
 
     await expect(asignarRol(2, "3", 1, 7)).resolves.toEqual({ ok: true });
 
-    expect(repoMock.cambiarRol).toHaveBeenCalledWith(2, 3, 7);
+    expect(repoMock.asignarRol).toHaveBeenCalledWith(2, 3, 7);
   });
 
   test("rechaza asignación si el rol no es entero", async () => {
@@ -53,6 +56,8 @@ describe("Asignacion service integration", () => {
     repoMock.usuarioTieneRol.mockResolvedValue({ id_rol: 3 });
     repoMock.revocarRol.mockResolvedValue({ ok: true });
 
-    await expect(revocarRol(2, 1)).resolves.toEqual({ mensaje: "Rol revocado correctamente" });
+    await expect(revocarRol(2, 1)).resolves.toEqual({
+      mensaje: "Rol revocado correctamente",
+    });
   });
 });
