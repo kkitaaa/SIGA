@@ -4,7 +4,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
 
 // Configura la conexión usando tu variable de entorno
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: process.env.DIRECT_URL });
 
 // Crea el adaptador para PostgreSQL
 const adapter = new PrismaPg(pool);
