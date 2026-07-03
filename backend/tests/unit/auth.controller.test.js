@@ -3,6 +3,8 @@ import { jest } from "@jest/globals";
 const serviceMock = {
   registerUser: jest.fn(),
   loginUser: jest.fn(),
+  refreshToken: jest.fn(),
+  revokeRefreshToken: jest.fn(),
 };
 
 jest.unstable_mockModule("../../src/services/auth.service.js", () => ({
@@ -11,15 +13,24 @@ jest.unstable_mockModule("../../src/services/auth.service.js", () => ({
 
 let register;
 let login;
+let refresh;
+let logout;
 
 beforeAll(async () => {
-  ({ register, login } =
+  ({ register, login, refresh, logout } =
     await import("../../src/controllers/auth.controller.js"));
 });
 
 describe("auth.controller", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  const mockResponse = () => ({
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+    cookie: jest.fn(),
+    clearCookie: jest.fn(),
   });
 
   test("registra usuario con 201", async () => {
@@ -32,7 +43,7 @@ describe("auth.controller", () => {
         rut: "12345678-9",
       },
     };
-    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    const res = mockResponse();
 
     await register(req, res);
 
@@ -44,10 +55,34 @@ describe("auth.controller", () => {
       new Error("CREDENCIALES_INVALIDAS"),
     );
     const req = { body: { email: "a@test.com", password: "x" } };
-    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    const res = mockResponse();
 
     await login(req, res);
 
     expect(res.status).toHaveBeenCalledWith(401);
+  });
+
+  test("logout sin cookie devuelve 400", async () => {
+    const req = { cookies: {} };
+    const res = mockResponse();
+
+    await logout(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: "refreshToken requerido" });
+  });
+
+  test("logout con cookie invoca revokeRefreshToken y borra cookie", async () => {
+    serviceMock.revokeRefreshToken = jest.fn().mockResolvedValue({});
+    const req = { cookies: { refreshToken: "valid-refresh" } };
+    const res = mockResponse();
+
+    await logout(req, res);
+
+    expect(serviceMock.revokeRefreshToken).toHaveBeenCalledWith(
+      "valid-refresh",
+    );
+    expect(res.clearCookie).toHaveBeenCalledWith("refreshToken", { path: "/" });
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
