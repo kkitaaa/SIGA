@@ -51,7 +51,7 @@ function App() {
         element={
           <ProtectedRoute rolesPermitidos={[
             "Directiva",
-            "Administracion",
+            "Administrativo",
             "Equipo PIE",
             "PIE",
             "Profesor",
@@ -77,7 +77,7 @@ function App() {
       <Route
         path="/admin/estudiantes"
         element={
-          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo", "Administracion"]}>
+          <ProtectedRoute rolesPermitidos={["Directiva", "Coordinador Administrativo", "Administrativo"]}>
             <EstudiantesPage />
           </ProtectedRoute>
         }

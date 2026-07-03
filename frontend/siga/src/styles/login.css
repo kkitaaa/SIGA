@@ -28,7 +28,8 @@ body {
 .login-page-brand {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center; /* center vertically within available space */
+  align-items: center; /* center horizontally */
   gap: 1rem;
   padding: 2rem 0 0 2rem;
   color: #ffffff;
@@ -40,19 +41,17 @@ body {
 }
 
 .site-logo {
-  height: 56px;
+  height: min(220px, 30vh); /* larger and responsive */
   width: auto;
   display: block;
 }
 
 .login-tagline {
   font-size: 1rem;
-  font-weight: 300;
-  max-width: 18rem;
-}
-
-.login-tagline {
-  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  font-weight: 700; /* bold */
+  max-width: 22rem;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); /* subtle, readable shadow */
 }
 
 .login-card {
@@ -220,6 +219,10 @@ body {
 
   .login-logo {
     font-size: 2.75rem;
+  }
+
+  .site-logo {
+    height: 140px; /* limit on small screens */
   }
 
   .login-card {

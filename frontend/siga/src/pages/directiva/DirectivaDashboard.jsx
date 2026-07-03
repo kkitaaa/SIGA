@@ -62,7 +62,7 @@ function AdminDashboard({ user }) {
                 <path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" />
               </svg>
             </button>
-            <button type="button" className="home-nav-button" onClick={() => navigate("/admin/usuarios")}>Asignar roles</button>
+            <button type="button" className="home-nav-button" onClick={() => navigate("/asignacion-roles")}>Asignar roles</button>
           </div>
         </div>
 
@@ -110,7 +110,7 @@ function AdminDashboard({ user }) {
                 className="usuarios-action"
                 onClick={() => navigate("/admin/usuarios")}
               >
-                Ver usuarios y asignar roles
+                Ver usuarios
               </button>
               <button
                 type="button"

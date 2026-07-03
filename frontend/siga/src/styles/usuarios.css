@@ -121,16 +121,17 @@
 .usuarios-select {
   border: 1px solid #cbd5e1;
   border-radius: 0.85rem;
-  padding: 0.6rem 0.8rem;
-  min-width: 280px;
+  padding: 0.55rem 0.8rem;
   background: white;
   line-height: 1.2;
   box-sizing: border-box;
-  min-height: 2.45rem;
+  min-height: 2.6rem;
 }
 
 .usuarios-input {
-  min-width: 320px;
+  /* Allow input to grow and take available space */
+  flex: 1 1 auto;
+  min-width: 0; /* needed so flex child can shrink under container */
 }
 
 .usuarios-detail-card .usuarios-filters .usuarios-input,
@@ -145,7 +146,11 @@
 .usuarios-sort-button {
   border: 1px solid #cbd5e1;
   border-radius: 0.85rem;
-  padding: 0.7rem 0.95rem;
+  padding: 0 0.95rem;
+  min-height: 2.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #f8fafc;
   color: #0f766e;
   cursor: pointer;
@@ -330,6 +335,9 @@
   align-items: center;
   padding: 0.95rem 1rem;
   background: #f8fafc;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .usuarios-pagination button {
