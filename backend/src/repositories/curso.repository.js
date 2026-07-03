@@ -41,12 +41,36 @@ export class CursoRepository {
 
   async findById(id_curso) {
     return await prisma.curso.findUnique({
-      where: { 
-        id_curso: Number(id_curso) 
+      where: {
+        id_curso: Number(id_curso),
       },
-      include: { 
-        estudiantes: true
-      }
+      include: {
+        estudiantes: true,
+      },
+    });
+  }
+
+  async findProfesorByUsuario(idUsuario) {
+    return await prisma.profesor.findUnique({
+      where: { id_usuario: idUsuario },
+    });
+  }
+
+  async findByProfesorId(idProfesor) {
+    return await prisma.curso.findMany({
+      where: { id_profesor: idProfesor },
+      include: {
+        profesor: {
+          include: {
+            usuario: {
+              select: { primer_nombre: true, primer_apellido: true },
+            },
+          },
+        },
+        _count: {
+          select: { estudiantes: true },
+        },
+      },
     });
   }
 }

@@ -8,6 +8,7 @@ const bcryptMock = {
 const createRepoMock = () => ({
   createUsuario: jest.fn(),
   findCuentaByEmail: jest.fn(),
+  createRefreshToken: jest.fn(),
 });
 
 const repoMock = createRepoMock();

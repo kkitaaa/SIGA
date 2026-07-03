@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals";
 
 const prismaMock = {
-  rol: { findMany: jest.fn() },
+  rol: { findMany: jest.fn(), create: jest.fn() },
   usuario_rol: { findFirst: jest.fn() },
 };
 

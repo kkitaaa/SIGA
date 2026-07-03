@@ -3,6 +3,7 @@ import {
   crearCursoController,
   obtenerCursosController,
   obtenerCursoPorIdController,
+  obtenerCursosPorProfesor,
 } from "../controllers/curso.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
@@ -131,6 +132,13 @@ router.post(
   crearCursoController,
 );
 
-router.get('/:id', obtenerCursoPorIdController);
+router.get(
+  "/mis-cursos",
+  authMiddleware,
+  verifyRole("Profesor"),
+  obtenerCursosPorProfesor,
+);
+
+router.get("/:id", obtenerCursoPorIdController);
 
 export default router;

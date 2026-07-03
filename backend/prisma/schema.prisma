@@ -29,8 +29,9 @@ model Cuenta {
   contraseña String
   estado      String
 
-  id_usuario Int     @unique
-  usuario    Usuario @relation(fields: [id_usuario], references: [id_usuario])
+  id_usuario    Int            @unique
+  usuario       Usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  refreshTokens RefreshToken[]
 }
 
 model Rol {
@@ -145,4 +146,14 @@ model AsignacionPieLog {
   usuario     Usuario     @relation(fields: [usuarioId], references: [id_usuario])
   estudiante  Estudiante  @relation(fields: [estudianteId], references: [id_estudiante])
   funcionario Funcionario @relation(fields: [funcionarioId], references: [id_funcionario])
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  id_cuenta Int
+  cuenta    Cuenta   @relation(fields: [id_cuenta], references: [id_cuenta])
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

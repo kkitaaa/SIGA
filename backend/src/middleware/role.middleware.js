@@ -29,7 +29,10 @@ export const verifyRole = (...requiredRoles) => {
         error: "Acceso denegado: no tienes los permisos necesarios",
       });
     } catch (error) {
-      console.error(`Error verificando los roles ${rolesPermitidos.join(", ")}:`, error);
+      console.error(
+        `Error verificando los roles ${rolesPermitidos.join(", ")}:`,
+        error,
+      );
       res.status(500).json({
         error: "Error interno del servidor al validar permisos",
       });
