@@ -30,7 +30,7 @@ const cruzarDatosEstudiantes = (estsData, asigsData, funcsData) => {
   });
 };
 
-export default function EstudiantesNEEPage({ user }) {
+export default function EstudiantesPIEPage({ user }) {
   const navigate = useNavigate();
   const PAGE_SIZE = 8;
   const [page, setPage] = useState(1);
@@ -116,7 +116,7 @@ export default function EstudiantesNEEPage({ user }) {
   }, [estudiantesFiltrados, page]);
 
   const handleVerDetalle = (estudiante) => {
-    navigate(`/estudiantes/${estudiante.id_estudiante}`);
+    navigate(`/estudiantes/${estudiante.id_estudiante}?fromPIE=1`);
   };
 
   return (
@@ -141,7 +141,7 @@ export default function EstudiantesNEEPage({ user }) {
         </div>
 
         <div className="home-topbar-actions">
-          <span className="home-role-badge">{user?.rol || 'Coordinador PIE'}</span>
+          <span className="home-role-badge">{user?.rol || 'PIE'}</span>
           <ProfileMenu user={user} />
         </div>
       </header>
@@ -214,7 +214,7 @@ export default function EstudiantesNEEPage({ user }) {
   );
 }
 
-EstudiantesNEEPage.propTypes = {
+EstudiantesPIEPage.propTypes = {
   user: PropTypes.shape({
     nombre: PropTypes.string,
     rol: PropTypes.string,

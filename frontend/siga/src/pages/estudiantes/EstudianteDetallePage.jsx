@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import api from '../../services/api'; 
 import '../../styles/home.css'; 
 
 export default function EstudianteDetallePage() {
   const { id } = useParams(); 
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPIE = new URLSearchParams(location.search).get('fromPIE') === '1';
 
   const [estudiante, setEstudiante] = useState(null);
   const [profesionales, setProfesionales] = useState([]);
@@ -61,6 +63,8 @@ export default function EstudianteDetallePage() {
   };
 
   const handleSave = async () => {
+    if (fromPIE) return;
+
     try {
       setGuardando(true);
       
@@ -121,7 +125,9 @@ export default function EstudianteDetallePage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>
             <h2 style={{ margin: 0 }}>Perfil del Estudiante</h2>
             <div>
-              {isEditing ? (
+              {fromPIE ? (
+                <p style={{ margin: 0, color: '#718096', fontSize: '0.95rem' }}>Modo PIE: sólo visualización</p>
+              ) : isEditing ? (
                 <>
                   <button onClick={handleCancel} disabled={guardando} style={{ marginRight: '10px', padding: '6px 12px', borderRadius: '5px', border: '1px solid #ccc', cursor: 'pointer' }}>
                     Cancelar
@@ -213,7 +219,7 @@ export default function EstudianteDetallePage() {
                 )}
               </div>
             )}
-            {isEditing && (
+            {isEditing && !fromPIE && (
               <p style={{ fontSize: '12px', color: '#718096', marginTop: '10px' }}>
                 *La asignación de profesionales PIE se administra desde la pestaña "Asignación PIE".
               </p>

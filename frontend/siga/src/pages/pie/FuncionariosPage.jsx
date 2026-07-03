@@ -75,7 +75,7 @@ export default function FuncionariosPage({ user }) {
         </div>
 
         <div className="home-topbar-actions">
-          <span className="home-role-badge">{user?.rol || 'Coordinador PIE'}</span>
+          <span className="home-role-badge">{user?.rol || 'PIE'}</span>
           <ProfileMenu user={user} />
         </div>
       </header>

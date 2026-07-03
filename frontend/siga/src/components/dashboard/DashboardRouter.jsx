@@ -13,7 +13,6 @@ const dashboardStrategy = {
   profesor: ProfesorDashboard,
   pie: PieDashboard,
   funcionario: FuncionarioDashboard,
-  "equipo pie": PieDashboard,
   "coordinador pie": PieDashboard,
   directiva: AdminDashboard,
   "coordinador administrativo": AdministracionDashboard,

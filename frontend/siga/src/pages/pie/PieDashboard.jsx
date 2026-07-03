@@ -11,7 +11,7 @@ function PieDashboard({ user }) {
   const [recentDocuments, setRecentDocuments] = useState([]);
 
 
-  const areas = ["Estudiantes NEE", "Funcionarios", "Cursos especializados"];
+  const areas = ["Estudiantes PIE", "Funcionarios", "Cursos especializados"];
 
   useEffect(() => {
     const load = async () => {
@@ -67,15 +67,15 @@ function PieDashboard({ user }) {
         </div>
 
         <div className="home-topbar-actions">
-          <span className="home-role-badge">{user?.rol || "Coordinador PIE"}</span>
+          <span className="home-role-badge">{user?.rol || 'PIE'}</span>
           <ProfileMenu user={user} />
         </div>
       </header>
 
       <main className="home-main">
         <section className="home-panel home-welcome-panel">
-          <div className="home-welcome-title">Bienvenido/a, {user?.nombre || 'Coordinador PIE'}</div>
-          <p className="home-welcome-subtitle">Panel de seguimiento y gestión para el equipo PIE.</p>
+          <div className="home-welcome-title">Bienvenido/a, {user?.nombre || 'Usuario'}</div>
+          <p className="home-welcome-subtitle">Panel de seguimiento y gestión para PIE.</p>
 
           <div className="home-card home-feed-card">
             <h2>Resumen general</h2>
@@ -109,9 +109,11 @@ function PieDashboard({ user }) {
                 <button type="button" className="usuarios-action" onClick={() => navigate('/pie/estudiantes')}>
                   Ver estudiantes PIE
                 </button>
-                <button type="button" className="usuarios-action" onClick={() => navigate('/asignacion-pie')}>
-                  Asignar Estudiantes (PIE)
-                </button>
+                {user?.rol === 'Coordinador PIE' && (
+                  <button type="button" className="usuarios-action" onClick={() => navigate('/asignacion-pie')}>
+                    Asignar Estudiantes (PIE)
+                  </button>
+                )}
                 <button type="button" className="usuarios-action" onClick={() => navigate('/funcionarios')}>
                   Ver Funcionarios
                 </button>
