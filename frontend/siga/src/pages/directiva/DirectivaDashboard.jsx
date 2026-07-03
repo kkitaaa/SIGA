@@ -114,6 +114,13 @@ function AdminDashboard({ user }) {
               </button>
               <button
                 type="button"
+                className="usuarios-action"
+                onClick={() => navigate("/cursos")}
+              >
+                Ver cursos
+              </button>
+              <button
+                type="button"
                 className="usuarios-action is-active"
                 onClick={() => navigate("/admin/estudiantes")}
               >
