@@ -1,4 +1,5 @@
 import { eventBus } from "../events/eventBus.js";
+import { EstudianteRepository } from "../repositories/estudiante.repository.js";
 
 const crearError = (message, statusCode = 400) => {
   const error = new Error(message);
@@ -7,15 +8,9 @@ const crearError = (message, statusCode = 400) => {
 };
 
 export class AsignacionPieService {
-  constructor({
-    asignacionPieRepository,
-    estudianteRepository,
-    funcionarioRepository,
-    prismaClient,
-  }) {
+  constructor({ asignacionPieRepository, funcionarioRepository, prismaClient }) {
     this.asignacionPieRepository = asignacionPieRepository;
-    this.estudianteRepository = estudianteRepository;
-    this.funcionarioRepository = funcionarioRepository;
+    this.funcionarioRepository = funcionarioRepository; // instancia
     this.prismaClient = prismaClient;
   }
 
@@ -27,13 +22,14 @@ export class AsignacionPieService {
       throw crearError("El estudiante ya tiene una asignacion PIE activa", 409);
     }
 
-    const estudiante = await this.estudianteRepository.findById(idEstudiante);
+    // ✅ EstudianteRepository se usa como clase estática
+    const estudiante = await EstudianteRepository.findById(idEstudiante);
     if (!estudiante) {
       throw crearError("El estudiante no existe", 404);
     }
 
-    const funcionario =
-      await this.funcionarioRepository.findPieMemberByUserId(idFuncionario);
+    // ✅ FuncionarioRepository se usa como instancia
+    const funcionario = await this.funcionarioRepository.findPieMemberByUserId(idFuncionario);
     if (!funcionario) {
       throw crearError("El funcionario PIE no existe", 404);
     }
@@ -44,12 +40,11 @@ export class AsignacionPieService {
         tx,
       );
 
-      await this.estudianteRepository.updateNeeStatus(idEstudiante, true, tx);
+      await EstudianteRepository.updateNeeStatus(idEstudiante, true, tx);
 
       return nuevaAsignacion;
     });
 
-    // Emitir evento para el log después de que la transacción haya sido confirmada
     eventBus.emit("asignacionPIE", {
       usuarioId: idUsuario,
       estudianteId: idEstudiante,
@@ -70,51 +65,36 @@ export class AsignacionPieService {
   }
 
   async obtenerAsignacion(idAsignacion) {
-    const asignacion =
-      await this.asignacionPieRepository.findById(idAsignacion);
-
+    const asignacion = await this.asignacionPieRepository.findById(idAsignacion);
     if (!asignacion) {
       throw crearError("La asignacion PIE no existe", 404);
     }
-
     return asignacion;
   }
 
   async finalizarAsignacion(idAsignacion, idUsuario) {
-    const asignacion =
-      await this.asignacionPieRepository.findById(idAsignacion);
-
+    const asignacion = await this.asignacionPieRepository.findById(idAsignacion);
     if (!asignacion) {
       throw crearError("La asignacion PIE no existe", 404);
     }
 
-    const asignacionFinalizada = await this.prismaClient.$transaction(
-      async (tx) => {
-        const finalizada = await this.asignacionPieRepository.finalizar(
+    const asignacionFinalizada = await this.prismaClient.$transaction(async (tx) => {
+      const finalizada = await this.asignacionPieRepository.finalizar(idAsignacion, tx);
+
+      const mantieneAsignaciones =
+        await this.asignacionPieRepository.findActiveByStudentExcluding(
+          asignacion.id_estudiante,
           idAsignacion,
           tx,
         );
 
-        const mantieneAsignaciones =
-          await this.asignacionPieRepository.findActiveByStudentExcluding(
-            asignacion.id_estudiante,
-            idAsignacion,
-            tx,
-          );
+      if (!mantieneAsignaciones) {
+        await EstudianteRepository.updateNeeStatus(asignacion.id_estudiante, false, tx);
+      }
 
-        if (!mantieneAsignaciones) {
-          await this.estudianteRepository.updateNeeStatus(
-            asignacion.id_estudiante,
-            false,
-            tx,
-          );
-        }
+      return finalizada;
+    });
 
-        return finalizada;
-      },
-    );
-
-    // Emitir evento para el log después de que la transacción haya sido confirmada
     eventBus.emit("asignacionPIE", {
       usuarioId: idUsuario,
       estudianteId: asignacion.id_estudiante,

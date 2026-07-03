@@ -52,16 +52,14 @@ export default function AsignacionPIEPage({ user }) {
 
       setAsignaciones(asignacionesRes.data.asignaciones || []);
       setEstudiantes(estudiantesRes.data.estudiantes || []);
-      setFuncionarios(funcionariosRes.data || []);
-      
+      // Ajusta según lo que devuelva tu backend: puede ser `funcionarios` o directamente un array
+      setFuncionarios(funcionariosRes.data.funcionarios || funcionariosRes.data || []);
     } catch (error) {
       console.error(error);
-      showError(
-        "Error cargando datos",
-        "Hubo un problema al conectar con el servidor."
-      );
+      showError("Error cargando datos", "Hubo un problema al conectar con el servidor.");
     }
   };
+
 
   useEffect(() => {
     cargarDatos();
@@ -69,33 +67,26 @@ export default function AsignacionPIEPage({ user }) {
 
   const crearAsignacion = async () => {
     if (!estudianteId || !funcionarioId) {
-      showWarning(
-        "Faltan datos",
-        "Por favor selecciona un estudiante y un funcionario."
-      );
+      showWarning("Faltan datos", "Por favor selecciona un estudiante y un funcionario.");
       return;
     }
 
     try {
-      await api.post("/asignacion-pie", {
+      const res = await api.post("/asignacion-pie", {
         idEstudiante: Number(estudianteId),
         idFuncionario: Number(funcionarioId),
       });
 
-      showSuccess("Asignación creada");
-
+      showSuccess(res.data.mensaje || "Asignación creada correctamente");
       setEstudianteId("");
       setFuncionarioId("");
-
       cargarDatos();
     } catch (error) {
       console.error(error);
-      showError(
-        "Error al crear asignación",
-        error.response?.data?.mensaje || "Error interno del servidor"
-      );
+      showError("Error al crear asignación", error.response?.data?.mensaje || "Error interno del servidor");
     }
   };
+
 
   return (
     <div className="usuarios-page">
@@ -184,24 +175,15 @@ export default function AsignacionPIEPage({ user }) {
             <Box mt={4} maxH="400px" overflowY="auto">
               {asignaciones.length > 0 ? (
                 asignaciones.map((a) => (
-                  <Box
-                    key={a.id_asignacion}
-                    p={3}
-                    borderWidth="1px"
-                    borderRadius="md"
-                    mb={3}
-                    shadow="sm"
-                    bg="white"
-                  >
-                    <strong>ID Estudiante:</strong> {a.id_estudiante} <br/>
-                    <strong>ID Funcionario:</strong> {a.id_funcionario}
+                  <Box key={a.id_asignacion} p={3} borderWidth="1px" borderRadius="md" mb={3} shadow="sm" bg="white">
+                    <strong>Estudiante:</strong> {a.estudiante?.primer_nombre} {a.estudiante?.primer_apellido} <br/>
+                    <strong>Funcionario:</strong> {a.funcionario?.nombre} - {a.funcionario?.tipo_profesional}
                   </Box>
                 ))
               ) : (
-                <p style={{ color: "gray", fontSize: "14px" }}>
-                  No hay asignaciones registradas.
-                </p>
+                <p style={{ color: "gray", fontSize: "14px" }}>No hay asignaciones registradas.</p>
               )}
+
             </Box>
           </div>
         </aside>
