@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "node:path";
+import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.routes.js";
 import asignacionRoutes from "./routes/asignacion.routes.js";
@@ -10,6 +11,8 @@ import usuarioRoutes from "./routes/usuario.routes.js";
 import documentoRoutes from "./routes/documento.routes.js";
 import cursoRoutes from "./routes/curso.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import { authMiddleware } from "./middleware/auth.js";
+import { listarUsuariosSinRolController } from "./controllers/usuario.controller.js";
 
 import { swaggerUi, swaggerSpec } from "./docs/swagger.js";
 import estudianteRoutes from "./routes/estudiante.routes.js";
@@ -31,10 +34,13 @@ app.use(
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 );
 
 app.use(express.json());
+// parse cookies for reading refresh token cookie
+app.use(cookieParser());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 /**
@@ -44,6 +50,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/asignacion", asignacionRoutes);
 app.use("/api/asignacion-pie", asignacionPieRoutes);
 app.use("/api/usuario", usuarioRoutes);
+app.get(
+  "/api/usuarios-sin-rol",
+  authMiddleware,
+  listarUsuariosSinRolController,
+);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/estudiantes", estudianteRoutes);
 app.use("/api/cursos", cursoRoutes);

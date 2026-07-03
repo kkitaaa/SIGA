@@ -71,8 +71,8 @@ export class AsignacionRepository {
     });
   }
 
-  async cambiarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario) {
-    return this.asignarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario);
+  async asignarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario) {
+    return this.cambiarRol(idUsuarioDestino, idRolAsignado, idTipoFuncionario);
   }
 
   async revocarRol(idUsuarioDestino) {
@@ -94,11 +94,15 @@ export class AsignacionRepository {
     });
   }
 
-  async verificarRolDirectiva(idUsuarioActual) {
+  async verificarRolAdministrativo(idUsuarioActual) {
     return prisma.usuario_rol.findFirst({
       where: {
         id_usuario: idUsuarioActual,
-        rol: { nombre_rol: "Directiva" },
+        rol: {
+          nombre_rol: {
+            in: ["Administrativo", "Directiva", "Coordinador Administrativo"],
+          },
+        },
       },
     });
   }

@@ -41,9 +41,9 @@
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">96.42% </span>
+            <span class="strong">96.55% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">27/28</span>
+            <span class="fraction">28/29</span>
           </div>
         </div>
         <p class="quiet">
@@ -125,7 +125,9 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,12 +145,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,6 +161,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -172,11 +176,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -209,10 +213,10 @@ export const asignarRol = async (
   }
 &nbsp;
   // Verificar permisos
-  const esAdministrativo =
-    await repo.verificarRolAdministrativo(idUsuarioActual);
-  if (!esAdministrativo)
+  const esAdministrativo = await repo.verificarRolAdministrativo(idUsuarioActual);
+  if (!esAdministrativo) {
     throw new Error("No tienes permisos para asignar roles");
+  }
 &nbsp;
   // Verificar existencia del usuario
   const usuarioExiste = await repo.usuarioExiste(idUsuarioDestino);
@@ -223,8 +227,10 @@ export const asignarRol = async (
   if (!rolExiste) throw new Error("El rol no existe");
 &nbsp;
   // Verificar si ya tiene rol
-  const tieneRol = await repo.usuarioTieneRol(idUsuarioDestino);
-  if (tieneRol) throw new Error("El usuario ya tiene un rol asignado");
+  const rolActual = await repo.usuarioTieneRol(idUsuarioDestino);
+  if (rolActual) {
+    throw new Error("El usuario ya tiene un rol asignado");
+  }
 &nbsp;
   // Validar si el rol es "Funcionario" y exigir su especialidad
   <span class="missing-if-branch" title="else path not taken" >E</span>if (rolExiste.nombre_rol.toLowerCase() === "funcionario") {
@@ -233,16 +239,16 @@ export const asignarRol = async (
     }
   }
 &nbsp;
-  // Asignar rol (y opcionalmente crear funcionario)
+  // Asignar o cambiar rol (y opcionalmente crear funcionario)
   return repo.asignarRol(idUsuarioDestino, parsedRolId, idTipoFuncionario);
 };
 &nbsp;
 export const revocarRol = async (idUsuarioDestino, idUsuarioActual) =&gt; {
   // Verificar permisos
-  const esAdministrativo =
-    await repo.verificarRolAdministrativo(idUsuarioActual);
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!esAdministrativo)
+  const esAdministrativo = await repo.verificarRolAdministrativo(idUsuarioActual);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!esAdministrativo) {
 <span class="cstat-no" title="statement not covered" >    throw new Error("No tienes permisos para revocar roles");</span>
+  }
 &nbsp;
   // Verificar existencia del usuario
   const usuarioExiste = await repo.usuarioExiste(idUsuarioDestino);
@@ -271,7 +277,7 @@ export const revocarRol = async (idUsuarioDestino, idUsuarioActual) =&gt; {
         rel="noopener noreferrer"
         >istanbul</a
       >
-      at 2026-07-02T01:30:28.106Z
+      at 2026-07-03T02:45:21.774Z
     </div>
     <script src="../prettify.js"></script>
     <script>

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { obtenerMetricasDashboard } from "../controllers/dashboard.controller.js";
+import { getMetricasProfesor } from "../controllers/profesor.controller.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { verifyRole } from "../middleware/role.middleware.js";
 
@@ -46,6 +47,13 @@ router.get(
   authMiddleware,
   verifyRole("Directiva", "Coordinador Administrativo"),
   obtenerMetricasDashboard,
+);
+
+router.get(
+  "/profesor",
+  authMiddleware,
+  verifyRole("Profesor"),
+  getMetricasProfesor,
 );
 
 export default router;

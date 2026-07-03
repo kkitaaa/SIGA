@@ -16,7 +16,8 @@ export const asignarRol = async (
   }
 
   // Verificar permisos
-  const esAdministrativo = await repo.verificarRolDirectiva(idUsuarioActual);
+  const esAdministrativo =
+    await repo.verificarRolAdministrativo(idUsuarioActual);
   if (!esAdministrativo) {
     throw new Error("No tienes permisos para asignar roles");
   }
@@ -31,8 +32,8 @@ export const asignarRol = async (
 
   // Verificar si ya tiene rol
   const rolActual = await repo.usuarioTieneRol(idUsuarioDestino);
-  if (rolActual && Number(rolActual.id_rol) === parsedRolId) {
-    return { mensaje: "El usuario ya tiene este rol asignado", ok: true };
+  if (rolActual) {
+    throw new Error("El usuario ya tiene un rol asignado");
   }
 
   // Validar si el rol es "Funcionario" y exigir su especialidad
@@ -43,12 +44,13 @@ export const asignarRol = async (
   }
 
   // Asignar o cambiar rol (y opcionalmente crear funcionario)
-  return repo.cambiarRol(idUsuarioDestino, parsedRolId, idTipoFuncionario);
+  return repo.asignarRol(idUsuarioDestino, parsedRolId, idTipoFuncionario);
 };
 
 export const revocarRol = async (idUsuarioDestino, idUsuarioActual) => {
   // Verificar permisos
-  const esAdministrativo = await repo.verificarRolAdministrativo(idUsuarioActual);
+  const esAdministrativo =
+    await repo.verificarRolAdministrativo(idUsuarioActual);
   if (!esAdministrativo) {
     throw new Error("No tienes permisos para revocar roles");
   }

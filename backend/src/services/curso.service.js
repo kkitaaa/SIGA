@@ -1,11 +1,9 @@
 export class CursoService {
-  // El constructor inyecta el repositorio, tal como en tus otros servicios
   constructor(cursoRepository) {
     this.repository = cursoRepository;
   }
 
   async crearCurso(dto) {
-    // Usamos this.repository en lugar de la clase CursoRepository directamente
     const cursoExistente = await this.repository.findByDetalles(
       dto.nivel_educativo,
       dto.nivel_curso,
@@ -26,13 +24,20 @@ export class CursoService {
   }
 
   async obtenerCursoPorId(id) {
-    // Aquí es donde fallaba antes, ahora this.repository existe y es la instancia correcta
     const curso = await this.repository.findById(id);
-    
+
     if (!curso) {
       throw new Error("Curso no encontrado");
     }
-    
+
     return curso;
+  }
+
+  async obtenerProfesorPorUsuario(idUsuario) {
+    return await this.repository.findProfesorByUsuario(idUsuario);
+  }
+
+  async obtenerCursosPorProfesor(idProfesor) {
+    return await this.repository.findByProfesorId(idProfesor);
   }
 }

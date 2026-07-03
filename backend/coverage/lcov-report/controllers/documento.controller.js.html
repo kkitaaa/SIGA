@@ -23,15 +23,15 @@
         </h1>
         <div class="clearfix">
           <div class="fl pad1y space-right2">
-            <span class="strong">93.75% </span>
+            <span class="strong">94.11% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">15/16</span>
+            <span class="fraction">16/17</span>
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">75% </span>
+            <span class="strong">80% </span>
             <span class="quiet">Branches</span>
-            <span class="fraction">6/8</span>
+            <span class="fraction">8/10</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -41,9 +41,9 @@
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">93.75% </span>
+            <span class="strong">94.11% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">15/16</span>
+            <span class="fraction">16/17</span>
           </div>
         </div>
         <p class="quiet">
@@ -113,27 +113,25 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,11 +148,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,11 +170,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DocumentoService } from "../services/documento.service.js";
 import { DocumentoRepository } from "../repositories/documento.repository.js";
 &nbsp;
-// Instanciamos las clases (Ensamblaje de dependencias)
 const repository = new DocumentoRepository();
 const service = new DocumentoService(repository);
 &nbsp;
-// Controlador original para subir
 export const subirDocumentoController = async (req, res) =&gt; {
   try {
     if (!req.file) {
@@ -188,10 +182,12 @@ export const subirDocumentoController = async (req, res) =&gt; {
       });
     }
 &nbsp;
-    // Llamamos al servicio instanciado
+    const nombreDocumento = req.body?.nombre || req.file.originalname;
+&nbsp;
     const documento = await service.subirDocumento(
       req.file,
-      req.user.id_usuario,
+      nombreDocumento,
+      req.user?.id_usuario,
     );
 &nbsp;
     return res.status(201).json({
@@ -206,12 +202,10 @@ export const subirDocumentoController = async (req, res) =&gt; {
   }
 };
 &nbsp;
-// Nuevo controlador para listar
 export const listarDocumentosController = async (req, res) =&gt; {
   try {
     const { page = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span> limit = <span class="branch-0 cbranch-no" title="branch not covered" >10 </span>} = req.query;
 &nbsp;
-    // Llamamos al servicio instanciado
     const resultado = await service.obtenerDocumentosPaginados(page, limit);
 &nbsp;
     return res.status(200).json({
@@ -241,7 +235,7 @@ export const listarDocumentosController = async (req, res) =&gt; {
         rel="noopener noreferrer"
         >istanbul</a
       >
-      at 2026-07-02T01:30:28.106Z
+      at 2026-07-03T02:45:21.774Z
     </div>
     <script src="../prettify.js"></script>
     <script>

@@ -11,7 +11,8 @@
     "multer": "^2.2.0",
     "pg": "^8.20.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "cookie-parser": "^1.4.6"
   },
   "devDependencies": {
     "eslint": "^10.4.1",
@@ -29,7 +30,7 @@
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/integration",
     "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/e2e",
-    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage --coverageReporters=lcov --coverageReporters=cobertura"
   },
   "type": "module"
 }
